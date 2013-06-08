@@ -14,9 +14,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import org.helper.domain.VeryCDResponse;
 import org.helper.util.CookieSplitter;
+import org.helper.util.HttpResponseStatus;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,11 +30,12 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
+@Scope("prototype")
 public class LoginService extends BaseService {
 	Logger log = LoggerFactory.getLogger(getClass());
 
-	public void login(String userId, String password) throws HttpException,
-			IOException {
+	public VeryCDResponse login(String userId, String password)
+			throws HttpException, IOException, ParseException {
 		setUrl("http://www.verycd.com/signin");
 		Map<String, String> loginParam = new HashMap<String, String>();
 		loginParam.put("username", userId);
@@ -36,13 +43,21 @@ public class LoginService extends BaseService {
 		setFormParamMap(loginParam);
 		HttpResponse response = doPost();
 		int statusCode = response.getStatusLine().getStatusCode();
-		EntityUtils.toString(response.getEntity());
-		if (statusCode == HttpStatus.SC_OK
-				|| statusCode == HttpStatus.SC_MOVED_TEMPORARILY) {
-			CookieSplitter.split(response.getHeaders("Set-Cookie"));
+		String responseBody = EntityUtils.toString(response.getEntity());
+		JSONObject json = (JSONObject) new JSONParser().parse(responseBody);
+		if (json.get("status") instanceof java.lang.String) {
+			if (statusCode == HttpStatus.SC_OK
+					&& ((String) json.get("status")).equalsIgnoreCase("ok")) {
+				CookieSplitter.split(response.getHeaders("Set-Cookie"));
+				return new VeryCDResponse(HttpResponseStatus.SUCCESS.getValue());
+			}
+		} else if (json.get("status") instanceof java.lang.Boolean
+				&& !(Boolean) json.get("status")) {
+			return new VeryCDResponse(HttpResponseStatus.ERROR.getValue(),
+					(String) json.get("msg"), (String) json.get("info"));
 		}
+		return new VeryCDResponse();
 	}
-
 
 	@Override
 	protected List<BasicHeader> extendRequestHeader() {

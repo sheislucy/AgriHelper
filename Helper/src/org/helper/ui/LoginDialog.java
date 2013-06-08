@@ -9,12 +9,15 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.apache.http.HttpException;
+import org.helper.domain.VeryCDResponse;
 import org.helper.service.LoginService;
+import org.helper.service.RefreshFarmService;
+import org.helper.util.HttpResponseStatus;
+import org.json.simple.parser.ParseException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
@@ -28,12 +31,14 @@ public class LoginDialog extends JDialog implements ActionListener,
 	private final JTextField userNameTf;
 	private final JTextField passwordTf;
 	private JOptionPane optionPane;
+	private HelperFrame parentFrame;
 
 	protected final static ApplicationContext ctx = new ClassPathXmlApplicationContext(
 			"applicationContext.xml");
 
-	public LoginDialog(JFrame parentFrame) {
+	public LoginDialog(HelperFrame parentFrame) {
 		super(parentFrame, "登录帐户", true);
+		this.parentFrame = parentFrame;
 		String nameLabel = "用户名";
 		String pswLabel = "密码";
 		userNameTf = new JTextField(6);
@@ -78,19 +83,35 @@ public class LoginDialog extends JDialog implements ActionListener,
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						LoginService s = ctx.getBean(LoginService.class);
+						LoginService loginService = ctx
+								.getBean(LoginService.class);
 						try {
-							s.login(user, psw);
+							checkSuccess(loginService.login(user, psw));
 						} catch (HttpException e1) {
 							e1.printStackTrace();
 						} catch (IOException e1) {
 							e1.printStackTrace();
+						} catch (ParseException e) {
+							e.printStackTrace();
 						}
+
 					}
 				}).start();
 
 			}
 			setVisible(false);
+		}
+	}
+
+	private void checkSuccess(VeryCDResponse response) {
+		if (HttpResponseStatus.ERROR.getValue().equalsIgnoreCase(
+				response.getStatus())) {
+			JOptionPane.showMessageDialog(this.parentFrame, response.getInfo());
+		} else {
+			parentFrame.changeLoginMenuName(parentFrame);
+			RefreshFarmService farmService = ctx
+					.getBean(RefreshFarmService.class);
+			farmService.refresh();
 		}
 	}
 

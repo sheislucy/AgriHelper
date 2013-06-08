@@ -8,7 +8,6 @@ public class CookieSplitter {
 	public static void split(Header... headers) {
 		for (Header header : headers) {
 			for (String pair : cut(header.getValue())) {
-				System.out.println(pair);
 				saveUserInfo(pair);
 			}
 		}

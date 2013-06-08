@@ -4,21 +4,24 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.helper.util.EmCookieKeys;
+
 public class UserDomain implements Serializable {
 	private static final long serialVersionUID = -8608225081404150735L;
 
 	private Map<String, Object> cookieMap = new HashMap<String, Object>();
 
-	private static UserDomain userDomain;
+	private static ThreadLocal<UserDomain> userDomain;
 
 	private UserDomain() {
 	}
 
 	public static UserDomain getInstance() {
-		if (null == userDomain || null == userDomain) {
-			userDomain = new UserDomain();
+		if (null == userDomain || null == userDomain.get()) {
+			userDomain = new ThreadLocal<UserDomain>();
+			userDomain.set(new UserDomain());
 		}
-		return userDomain;
+		return userDomain.get();
 	}
 
 	public void addCookie(String key, Object value) {
@@ -31,5 +34,14 @@ public class UserDomain implements Serializable {
 
 	public void setCookies(Map<String, Object> cookies) {
 		cookieMap = cookies;
+	}
+
+	public Object getCookieValue(String cookieName) {
+		return cookieMap.get(cookieName);
+	}
+
+	public boolean isLoggedIn(String name) {
+		return ((String) cookieMap.get(EmCookieKeys.MEMBER_NAME.getValue()
+				.toUpperCase())).equalsIgnoreCase(name);
 	}
 }

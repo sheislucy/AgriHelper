@@ -29,6 +29,8 @@ import javax.swing.table.TableColumnModel;
  */
 public class HelperFrame extends JFrame {
 	private static final long serialVersionUID = -6344590535790274762L;
+	private JTable farmTable;
+	private JMenu menuLogin;
 
 	public HelperFrame() {
 		this.setTitle("Helper Version 0.0.1");
@@ -133,7 +135,7 @@ public class HelperFrame extends JFrame {
 			tableModel.addRow(o);
 		}
 
-		JTable farmTable = new JTable();
+		farmTable = new JTable();
 		farmTable.setModel(tableModel);
 		farmTable.getTableHeader().setDefaultRenderer(
 				new TableHeaderChechboxRender(farmTable));
@@ -158,7 +160,7 @@ public class HelperFrame extends JFrame {
 
 	private JMenuBar constructMenuBar(final HelperFrame frame) {
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menuLogin = new JMenu("µÇÂ¼L");
+		menuLogin = new JMenu("µÇÂ¼L");
 		menuLogin.setMnemonic(KeyEvent.VK_L);
 		menuLogin.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -179,9 +181,15 @@ public class HelperFrame extends JFrame {
 		return menuBar;
 	}
 
-	public static void main(String[] args) {
-		HelperFrame frame = new HelperFrame();
-		frame.setVisible(true);
+	public void changeLoginMenuName(final HelperFrame frame) {
+		menuLogin.setText("µÇ³öO");
+		menuLogin.setMnemonic(KeyEvent.VK_O);
+		menuLogin.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+//				new LoginDialog(frame);
+			}
+		});
+		menuLogin.repaint();
 	}
 
 }
