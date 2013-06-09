@@ -11,7 +11,7 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
-import org.helper.domain.UserDomain;
+import org.helper.domain.VeryCDUserDomain;
 import org.helper.util.EmCookieKeys;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -29,15 +29,13 @@ public class RefreshFarmStep1Service extends BaseService {
 	@Override
 	protected List<BasicHeader> extendRequestHeader() {
 		List<BasicHeader> headers = new ArrayList<BasicHeader>();
-		headers.add(new BasicHeader("id", "1021978"));
-		headers.add(new BasicHeader("my_suffix", "Lw%3D%3D"));
 		headers.add(new BasicHeader("Host", "home.verycd.com"));
 		return headers;
 	}
 
 	public String step1GetMethod() throws ClientProtocolException, IOException,
 			ParserException {
-		setUrl("http://home.verycd.com/userapp.php");
+		setUrl("http://home.verycd.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D");
 		HttpResponse response = doGet();
 		String responseBody = EntityUtils.toString(response.getEntity(),
 				"utf-8");
@@ -60,26 +58,26 @@ public class RefreshFarmStep1Service extends BaseService {
 		BasicCookieStore cookieStore = new BasicCookieStore();
 		StringBuilder cookieValue = new StringBuilder("sid=");
 		cookieValue
-				.append((String) UserDomain.getInstance().getCookieValue(
-						EmCookieKeys.SID.getValue().toUpperCase()))
+				.append((String) VeryCDUserDomain.getInstance().getCookieValue(
+						EmCookieKeys.SID.getValue()))
 				.append("; member_id=")
-				.append((String) UserDomain.getInstance().getCookieValue(
-						EmCookieKeys.MEMBER_ID.getValue().toUpperCase()))
+				.append((String) VeryCDUserDomain.getInstance().getCookieValue(
+						EmCookieKeys.MEMBER_ID.getValue()))
 				.append("; member_name=")
-				.append((String) UserDomain.getInstance().getCookieValue(
-						EmCookieKeys.MEMBER_NAME.getValue().toUpperCase()))
+				.append((String) VeryCDUserDomain.getInstance().getCookieValue(
+						EmCookieKeys.MEMBER_NAME.getValue()))
 				.append("; mgroupId=")
-				.append((String) UserDomain.getInstance().getCookieValue(
-						EmCookieKeys.M_GROUP_ID.getValue().toUpperCase()))
+				.append((String) VeryCDUserDomain.getInstance().getCookieValue(
+						EmCookieKeys.M_GROUP_ID.getValue()))
 				.append("; pass_hash=")
-				.append((String) UserDomain.getInstance().getCookieValue(
-						EmCookieKeys.PASS_HASH.getValue().toUpperCase()))
+				.append((String) VeryCDUserDomain.getInstance().getCookieValue(
+						EmCookieKeys.PASS_HASH.getValue()))
 				.append("; uchome_auth=")
-				.append((String) UserDomain.getInstance().getCookieValue(
-						EmCookieKeys.UCHOME_AUTH.getValue().toUpperCase()))
+				.append((String) VeryCDUserDomain.getInstance().getCookieValue(
+						EmCookieKeys.UCHOME_AUTH.getValue()))
 				.append("; uchome_loginuser=")
-				.append((String) UserDomain.getInstance().getCookieValue(
-						EmCookieKeys.UCHOME_LOGINUSER.getValue().toUpperCase()))
+				.append((String) VeryCDUserDomain.getInstance().getCookieValue(
+						EmCookieKeys.UCHOME_LOGINUSER.getValue()))
 				.append(";");
 
 		BasicClientCookie cookie = new BasicClientCookie("",

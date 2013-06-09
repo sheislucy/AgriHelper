@@ -48,7 +48,7 @@ public class LoginService extends BaseService {
 		if (json.get("status") instanceof java.lang.String) {
 			if (statusCode == HttpStatus.SC_OK
 					&& ((String) json.get("status")).equalsIgnoreCase("ok")) {
-				CookieSplitter.split(response.getHeaders("Set-Cookie"));
+				CookieSplitter.splitLogin(response.getHeaders("Set-Cookie"));
 				return new VeryCDResponse(HttpResponseStatus.SUCCESS.getValue());
 			}
 		} else if (json.get("status") instanceof java.lang.Boolean

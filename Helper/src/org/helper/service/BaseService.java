@@ -17,7 +17,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
-import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -29,8 +28,6 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HttpContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -80,7 +77,9 @@ public abstract class BaseService {
 	protected HttpResponse doGet() throws ClientProtocolException, IOException {
 		HttpGet getRequest = new HttpGet(getUrl());
 		List<BasicHeader> headers = buildCommonHeaders();
-		headers.addAll(extendRequestHeader());
+		if (null != extendRequestHeader()) {
+			headers.addAll(extendRequestHeader());
+		}
 
 		BasicHttpParams params = new BasicHttpParams();
 		params.setParameter(ClientPNames.DEFAULT_HEADERS, headers);

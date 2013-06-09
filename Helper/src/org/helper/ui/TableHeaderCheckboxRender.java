@@ -13,13 +13,13 @@ import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
-public class TableHeaderChechboxRender implements TableCellRenderer {
+public class TableHeaderCheckboxRender implements TableCellRenderer {
 
 	private CheckTableModel tableModel;
 	private JTableHeader tableHeader;
 	final JCheckBox selectBox;
 
-	public TableHeaderChechboxRender(JTable table) {
+	public TableHeaderCheckboxRender(JTable table) {
 		this.tableModel = (CheckTableModel) table.getModel();
 		this.tableHeader = table.getTableHeader();
 		this.selectBox = new JCheckBox(tableModel.getColumnName(0));

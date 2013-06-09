@@ -86,7 +86,9 @@ public class LoginDialog extends JDialog implements ActionListener,
 						LoginService loginService = ctx
 								.getBean(LoginService.class);
 						try {
-							checkSuccess(loginService.login(user, psw));
+//							synchronized (loginService) {
+								checkSuccess(loginService.login(user, psw));
+//							}
 						} catch (HttpException e1) {
 							e1.printStackTrace();
 						} catch (IOException e1) {
@@ -108,11 +110,12 @@ public class LoginDialog extends JDialog implements ActionListener,
 				response.getStatus())) {
 			JOptionPane.showMessageDialog(this.parentFrame, response.getInfo());
 		} else {
-			parentFrame.changeLoginMenuName(parentFrame);
+			parentFrame.changeLoginMenuName();
 			RefreshFarmService farmService = ctx
 					.getBean(RefreshFarmService.class);
 			farmService.refresh();
 		}
+		parentFrame.refreshAccount();
 	}
 
 	@Override

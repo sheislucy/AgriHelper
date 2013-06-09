@@ -1,11 +1,18 @@
 package org.helper.util;
 
 import org.apache.http.Header;
-import org.helper.domain.UserDomain;
+import org.helper.domain.FarmDomain;
+import org.helper.domain.VeryCDUserDomain;
 
 public class CookieSplitter {
 
-	public static void split(Header... headers) {
+	public static void splitFarm(Header... headers) {
+		for (Header header : headers) {
+			saveFarmInfo(header.getValue());
+		}
+	}
+
+	public static void splitLogin(Header... headers) {
 		for (Header header : headers) {
 			for (String pair : cut(header.getValue())) {
 				saveUserInfo(pair);
@@ -13,10 +20,17 @@ public class CookieSplitter {
 		}
 	}
 
+	private static void saveFarmInfo(String pairStr) {
+		String[] pair = pairStr.split("=");
+		if (pair != null && pair.length > 1 ) {
+			FarmDomain.getInstance().addCookie(pair[0], pair[1]);
+		}
+	}
+
 	private static void saveUserInfo(String pairStr) {
 		String[] pair = pairStr.split("=");
 		if (pair != null && pair.length > 1 && EmCookieKeys.contains(pair[0])) {
-			UserDomain.getInstance().addCookie(pair[0].toUpperCase(), pair[1]);
+			VeryCDUserDomain.getInstance().addCookie(pair[0], pair[1]);
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -21,7 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableColumnModel;
+
+import org.helper.domain.FarmDomain;
+import org.helper.domain.FieldUnitDomain;
 
 /**
  * @author luxixu
@@ -31,6 +36,16 @@ public class HelperFrame extends JFrame {
 	private static final long serialVersionUID = -6344590535790274762L;
 	private JTable farmTable;
 	private JMenu menuLogin;
+	private JPanel mainBar;
+	private JTabbedPane tab;
+	private JScrollPane manuallyPanel;
+	private JPanel manuallyWrapper;
+	private JScrollPane scrollTablePanel;
+	private JPanel controlPanel;
+	private JPanel footerWrapper;
+	private JTabbedPane consoleTab;
+	private JTabbedPane infoPane;
+	private CheckTableModel tableModel;
 
 	public HelperFrame() {
 		this.setTitle("Helper Version 0.0.1");
@@ -43,10 +58,10 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JPanel constructMainPanel() {
-		JPanel mainBar = new JPanel();
+		mainBar = new JPanel();
 		mainBar.setPreferredSize(new Dimension(780, 650));
 
-		JTabbedPane tab = new JTabbedPane();
+		tab = new JTabbedPane();
 		tab.addTab("手动操作", constructManuallyPanel());
 		tab.addTab("好友列表", constructManuallyPanel2());
 		tab.addTab("自动操作", constructManuallyPanel2());
@@ -56,21 +71,20 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JScrollPane constructManuallyPanel2() {
-		JScrollPane manuallyPanel = new JScrollPane();
+		manuallyPanel = new JScrollPane();
 		manuallyPanel.setPreferredSize(new Dimension(780, 600));
 		return manuallyPanel;
 	}
 
 	private JPanel constructManuallyPanel() {
-		JPanel manuallyWrapper = new JPanel();
+		manuallyWrapper = new JPanel();
 		BoxLayout lo = new BoxLayout(manuallyWrapper, BoxLayout.Y_AXIS);
 		manuallyWrapper.setLayout(lo);
 
-		JScrollPane scrollTablePanel = new JScrollPane(
-				constructFarmFieldTable());
+		scrollTablePanel = new JScrollPane(constructFarmFieldTable());
 		scrollTablePanel.setPreferredSize(new Dimension(780, 300));
 
-		JPanel controlPanel = new JPanel();
+		controlPanel = new JPanel();
 		controlPanel.setPreferredSize(new Dimension(780, 50));
 
 		List<JCheckBox> controlCheckboxes = constructControlCheckbox();
@@ -82,13 +96,16 @@ public class HelperFrame extends JFrame {
 		controlPanel.add(new JButton("执行护理"));
 		controlPanel.add(new JButton("刷新"));
 
-		JPanel footerWrapper = new JPanel();
-		JTabbedPane consoleTab = new JTabbedPane();
+		footerWrapper = new JPanel();
+		consoleTab = new JTabbedPane();
 		consoleTab.setPreferredSize(new Dimension(500, 250));
 		consoleTab.addTab("操作日志", new JScrollPane());
 
-		JTabbedPane infoPane = new JTabbedPane();
+		infoPane = new JTabbedPane();
 		infoPane.setPreferredSize(new Dimension(280, 250));
+		// JScrollPane userInfoPane = new JScrollPane(new
+		// JLabel("用户名：qqqqqqqqqqqqqqqqqqqqqq ",
+		// SwingConstants.LEFT));
 		infoPane.addTab("个人信息", new JScrollPane());
 		footerWrapper.add(consoleTab);
 		footerWrapper.add(infoPane);
@@ -124,21 +141,21 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JTable constructFarmFieldTable() {
-		CheckTableModel tableModel = new CheckTableModel(new Object[] { "",
-				"土地", "名称", "花期", "产量", "杂草", "虫害", "阳光", "收获时间" }, 0);
-		Object[][] cellData = {
-				{ new Boolean(true), "1", "玉米", "2day", "50", "true", "true",
-						"true", "2013-6-7" },
-				{ new Boolean(true), "2", "西瓜", "2day", "44", "true", "true",
-						"true", "2013-6-7" } };
-		for (Object[] o : cellData) {
-			tableModel.addRow(o);
-		}
+		tableModel = new CheckTableModel(new Object[] { "", "土地", "名称", "花期",
+				"产量", "杂草", "虫害", "阳光", "收获时间" }, 0);
+		// Object[][] cellData = {
+		// { new Boolean(true), "1", "玉米", "2day", "50", "true", "true",
+		// "true", "2013-6-7" },
+		// { new Boolean(true), "2", "西瓜", "2day", "44", "true", "true",
+		// "true", "2013-6-7" } };
+		// for (Object[] o : cellData) {
+		// tableModel.addRow(o);
+		// }
 
 		farmTable = new JTable();
 		farmTable.setModel(tableModel);
 		farmTable.getTableHeader().setDefaultRenderer(
-				new TableHeaderChechboxRender(farmTable));
+				new TableHeaderCheckboxRender(farmTable));
 
 		TableColumnModel tcm = farmTable.getColumnModel();
 		tcm.getColumn(0).setCellEditor(new DefaultCellEditor(new JCheckBox()));
@@ -181,15 +198,58 @@ public class HelperFrame extends JFrame {
 		return menuBar;
 	}
 
-	public void changeLoginMenuName(final HelperFrame frame) {
+	public void changeLoginMenuName() {
 		menuLogin.setText("登出O");
 		menuLogin.setMnemonic(KeyEvent.VK_O);
 		menuLogin.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-//				new LoginDialog(frame);
+				// new LoginDialog(frame);
 			}
 		});
 		menuLogin.repaint();
+	}
+
+	public void refreshAccount() {
+		JScrollPane userInfoPane = (JScrollPane) infoPane.getComponentAt(0);
+		JPanel tempPanel = new JPanel();
+		BoxLayout lo = new BoxLayout(tempPanel, BoxLayout.Y_AXIS);
+		tempPanel.setLayout(lo);
+		tempPanel.add(new JLabel("用户名： "
+				+ FarmDomain.getInstance().getUserName(), SwingConstants.LEFT));
+		tempPanel.add(new JLabel("ID： "
+				+ FarmDomain.getInstance().getUserId(), SwingConstants.LEFT));
+		tempPanel.add(new JLabel("金币： " + FarmDomain.getInstance().getMoney(),
+				SwingConstants.LEFT));
+		tempPanel.add(new JLabel("经验： " + FarmDomain.getInstance().getExp(),
+				SwingConstants.LEFT));
+		tempPanel.add(new JLabel("魅力值： " + FarmDomain.getInstance().getCharm(),
+				SwingConstants.LEFT));
+		userInfoPane.setViewportView(tempPanel);
+		infoPane.repaint();
+
+		tableModel.setRowCount(0);
+		List<FieldUnitDomain> fieldList = FarmDomain.getInstance()
+				.getFieldList();
+		// Object[][] cellData = {
+		// { new Boolean(true), "1", "玉米", "2day", "50", "true", "true",
+		// "true", "2013-6-7" },
+		// { new Boolean(true), "2", "西瓜", "2day", "44", "true", "true",
+		// "true", "2013-6-7" } };
+		int i = 0;
+		for (FieldUnitDomain unit : fieldList) {
+			Vector<Object> entry = new Vector<Object>();
+			entry.add(new Boolean(true));
+			entry.add(i++);
+			entry.add(unit.getA());
+			entry.add("1H");
+			entry.add(unit.getK());
+			entry.add(new Boolean(unit.getS()) ? "YES" : "-");
+			entry.add(new Boolean(unit.getT()) ? "YES;" : "-");
+			entry.add(new Boolean(unit.getU()) ? "YES;" : "-");
+			tableModel.addRow(entry);
+		}
+		farmTable.setModel(tableModel);
+		farmTable.repaint();
 	}
 
 }

@@ -6,20 +6,20 @@ import java.util.Map;
 
 import org.helper.util.EmCookieKeys;
 
-public class UserDomain implements Serializable {
+public class VeryCDUserDomain implements Serializable {
 	private static final long serialVersionUID = -8608225081404150735L;
 
 	private Map<String, Object> cookieMap = new HashMap<String, Object>();
 
-	private static ThreadLocal<UserDomain> userDomain;
+	private static ThreadLocal<VeryCDUserDomain> userDomain;
 
-	private UserDomain() {
+	private VeryCDUserDomain() {
 	}
 
-	public static UserDomain getInstance() {
+	public static VeryCDUserDomain getInstance() {
 		if (null == userDomain || null == userDomain.get()) {
-			userDomain = new ThreadLocal<UserDomain>();
-			userDomain.set(new UserDomain());
+			userDomain = new ThreadLocal<VeryCDUserDomain>();
+			userDomain.set(new VeryCDUserDomain());
 		}
 		return userDomain.get();
 	}
