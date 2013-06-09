@@ -26,8 +26,8 @@ public class LoginDialog extends JDialog implements ActionListener,
 		PropertyChangeListener {
 	private static final long serialVersionUID = -9129214165101380074L;
 
-	private final static String OKButtonString = "È·¶¨";
-	private final static String CANCELButtonString = "È¡Ïû";
+	private final static String OKButtonString = "ç¡®å®š";
+	private final static String CANCELButtonString = "å–æ¶ˆ";
 	private final JTextField userNameTf;
 	private final JTextField passwordTf;
 	private JOptionPane optionPane;
@@ -37,10 +37,10 @@ public class LoginDialog extends JDialog implements ActionListener,
 			"applicationContext.xml");
 
 	public LoginDialog(HelperFrame parentFrame) {
-		super(parentFrame, "µÇÂ¼ÕÊ»§", true);
+		super(parentFrame, "ç™»å½•å¸æˆ·", true);
 		this.parentFrame = parentFrame;
-		String nameLabel = "ÓÃ»§Ãû";
-		String pswLabel = "ÃÜÂë";
+		String nameLabel = "ç”¨æˆ·å";
+		String pswLabel = "å¯†ç ";
 		userNameTf = new JTextField(6);
 		passwordTf = new JTextField(6);
 		Object array[] = { nameLabel, userNameTf, pswLabel, passwordTf };

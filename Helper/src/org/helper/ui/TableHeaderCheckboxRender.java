@@ -28,7 +28,6 @@ public class TableHeaderCheckboxRender implements TableCellRenderer {
 		tableHeader.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() > 0) {
-					// 获得选中列
 					int selectColumn = tableHeader.columnAtPoint(e.getPoint());
 					if (selectColumn == 0) {
 						boolean value = !selectBox.isSelected();
@@ -46,8 +45,8 @@ public class TableHeaderCheckboxRender implements TableCellRenderer {
             boolean isSelected, boolean hasFocus, int row, int column) {
         String valueStr = (String) value;
         JLabel label = new JLabel(valueStr);
-        label.setHorizontalAlignment(SwingConstants.CENTER); // 表头标签剧中
-        selectBox.setHorizontalAlignment(SwingConstants.CENTER);// 表头标签剧中
+        label.setHorizontalAlignment(SwingConstants.CENTER); 
+        selectBox.setHorizontalAlignment(SwingConstants.CENTER);
         selectBox.setBorderPainted(true);
         JComponent component = (column == 0) ? selectBox : label;
 

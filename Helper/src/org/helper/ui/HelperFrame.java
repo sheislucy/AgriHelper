@@ -62,9 +62,9 @@ public class HelperFrame extends JFrame {
 		mainBar.setPreferredSize(new Dimension(780, 650));
 
 		tab = new JTabbedPane();
-		tab.addTab("ÊÖ¶¯²Ù×÷", constructManuallyPanel());
-		tab.addTab("ºÃÓÑÁĞ±í", constructManuallyPanel2());
-		tab.addTab("×Ô¶¯²Ù×÷", constructManuallyPanel2());
+		tab.addTab("æ‰‹åŠ¨æ“ä½œ", constructManuallyPanel());
+		tab.addTab("å¥½å‹åˆ—è¡¨", constructManuallyPanel2());
+		tab.addTab("è‡ªåŠ¨æ“ä½œ", constructManuallyPanel2());
 		mainBar.add(tab);
 		return mainBar;
 
@@ -91,22 +91,19 @@ public class HelperFrame extends JFrame {
 		for (JCheckBox cb : controlCheckboxes) {
 			controlPanel.add(cb);
 		}
-		controlPanel.add(new JLabel("×÷Îï"));
+		controlPanel.add(new JLabel("ä½œç‰©"));
 		controlPanel.add(new JComboBox<String>(crops()));
-		controlPanel.add(new JButton("Ö´ĞĞ»¤Àí"));
-		controlPanel.add(new JButton("Ë¢ĞÂ"));
+		controlPanel.add(new JButton("æ‰§è¡ŒæŠ¤ç†"));
+		controlPanel.add(new JButton("åˆ·æ–°"));
 
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
 		consoleTab.setPreferredSize(new Dimension(500, 250));
-		consoleTab.addTab("²Ù×÷ÈÕÖ¾", new JScrollPane());
+		consoleTab.addTab("æ“ä½œæ—¥å¿—Ö¾", new JScrollPane());
 
 		infoPane = new JTabbedPane();
 		infoPane.setPreferredSize(new Dimension(280, 250));
-		// JScrollPane userInfoPane = new JScrollPane(new
-		// JLabel("ÓÃ»§Ãû£ºqqqqqqqqqqqqqqqqqqqqqq ",
-		// SwingConstants.LEFT));
-		infoPane.addTab("¸öÈËĞÅÏ¢", new JScrollPane());
+		infoPane.addTab("ä¸ªäººä¿¡æ¯", new JScrollPane());
 		footerWrapper.add(consoleTab);
 		footerWrapper.add(infoPane);
 
@@ -122,13 +119,13 @@ public class HelperFrame extends JFrame {
 
 	private List<JCheckBox> constructControlCheckbox() {
 		List<JCheckBox> checkboxSet = new ArrayList<JCheckBox>();
-		JCheckBox sunshine = new JCheckBox("Ñô¹â");
-		JCheckBox worm = new JCheckBox("É±³æ");
-		JCheckBox weed = new JCheckBox("³ı²İ");
-		JCheckBox plow = new JCheckBox("·­µØ");
-		JCheckBox havest = new JCheckBox("ÊÕ»ñ");
-		JCheckBox buy = new JCheckBox("×Ô¶¯ÂòÖÖ");
-		JCheckBox plant = new JCheckBox("²¥ÖÖ");
+		JCheckBox sunshine = new JCheckBox("é˜³å…‰");
+		JCheckBox worm = new JCheckBox("æ€è™«");
+		JCheckBox weed = new JCheckBox("é™¤è‰");
+		JCheckBox plow = new JCheckBox("ç¿»åœ°");
+		JCheckBox havest = new JCheckBox("æ”¶è·");
+		JCheckBox buy = new JCheckBox("è‡ªåŠ¨ä¹°ç§");
+		JCheckBox plant = new JCheckBox("æ’­ç§");
 		checkboxSet.add(sunshine);
 		checkboxSet.add(worm);
 		checkboxSet.add(weed);
@@ -141,16 +138,8 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JTable constructFarmFieldTable() {
-		tableModel = new CheckTableModel(new Object[] { "", "ÍÁµØ", "Ãû³Æ", "»¨ÆÚ",
-				"²úÁ¿", "ÔÓ²İ", "³æº¦", "Ñô¹â", "ÊÕ»ñÊ±¼ä" }, 0);
-		// Object[][] cellData = {
-		// { new Boolean(true), "1", "ÓñÃ×", "2day", "50", "true", "true",
-		// "true", "2013-6-7" },
-		// { new Boolean(true), "2", "Î÷¹Ï", "2day", "44", "true", "true",
-		// "true", "2013-6-7" } };
-		// for (Object[] o : cellData) {
-		// tableModel.addRow(o);
-		// }
+		tableModel = new CheckTableModel(new Object[] { "", "åœŸåœ°", "åç§°", "èŠ±æœŸ",
+				"äº§é‡", "æ‚è‰", "è™«å®³", "é˜³å…‰", "æ”¶è·æ—¶é—´" }, 0);
 
 		farmTable = new JTable();
 		farmTable.setModel(tableModel);
@@ -177,7 +166,7 @@ public class HelperFrame extends JFrame {
 
 	private JMenuBar constructMenuBar(final HelperFrame frame) {
 		JMenuBar menuBar = new JMenuBar();
-		menuLogin = new JMenu("µÇÂ¼L");
+		menuLogin = new JMenu("ç™»å½•L");
 		menuLogin.setMnemonic(KeyEvent.VK_L);
 		menuLogin.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -185,10 +174,10 @@ public class HelperFrame extends JFrame {
 			}
 		});
 
-		JMenu menuShop = new JMenu("ÉÌµêS");
+		JMenu menuShop = new JMenu("å•†åº—S");
 		menuShop.setMnemonic(KeyEvent.VK_S);
 
-		JMenu menuStore = new JMenu("²Ö¿âT");
+		JMenu menuStore = new JMenu("ä»“åº“T");
 		menuStore.setMnemonic(KeyEvent.VK_T);
 
 		menuBar.add(menuLogin);
@@ -199,7 +188,7 @@ public class HelperFrame extends JFrame {
 	}
 
 	public void changeLoginMenuName() {
-		menuLogin.setText("µÇ³öO");
+		menuLogin.setText("ç™»å‡ºO");
 		menuLogin.setMnemonic(KeyEvent.VK_O);
 		menuLogin.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -214,15 +203,15 @@ public class HelperFrame extends JFrame {
 		JPanel tempPanel = new JPanel();
 		BoxLayout lo = new BoxLayout(tempPanel, BoxLayout.Y_AXIS);
 		tempPanel.setLayout(lo);
-		tempPanel.add(new JLabel("ÓÃ»§Ãû£º "
+		tempPanel.add(new JLabel("ç”¨æˆ·åï¼š "
 				+ FarmDomain.getInstance().getUserName(), SwingConstants.LEFT));
-		tempPanel.add(new JLabel("ID£º "
+		tempPanel.add(new JLabel("IDï¼š "
 				+ FarmDomain.getInstance().getUserId(), SwingConstants.LEFT));
-		tempPanel.add(new JLabel("½ğ±Ò£º " + FarmDomain.getInstance().getMoney(),
+		tempPanel.add(new JLabel("é‡‘å¸ï¼š " + FarmDomain.getInstance().getMoney(),
 				SwingConstants.LEFT));
-		tempPanel.add(new JLabel("¾­Ñé£º " + FarmDomain.getInstance().getExp(),
+		tempPanel.add(new JLabel("ç»éªŒï¼š " + FarmDomain.getInstance().getExp(),
 				SwingConstants.LEFT));
-		tempPanel.add(new JLabel("÷ÈÁ¦Öµ£º " + FarmDomain.getInstance().getCharm(),
+		tempPanel.add(new JLabel("é­…åŠ›å€¼ï¼š " + FarmDomain.getInstance().getCharm(),
 				SwingConstants.LEFT));
 		userInfoPane.setViewportView(tempPanel);
 		infoPane.repaint();
@@ -230,11 +219,6 @@ public class HelperFrame extends JFrame {
 		tableModel.setRowCount(0);
 		List<FieldUnitDomain> fieldList = FarmDomain.getInstance()
 				.getFieldList();
-		// Object[][] cellData = {
-		// { new Boolean(true), "1", "ÓñÃ×", "2day", "50", "true", "true",
-		// "true", "2013-6-7" },
-		// { new Boolean(true), "2", "Î÷¹Ï", "2day", "44", "true", "true",
-		// "true", "2013-6-7" } };
 		int i = 0;
 		for (FieldUnitDomain unit : fieldList) {
 			Vector<Object> entry = new Vector<Object>();

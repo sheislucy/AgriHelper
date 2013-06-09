@@ -7,10 +7,10 @@ import java.util.HashMap;
 public class FontUtil {
 	public static Font generateUnderline() {
 		HashMap<TextAttribute, Object> hm = new HashMap<TextAttribute, Object>();
-		hm.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON); // ¶¨ÒåÊÇ·ñÓĞÏÂ»®Ïß
-		hm.put(TextAttribute.SIZE, 12); // ¶¨Òå×ÖºÅ
-		hm.put(TextAttribute.FAMILY, "Simsun"); // ¶¨Òå×ÖÌåÃû
-		Font font = new Font(hm); // Éú³É×ÖºÅÎª12£¬×ÖÌåÎªËÎÌå£¬×ÖĞÎ´øÓĞÏÂ»®ÏßµÄ×ÖÌå
+		hm.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON); // å®šä¹‰æ˜¯å¦æœ‰ä¸‹åˆ’çº¿
+		hm.put(TextAttribute.SIZE, 12); // å®šä¹‰å­—å·
+		hm.put(TextAttribute.FAMILY, "Simsun"); // å®šä¹‰å­—ä½“å
+		Font font = new Font(hm); // ç”Ÿæˆå­—å·ä¸º12ï¼Œå­—ä½“ä¸ºå®‹ä½“ï¼Œå­—å½¢å¸¦æœ‰ä¸‹åˆ’çº¿çš„å­—ä½“
 		return font;
 	}
 }
