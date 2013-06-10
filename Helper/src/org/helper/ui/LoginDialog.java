@@ -57,7 +57,14 @@ public class LoginDialog extends JDialog implements ActionListener,
 				userNameTf.requestFocusInWindow();
 			}
 		});
+	}
 
+	public void showIt() {
+		setLocation(
+				parentFrame.getLocationOnScreen().x + parentFrame.getWidth()
+						/ 2,
+				parentFrame.getLocationOnScreen().y + parentFrame.getHeight()
+						/ 4);
 		setVisible(true);
 	}
 
@@ -86,9 +93,9 @@ public class LoginDialog extends JDialog implements ActionListener,
 						LoginService loginService = ctx
 								.getBean(LoginService.class);
 						try {
-//							synchronized (loginService) {
-								checkSuccess(loginService.login(user, psw));
-//							}
+							// synchronized (loginService) {
+							checkSuccess(loginService.login(user, psw));
+							// }
 						} catch (HttpException e1) {
 							e1.printStackTrace();
 						} catch (IOException e1) {

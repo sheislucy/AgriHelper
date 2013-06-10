@@ -46,6 +46,7 @@ public class HelperFrame extends JFrame {
 	private JTabbedPane consoleTab;
 	private JTabbedPane infoPane;
 	private CheckTableModel tableModel;
+	private LoginDialog loginDialog;
 
 	public HelperFrame() {
 		this.setTitle("Helper Version 0.0.1");
@@ -92,7 +93,7 @@ public class HelperFrame extends JFrame {
 			controlPanel.add(cb);
 		}
 		controlPanel.add(new JLabel("作物"));
-		controlPanel.add(new JComboBox<String>(crops()));
+		controlPanel.add(new JComboBox(crops()));
 		controlPanel.add(new JButton("执行护理"));
 		controlPanel.add(new JButton("刷新"));
 
@@ -165,12 +166,13 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JMenuBar constructMenuBar(final HelperFrame frame) {
+		loginDialog = new LoginDialog(frame);
 		JMenuBar menuBar = new JMenuBar();
 		menuLogin = new JMenu("登录L");
 		menuLogin.setMnemonic(KeyEvent.VK_L);
 		menuLogin.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				new LoginDialog(frame);
+				loginDialog.showIt();
 			}
 		});
 
@@ -205,8 +207,8 @@ public class HelperFrame extends JFrame {
 		tempPanel.setLayout(lo);
 		tempPanel.add(new JLabel("用户名： "
 				+ FarmDomain.getInstance().getUserName(), SwingConstants.LEFT));
-		tempPanel.add(new JLabel("ID： "
-				+ FarmDomain.getInstance().getUserId(), SwingConstants.LEFT));
+		tempPanel.add(new JLabel("ID： " + FarmDomain.getInstance().getUserId(),
+				SwingConstants.LEFT));
 		tempPanel.add(new JLabel("金币： " + FarmDomain.getInstance().getMoney(),
 				SwingConstants.LEFT));
 		tempPanel.add(new JLabel("经验： " + FarmDomain.getInstance().getExp(),
