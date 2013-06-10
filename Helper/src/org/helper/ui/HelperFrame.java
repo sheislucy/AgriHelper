@@ -27,6 +27,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
+import org.helper.domain.VeryCDUserDomain;
 import org.helper.service.RefreshFarmService;
 import org.helper.util.HelperAppContext;
 
@@ -50,6 +51,9 @@ public class HelperFrame extends JFrame {
 	private CheckTableModel tableModel;
 	private LoginDialog loginDialog;
 	private JButton refreshBtn;
+
+	private VeryCDUserDomain userDomain;
+	private FarmDomain farmDomain;
 
 	public HelperFrame() {
 		this.refreshBtn = new JButton("刷新");
@@ -100,7 +104,7 @@ public class HelperFrame extends JFrame {
 		controlPanel.add(new JComboBox(crops()));
 		controlPanel.add(new JButton("执行护理"));
 		controlPanel.add(refreshBtn);
-		
+
 		bindRefreshEvent();
 
 		footerWrapper = new JPanel();
@@ -149,6 +153,8 @@ public class HelperFrame extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				RefreshFarmService farmService = HelperAppContext.CTX
 						.getBean(RefreshFarmService.class);
+				VeryCDUserDomain.setInstance(userDomain);
+				FarmDomain.setInstance(farmDomain);
 				farmService.refresh();
 				refreshAccount();
 			}
@@ -253,6 +259,13 @@ public class HelperFrame extends JFrame {
 		}
 		farmTable.setModel(tableModel);
 		farmTable.repaint();
+	}
+
+	public void refreshAccount(VeryCDUserDomain userDomain,
+			FarmDomain farmDomain) {
+		this.userDomain = userDomain;
+		this.farmDomain = farmDomain;
+		refreshAccount();
 	}
 
 }

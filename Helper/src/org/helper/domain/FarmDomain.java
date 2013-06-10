@@ -32,6 +32,14 @@ public class FarmDomain implements Serializable {
 		return farmDomain.get();
 	}
 
+	public void removeAllFields() {
+		fieldList.clear();
+	}
+
+	public static void setInstance(FarmDomain domain) {
+		farmDomain.set(domain);
+	}
+
 	public void addCookie(String key, Object value) {
 		cookieMap.put(key, value);
 	}

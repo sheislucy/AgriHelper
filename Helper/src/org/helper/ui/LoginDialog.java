@@ -13,14 +13,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.apache.http.HttpException;
+import org.helper.domain.FarmDomain;
 import org.helper.domain.VeryCDResponse;
+import org.helper.domain.VeryCDUserDomain;
 import org.helper.service.LoginService;
 import org.helper.service.RefreshFarmService;
 import org.helper.util.HelperAppContext;
 import org.helper.util.HttpResponseStatus;
 import org.json.simple.parser.ParseException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
 
 public class LoginDialog extends JDialog implements ActionListener,
@@ -120,7 +120,8 @@ public class LoginDialog extends JDialog implements ActionListener,
 					.getBean(RefreshFarmService.class);
 			farmService.refresh();
 		}
-		parentFrame.refreshAccount();
+		parentFrame.refreshAccount(VeryCDUserDomain.getInstance(),
+				FarmDomain.getInstance());
 	}
 
 	@Override

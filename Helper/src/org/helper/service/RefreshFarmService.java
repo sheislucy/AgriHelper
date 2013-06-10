@@ -51,8 +51,8 @@ public class RefreshFarmService {
 				String.valueOf(user.get("userName")));
 		FarmDomain.getInstance().setUserId(String.valueOf(user.get("uId")));
 		FarmDomain.getInstance().setMoney(String.valueOf(user.get("money")));
-		// TODO need build fields
 		JSONArray farmlandStatus = (JSONArray) farmJson.get("farmlandStatus");
+		FarmDomain.getInstance().removeAllFields();
 		for (Object jsonUnit : farmlandStatus) {
 			FieldUnitDomain unit = new FieldUnitDomain();
 			unit.setA(String.valueOf(((JSONObject) jsonUnit).get("a")));

@@ -24,6 +24,10 @@ public class VeryCDUserDomain implements Serializable {
 		return userDomain.get();
 	}
 
+	public static void setInstance(VeryCDUserDomain domain) {
+		userDomain.set(domain);
+	}
+
 	public void addCookie(String key, Object value) {
 		cookieMap.put(key, value);
 	}
