@@ -262,8 +262,8 @@ public class HelperFrame extends JFrame {
 			entry.add(formatCycle(cycle));
 			entry.add(unit.getK());
 			entry.add(new Boolean(unit.getS()) ? "YES" : "-");
-			entry.add(new Boolean(unit.getT()) ? "YES;" : "-");
-			entry.add(new Boolean(unit.getU()) ? "YES;" : "-");
+			entry.add(new Boolean(unit.getT()) ? "YES" : "-");
+			entry.add(new Boolean(unit.getU()) ? "YES" : "-");
 			long harvest = Long.parseLong(unit.getQ());
 			if (harvest > 0L) {
 				Date harvestDate = new Date(
