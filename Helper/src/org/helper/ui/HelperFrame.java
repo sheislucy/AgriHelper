@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -27,8 +30,10 @@ import javax.swing.table.TableColumnModel;
 
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
+import org.helper.domain.ShopDomain;
 import org.helper.domain.VeryCDUserDomain;
 import org.helper.service.RefreshFarmService;
+import org.helper.util.EmCropStatus;
 import org.helper.util.HelperAppContext;
 
 /**
@@ -110,7 +115,7 @@ public class HelperFrame extends JFrame {
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
 		consoleTab.setPreferredSize(new Dimension(500, 250));
-		consoleTab.addTab("操作日志־", new JScrollPane());
+		consoleTab.addTab("操作日志", new JScrollPane());
 
 		infoPane = new JTabbedPane();
 		infoPane.setPreferredSize(new Dimension(280, 250));
@@ -162,8 +167,8 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JTable constructFarmFieldTable() {
-		tableModel = new CheckTableModel(new Object[] { "", "土地", "名称", "花期",
-				"产量", "杂草", "虫害", "阳光", "收获时间" }, 0);
+		tableModel = new CheckTableModel(new Object[] { "", "土地", "名称", "阶段",
+				"花期", "产量", "杂草", "虫害", "阳光", "收获时间" }, 0);
 
 		farmTable = new JTable();
 		farmTable.setModel(tableModel);
@@ -177,13 +182,14 @@ public class HelperFrame extends JFrame {
 
 		tcm.getColumn(1).setMaxWidth(50);
 
-		tcm.getColumn(2).setWidth(400);
-
-		tcm.getColumn(3).setMaxWidth(200);
-		tcm.getColumn(4).setMaxWidth(50);
+		tcm.getColumn(2).setWidth(300);//NAME
+		tcm.getColumn(3).setMaxWidth(50);//status
+		
+		tcm.getColumn(4).setMaxWidth(100);
 		tcm.getColumn(5).setMaxWidth(50);
 		tcm.getColumn(6).setMaxWidth(50);
 		tcm.getColumn(7).setMaxWidth(50);
+		tcm.getColumn(8).setMaxWidth(150);
 
 		return farmTable;
 	}
@@ -244,17 +250,28 @@ public class HelperFrame extends JFrame {
 		tableModel.setRowCount(0);
 		List<FieldUnitDomain> fieldList = FarmDomain.getInstance()
 				.getFieldList();
-		int i = 0;
+		int i = 1;
+		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		for (FieldUnitDomain unit : fieldList) {
 			Vector<Object> entry = new Vector<Object>();
 			entry.add(new Boolean(true));
 			entry.add(i++);
-			entry.add(unit.getA());
-			entry.add("1H");
+			entry.add(ShopDomain.getCropName(unit.getA()).replace("种子", ""));
+			entry.add(EmCropStatus.getStatusName(unit.getB()));//阶段
+			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
+			entry.add(formatCycle(cycle));
 			entry.add(unit.getK());
 			entry.add(new Boolean(unit.getS()) ? "YES" : "-");
 			entry.add(new Boolean(unit.getT()) ? "YES;" : "-");
 			entry.add(new Boolean(unit.getU()) ? "YES;" : "-");
+			long harvest = Long.parseLong(unit.getQ());
+			if (harvest > 0L) {
+				Date harvestDate = new Date(
+						(Long.parseLong(unit.getQ()) + cycle) * 1000);
+				entry.add(sdf.format(harvestDate));
+			} else {
+				entry.add("-");
+			}
 			tableModel.addRow(entry);
 		}
 		farmTable.setModel(tableModel);
@@ -268,4 +285,16 @@ public class HelperFrame extends JFrame {
 		refreshAccount();
 	}
 
+	private String formatCycle(long cycle) {
+		StringBuilder sb = new StringBuilder();
+		long min = cycle / 60;
+		long hour = 0L;
+		if (min > 60) {
+			hour = min / 60;
+			min = min % 60;
+			return sb.append(hour).append("小时").append(min).append("分")
+					.toString();
+		}
+		return sb.append(min).append("分").toString();
+	}
 }

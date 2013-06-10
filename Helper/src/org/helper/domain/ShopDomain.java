@@ -6,7 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -32,6 +35,7 @@ public class ShopDomain implements Serializable {
 			cropList.clear();
 			for (Object jsonUnit : cropsArray) {
 				CropDomain crop = new CropDomain();
+				crop.setcId(String.valueOf(((JSONObject) jsonUnit).get("cId")));
 				crop.setcName(String.valueOf(((JSONObject) jsonUnit)
 						.get("cName")));
 				crop.setcType(String.valueOf(((JSONObject) jsonUnit)
@@ -67,6 +71,16 @@ public class ShopDomain implements Serializable {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String getGrowthCycle(String cId) {
+		int cropId = Integer.parseInt(cId);
+		for (CropDomain cd : cropList) {
+			if (Integer.parseInt(cd.getcId()) == cropId) {
+				return cd.getGrowthCycle();
+			}
+		}
+		return "";
 	}
 
 	public static String getCropName(String cId) {
