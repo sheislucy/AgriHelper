@@ -106,7 +106,7 @@ public class HelperFrame extends JFrame {
 			controlPanel.add(cb);
 		}
 		controlPanel.add(new JLabel("作物"));
-		controlPanel.add(new JComboBox(crops()));
+		controlPanel.add(new JComboBox(ShopDomain.getCropNameList()));
 		controlPanel.add(new JButton("执行护理"));
 		controlPanel.add(refreshBtn);
 
@@ -127,10 +127,6 @@ public class HelperFrame extends JFrame {
 		manuallyWrapper.add(controlPanel);
 		manuallyWrapper.add(footerWrapper);
 		return manuallyWrapper;
-	}
-
-	private String[] crops() {
-		return new String[] { "potato", "tomato" };
 	}
 
 	private List<JCheckBox> constructControlCheckbox() {

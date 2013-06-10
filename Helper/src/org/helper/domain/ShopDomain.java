@@ -6,11 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -91,5 +89,13 @@ public class ShopDomain implements Serializable {
 			}
 		}
 		return "";
+	}
+
+	public static Vector<String> getCropNameList() {
+		Vector<String> nameList = new Vector<String>();
+		for (CropDomain cd : cropList) {
+			nameList.add(cd.getcName().replace("种子", ""));
+		}
+		return nameList;
 	}
 }
