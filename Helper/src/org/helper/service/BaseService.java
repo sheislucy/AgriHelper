@@ -29,17 +29,12 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public abstract class BaseService {
 
 	protected DefaultHttpClient httpClient;
 
 	protected PoolingClientConnectionManager clientManager;
-
-	protected final static ApplicationContext ctx = new ClassPathXmlApplicationContext(
-			"applicationContext.xml");
 
 	@Autowired
 	protected HttpHost proxy;

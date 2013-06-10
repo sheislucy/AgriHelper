@@ -16,6 +16,7 @@ import org.apache.http.HttpException;
 import org.helper.domain.VeryCDResponse;
 import org.helper.service.LoginService;
 import org.helper.service.RefreshFarmService;
+import org.helper.util.HelperAppContext;
 import org.helper.util.HttpResponseStatus;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.ApplicationContext;
@@ -32,9 +33,6 @@ public class LoginDialog extends JDialog implements ActionListener,
 	private final JTextField passwordTf;
 	private JOptionPane optionPane;
 	private HelperFrame parentFrame;
-
-	protected final static ApplicationContext ctx = new ClassPathXmlApplicationContext(
-			"applicationContext.xml");
 
 	public LoginDialog(HelperFrame parentFrame) {
 		super(parentFrame, "登录帐户", true);
@@ -90,7 +88,7 @@ public class LoginDialog extends JDialog implements ActionListener,
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						LoginService loginService = ctx
+						LoginService loginService = HelperAppContext.CTX
 								.getBean(LoginService.class);
 						try {
 							// synchronized (loginService) {
@@ -118,7 +116,7 @@ public class LoginDialog extends JDialog implements ActionListener,
 			JOptionPane.showMessageDialog(this.parentFrame, response.getInfo());
 		} else {
 			parentFrame.changeLoginMenuName();
-			RefreshFarmService farmService = ctx
+			RefreshFarmService farmService = HelperAppContext.CTX
 					.getBean(RefreshFarmService.class);
 			farmService.refresh();
 		}

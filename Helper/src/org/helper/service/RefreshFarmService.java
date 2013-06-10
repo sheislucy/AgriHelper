@@ -5,29 +5,26 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
+import org.helper.util.HelperAppContext;
 import org.htmlparser.util.ParserException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
 @Scope("prototype")
 public class RefreshFarmService {
-	protected final static ApplicationContext ctx = new ClassPathXmlApplicationContext(
-			"applicationContext.xml");
 
 	public void refresh() {
-		RefreshFarmStep1Service step1 = ctx
+		RefreshFarmStep1Service step1 = HelperAppContext.CTX
 				.getBean(RefreshFarmStep1Service.class);
-		RefreshFarmStep2Service step2 = ctx
+		RefreshFarmStep2Service step2 = HelperAppContext.CTX
 				.getBean(RefreshFarmStep2Service.class);
-		RefreshFarmStep3Service step3 = ctx
+		RefreshFarmStep3Service step3 = HelperAppContext.CTX
 				.getBean(RefreshFarmStep3Service.class);
-		RefreshFarmStep4Service step4 = ctx
+		RefreshFarmStep4Service step4 = HelperAppContext.CTX
 				.getBean(RefreshFarmStep4Service.class);
 		try {
 			String url2 = step1.step1GetMethod();

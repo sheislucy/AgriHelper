@@ -27,6 +27,8 @@ import javax.swing.table.TableColumnModel;
 
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
+import org.helper.service.RefreshFarmService;
+import org.helper.util.HelperAppContext;
 
 /**
  * @author luxixu
@@ -47,8 +49,10 @@ public class HelperFrame extends JFrame {
 	private JTabbedPane infoPane;
 	private CheckTableModel tableModel;
 	private LoginDialog loginDialog;
+	private JButton refreshBtn;
 
 	public HelperFrame() {
+		this.refreshBtn = new JButton("刷新");
 		this.setTitle("Helper Version 0.0.1");
 		this.setSize(800, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,7 +99,9 @@ public class HelperFrame extends JFrame {
 		controlPanel.add(new JLabel("作物"));
 		controlPanel.add(new JComboBox(crops()));
 		controlPanel.add(new JButton("执行护理"));
-		controlPanel.add(new JButton("刷新"));
+		controlPanel.add(refreshBtn);
+		
+		bindRefreshEvent();
 
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
@@ -136,6 +142,17 @@ public class HelperFrame extends JFrame {
 		checkboxSet.add(plant);
 
 		return checkboxSet;
+	}
+
+	private void bindRefreshEvent() {
+		this.refreshBtn.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				RefreshFarmService farmService = HelperAppContext.CTX
+						.getBean(RefreshFarmService.class);
+				farmService.refresh();
+				refreshAccount();
+			}
+		});
 	}
 
 	private JTable constructFarmFieldTable() {
