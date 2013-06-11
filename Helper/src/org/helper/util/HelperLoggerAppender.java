@@ -2,9 +2,23 @@ package org.helper.util;
 
 import javax.swing.JTextArea;
 
-public abstract class HelperLoggerAppender {
+import org.helper.ui.HelperFrame;
 
-	public static void writeLog(JTextArea loggerArea, String logText) {
+public class HelperLoggerAppender {
+
+	private HelperFrame mainframe;
+	private static HelperLoggerAppender logger;
+
+	private HelperLoggerAppender() {
+	}
+
+	public static void setInstance(HelperFrame mainframe) {
+		logger = new HelperLoggerAppender();
+		logger.mainframe = mainframe;
+	}
+
+	public static void writeLog(String logText) {
+		JTextArea loggerArea = logger.mainframe.getLoggerArea();
 		if (loggerArea.getRows() > 200) {
 			loggerArea.setText("");
 		}

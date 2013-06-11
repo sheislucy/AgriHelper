@@ -71,6 +71,10 @@ public class ShopDomain implements Serializable {
 		}
 	}
 
+	public static Vector<CropDomain> getCropList() {
+		return new Vector<CropDomain>(cropList);
+	}
+
 	public static String getGrowthCycle(String cId) {
 		int cropId = Integer.parseInt(cId);
 		for (CropDomain cd : cropList) {

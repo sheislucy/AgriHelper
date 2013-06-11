@@ -32,6 +32,16 @@ public class FarmDomain implements Serializable {
 		return farmDomain.get();
 	}
 
+	public FieldUnitDomain getFieldUnitDomainById(String id) {
+		int fid = Integer.parseInt(id);
+		for (FieldUnitDomain d : fieldList) {
+			if (Integer.parseInt(d.getA()) == fid) {
+				return d;
+			}
+		}
+		return null;
+	}
+
 	public void removeAllFields() {
 		fieldList.clear();
 	}
