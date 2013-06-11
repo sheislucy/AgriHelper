@@ -22,15 +22,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Administrator
  * 
  */
-@Service
-@Scope("prototype")
 public class LoginService extends BaseService {
 	Logger log = LoggerFactory.getLogger(getClass());
 

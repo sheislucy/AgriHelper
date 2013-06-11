@@ -33,8 +33,8 @@ import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.ShopDomain;
 import org.helper.domain.VeryCDUserDomain;
 import org.helper.service.RefreshFarmService;
+import org.helper.service.ServiceFactory;
 import org.helper.util.EmCropStatus;
-import org.helper.util.HelperAppContext;
 
 /**
  * @author luxixu
@@ -152,8 +152,8 @@ public class HelperFrame extends JFrame {
 	private void bindRefreshEvent() {
 		this.refreshBtn.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				RefreshFarmService farmService = HelperAppContext.CTX
-						.getBean(RefreshFarmService.class);
+				RefreshFarmService farmService = ServiceFactory
+						.getService(RefreshFarmService.class);
 				VeryCDUserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				farmService.refresh();
@@ -178,9 +178,9 @@ public class HelperFrame extends JFrame {
 
 		tcm.getColumn(1).setMaxWidth(50);
 
-		tcm.getColumn(2).setWidth(300);//NAME
-		tcm.getColumn(3).setMaxWidth(50);//status
-		
+		tcm.getColumn(2).setWidth(300);// NAME
+		tcm.getColumn(3).setMaxWidth(50);// status
+
 		tcm.getColumn(4).setMaxWidth(100);
 		tcm.getColumn(5).setMaxWidth(50);
 		tcm.getColumn(6).setMaxWidth(50);
@@ -253,7 +253,7 @@ public class HelperFrame extends JFrame {
 			entry.add(new Boolean(true));
 			entry.add(i++);
 			entry.add(ShopDomain.getCropName(unit.getA()).replace("种子", ""));
-			entry.add(EmCropStatus.getStatusName(unit.getB()));//阶段
+			entry.add(EmCropStatus.getStatusName(unit.getB()));// 阶段
 			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
 			entry.add(formatCycle(cycle));
 			entry.add(unit.getK());

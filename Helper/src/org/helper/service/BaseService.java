@@ -28,7 +28,6 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseService {
 
@@ -36,17 +35,21 @@ public abstract class BaseService {
 
 	protected PoolingClientConnectionManager clientManager;
 
-	@Autowired
 	protected HttpHost proxy;
 
-	@Autowired
 	protected SchemeRegistry schemeRegistry;
 
 	private String url;
 
 	private Map<String, String> formParamMap;
 
+	private void init() {
+		schemeRegistry = new org.apache.http.conn.scheme.SchemeRegistry();
+		proxy = new HttpHost("127.0.0.1", 8888);
+	}
+
 	protected HttpResponse doPost() throws ClientProtocolException, IOException {
+		init();
 		HttpPost postRequest = new HttpPost(getUrl());
 		List<BasicHeader> headers = buildCommonHeaders();
 		headers.addAll(extendRequestHeader());
@@ -70,6 +73,7 @@ public abstract class BaseService {
 	}
 
 	protected HttpResponse doGet() throws ClientProtocolException, IOException {
+		init();
 		HttpGet getRequest = new HttpGet(getUrl());
 		List<BasicHeader> headers = buildCommonHeaders();
 		if (null != extendRequestHeader()) {

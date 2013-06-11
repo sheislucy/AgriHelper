@@ -7,11 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicHeader;
 import org.helper.util.CookieSplitter;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
-@Service
-@Scope("prototype")
 public class RefreshFarmStep3Service extends BaseService {
 
 	@Override

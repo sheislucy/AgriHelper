@@ -20,7 +20,7 @@ public class ShopDomain implements Serializable {
 	private static List<CropDomain> cropList = new ArrayList<CropDomain>();
 
 	static {
-		File shopFile = new File("resource/shop.json");
+		File shopFile = new File("shop.json");
 		InputStreamReader inputStreamReader = null;
 		try {
 			inputStreamReader = new InputStreamReader(new FileInputStream(

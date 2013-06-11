@@ -16,11 +16,7 @@ import org.helper.util.FarmKeyGenerator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
-@Service
-@Scope("prototype")
 public class RefreshFarmStep4Service extends BaseService {
 
 	@Override
@@ -52,8 +48,8 @@ public class RefreshFarmStep4Service extends BaseService {
 			cookieValue.append(uidEntry.getKey()).append("=")
 					.append(uidEntry.getValue());
 		}
-		BasicClientCookie cookie = new BasicClientCookie(
-				uidEntry.getKey(), (String)uidEntry.getValue());
+		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
+				(String) uidEntry.getValue());
 		cookie.setDomain("yeswan.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);

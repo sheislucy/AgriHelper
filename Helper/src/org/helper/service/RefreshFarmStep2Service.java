@@ -13,11 +13,7 @@ import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
-@Service
-@Scope("prototype")
 public class RefreshFarmStep2Service extends BaseService {
 
 	@Override
@@ -37,8 +33,13 @@ public class RefreshFarmStep2Service extends BaseService {
 		if (null != nodes) {
 			for (int i = 0; i < nodes.size(); i++) {
 				TagNode frameTag = (TagNode) nodes.elementAt(i);
-				if (("app1021978_").equalsIgnoreCase(frameTag.getAttribute("id"))) {
-					return frameTag.getAttribute("src").replaceAll("&amp;", "&").replace("kxnc.manyou.yeswan.com?", "kxnc.manyou.yeswan.com/?");
+				if (("app1021978_").equalsIgnoreCase(frameTag
+						.getAttribute("id"))) {
+					return frameTag
+							.getAttribute("src")
+							.replaceAll("&amp;", "&")
+							.replace("kxnc.manyou.yeswan.com?",
+									"kxnc.manyou.yeswan.com/?");
 				}
 			}
 		}

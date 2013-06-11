@@ -19,11 +19,7 @@ import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
-@Service
-@Scope("prototype")
 public class RefreshFarmStep1Service extends BaseService {
 
 	@Override

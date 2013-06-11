@@ -18,10 +18,10 @@ import org.helper.domain.VeryCDResponse;
 import org.helper.domain.VeryCDUserDomain;
 import org.helper.service.LoginService;
 import org.helper.service.RefreshFarmService;
-import org.helper.util.HelperAppContext;
+import org.helper.service.ServiceFactory;
 import org.helper.util.HttpResponseStatus;
+import org.helper.util.StringUtils;
 import org.json.simple.parser.ParseException;
-import org.springframework.util.StringUtils;
 
 public class LoginDialog extends JDialog implements ActionListener,
 		PropertyChangeListener {
@@ -88,8 +88,8 @@ public class LoginDialog extends JDialog implements ActionListener,
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						LoginService loginService = HelperAppContext.CTX
-								.getBean(LoginService.class);
+						LoginService loginService = ServiceFactory
+								.getService(LoginService.class);
 						try {
 							// synchronized (loginService) {
 							checkSuccess(loginService.login(user, psw));
@@ -116,8 +116,8 @@ public class LoginDialog extends JDialog implements ActionListener,
 			JOptionPane.showMessageDialog(this.parentFrame, response.getInfo());
 		} else {
 			parentFrame.changeLoginMenuName();
-			RefreshFarmService farmService = HelperAppContext.CTX
-					.getBean(RefreshFarmService.class);
+			RefreshFarmService farmService = ServiceFactory
+					.getService(RefreshFarmService.class);
 			farmService.refresh();
 		}
 		parentFrame.refreshAccount(VeryCDUserDomain.getInstance(),
