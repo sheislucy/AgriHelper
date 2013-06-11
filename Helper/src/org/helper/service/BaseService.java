@@ -45,7 +45,7 @@ public abstract class BaseService {
 
 	private void init() {
 		schemeRegistry = new org.apache.http.conn.scheme.SchemeRegistry();
-		proxy = new HttpHost("127.0.0.1", 8888);
+//		proxy = new HttpHost("127.0.0.1", 8888);
 	}
 
 	protected HttpResponse doPost() throws ClientProtocolException, IOException {
@@ -61,8 +61,8 @@ public abstract class BaseService {
 
 		clientManager = new PoolingClientConnectionManager(schemeRegistry);
 		httpClient = new DefaultHttpClient(clientManager, params);
-		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
-				proxy);
+//		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
+//				proxy);
 
 		HttpEntity entity = new UrlEncodedFormEntity(buildFormParameters(),
 				"UTF-8");

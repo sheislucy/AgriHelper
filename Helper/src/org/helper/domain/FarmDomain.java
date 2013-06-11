@@ -36,6 +36,10 @@ public class FarmDomain implements Serializable {
 		fieldList.clear();
 	}
 
+	public void addField(FieldUnitDomain unit) {
+		fieldList.add(unit);
+	}
+
 	public static void setInstance(FarmDomain domain) {
 		farmDomain.set(domain);
 	}

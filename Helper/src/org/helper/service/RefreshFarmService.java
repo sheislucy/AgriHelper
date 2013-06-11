@@ -64,7 +64,7 @@ public class RefreshFarmService {
 			unit.setS(String.valueOf(((JSONObject) jsonUnit).get("s")));
 			unit.setT(String.valueOf(((JSONObject) jsonUnit).get("t")));
 			unit.setU(String.valueOf(((JSONObject) jsonUnit).get("u")));
-			FarmDomain.getInstance().getFieldList().add(unit);
+			FarmDomain.getInstance().addField(unit);
 		}
 	}
 

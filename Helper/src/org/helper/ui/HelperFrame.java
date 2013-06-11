@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,16 +26,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableColumnModel;
 
+import org.apache.http.client.ClientProtocolException;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.ShopDomain;
 import org.helper.domain.VeryCDUserDomain;
-import org.helper.service.RefreshFarmService;
+import org.helper.service.RefreshFarmStep4Service;
 import org.helper.service.ServiceFactory;
 import org.helper.util.EmCropStatus;
+import org.json.simple.parser.ParseException;
 
 /**
  * @author luxixu
@@ -56,12 +60,30 @@ public class HelperFrame extends JFrame {
 	private CheckTableModel tableModel;
 	private LoginDialog loginDialog;
 	private JButton refreshBtn;
+	private JTextArea loggerArea;
+	private JCheckBox water;
+	private JCheckBox worm;
+	private JCheckBox weed;
+	private JCheckBox plow;
+	private JCheckBox harvest;
+	private JCheckBox buy;
+	private JCheckBox plant;
+	private JButton execute;
 
 	private VeryCDUserDomain userDomain;
 	private FarmDomain farmDomain;
 
 	public HelperFrame() {
 		this.refreshBtn = new JButton("刷新");
+		this.execute = new JButton("执行护理");
+		this.loggerArea = new JTextArea();
+		this.loggerArea.setLineWrap(true);
+		// FIXME dummy code
+		this.loggerArea
+				.append("log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1"
+						+ "log1log1log1log1log1log1log1log1log1log1\n");
+		this.loggerArea.append("log2\n");
+
 		this.setTitle("Helper Version 0.0.1");
 		this.setSize(800, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -107,15 +129,16 @@ public class HelperFrame extends JFrame {
 		}
 		controlPanel.add(new JLabel("作物"));
 		controlPanel.add(new JComboBox(ShopDomain.getCropNameList()));
-		controlPanel.add(new JButton("执行护理"));
+		controlPanel.add(execute);
 		controlPanel.add(refreshBtn);
 
 		bindRefreshEvent();
+		bindExecuteEvent();
 
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
 		consoleTab.setPreferredSize(new Dimension(500, 250));
-		consoleTab.addTab("操作日志", new JScrollPane());
+		consoleTab.addTab("操作日志", loggerArea);
 
 		infoPane = new JTabbedPane();
 		infoPane.setPreferredSize(new Dimension(280, 250));
@@ -129,20 +152,28 @@ public class HelperFrame extends JFrame {
 		return manuallyWrapper;
 	}
 
+	private void bindExecuteEvent() {
+		this.execute.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// TODO
+			}
+		});
+	}
+
 	private List<JCheckBox> constructControlCheckbox() {
 		List<JCheckBox> checkboxSet = new ArrayList<JCheckBox>();
-		JCheckBox sunshine = new JCheckBox("阳光");
-		JCheckBox worm = new JCheckBox("杀虫");
-		JCheckBox weed = new JCheckBox("除草");
-		JCheckBox plow = new JCheckBox("翻地");
-		JCheckBox havest = new JCheckBox("收获");
-		JCheckBox buy = new JCheckBox("自动买种");
-		JCheckBox plant = new JCheckBox("播种");
-		checkboxSet.add(sunshine);
+		water = new JCheckBox("浇水");
+		worm = new JCheckBox("杀虫");
+		weed = new JCheckBox("除草");
+		plow = new JCheckBox("翻地");
+		harvest = new JCheckBox("收获");
+		buy = new JCheckBox("自动买种");
+		plant = new JCheckBox("播种");
+		checkboxSet.add(water);
 		checkboxSet.add(worm);
 		checkboxSet.add(weed);
 		checkboxSet.add(plow);
-		checkboxSet.add(havest);
+		checkboxSet.add(harvest);
 		checkboxSet.add(buy);
 		checkboxSet.add(plant);
 
@@ -152,11 +183,19 @@ public class HelperFrame extends JFrame {
 	private void bindRefreshEvent() {
 		this.refreshBtn.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				RefreshFarmService farmService = ServiceFactory
-						.getService(RefreshFarmService.class);
+				RefreshFarmStep4Service farmService = ServiceFactory
+						.getService(RefreshFarmStep4Service.class);
 				VeryCDUserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
-				farmService.refresh();
+				try {
+					farmService.getFarmAndPlayerInfo();
+				} catch (ClientProtocolException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
 				refreshAccount();
 			}
 		});
@@ -164,7 +203,7 @@ public class HelperFrame extends JFrame {
 
 	private JTable constructFarmFieldTable() {
 		tableModel = new CheckTableModel(new Object[] { "", "土地", "名称", "阶段",
-				"花期", "产量", "杂草", "虫害", "阳光", "收获时间" }, 0);
+				"花期", "产量", "杂草", "虫害", "干旱", "收获时间" }, 0);
 
 		farmTable = new JTable();
 		farmTable.setModel(tableModel);
