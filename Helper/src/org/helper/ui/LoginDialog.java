@@ -60,7 +60,7 @@ public class LoginDialog extends JDialog implements ActionListener,
 	public void showIt() {
 		setLocation(
 				parentFrame.getLocationOnScreen().x + parentFrame.getWidth()
-						/ 2,
+						/ 3,
 				parentFrame.getLocationOnScreen().y + parentFrame.getHeight()
 						/ 4);
 		setVisible(true);

@@ -76,6 +76,7 @@ public class HelperFrame extends JFrame {
 	private JCheckBox plant;
 	private JButton execute;
 	private JComboBox seedCombo;
+	private JButton refreshShopBtn;
 
 	private VeryCDUserDomain userDomain;
 	private FarmDomain farmDomain;
@@ -85,15 +86,11 @@ public class HelperFrame extends JFrame {
 	public HelperFrame() {
 		this.refreshBtn = new JButton("刷新");
 		this.execute = new JButton("执行护理");
+		this.refreshShopBtn = new JButton("刷新商店");
 		this.loggerArea = new JTextArea();
 		this.loggerArea.setLineWrap(true);
 		this.operationList = new ArrayList<EmOperations>();
 		this.checkedFieldIdList = new ArrayList<String>();
-		// FIXME dummy code
-		this.loggerArea
-				.append("log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1log1"
-						+ "log1log1log1log1log1log1log1log1log1log1\n");
-		this.loggerArea.append("log2\n");
 
 		this.setTitle("Helper Version 0.0.1");
 		this.setSize(800, 700);
@@ -130,30 +127,38 @@ public class HelperFrame extends JFrame {
 		manuallyWrapper.setLayout(lo);
 
 		scrollTablePanel = new JScrollPane(constructFarmFieldTable());
-		scrollTablePanel.setPreferredSize(new Dimension(780, 350));
+		scrollTablePanel.setPreferredSize(new Dimension(780, 325));
 
 		controlPanel = new JPanel();
-		controlPanel.setPreferredSize(new Dimension(780, 50));
+		controlPanel.setPreferredSize(new Dimension(780, 90));
 
+		JPanel ctrlWrapper1 = new JPanel();// control 面板第一行
+		ctrlWrapper1.setPreferredSize(new Dimension(780, 30));
 		List<JCheckBox> controlCheckboxes = constructControlCheckbox();
 		for (JCheckBox cb : controlCheckboxes) {
-			controlPanel.add(cb);
+			ctrlWrapper1.add(cb);
 		}
-		controlPanel.add(new JLabel("作物"));
-		controlPanel.add(constructSeedCombo());
-		controlPanel.add(execute);
-		controlPanel.add(refreshBtn);
+		ctrlWrapper1.add(new JLabel("作物"));
+		ctrlWrapper1.add(constructSeedCombo());
+		controlPanel.add(ctrlWrapper1);
+
+		JPanel ctrlWrapper2 = new JPanel();// control 面板第二行
+		ctrlWrapper2.setPreferredSize(new Dimension(780, 35));
+		ctrlWrapper2.add(execute);
+		ctrlWrapper2.add(refreshBtn);
+		ctrlWrapper2.add(refreshShopBtn);
+		controlPanel.add(ctrlWrapper2);
 
 		bindRefreshEvent();
 		bindExecuteEvent();
 
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
-		consoleTab.setPreferredSize(new Dimension(580, 200));
+		consoleTab.setPreferredSize(new Dimension(580, 190));
 		consoleTab.addTab("操作日志", loggerArea);
 
 		infoPane = new JTabbedPane();
-		infoPane.setPreferredSize(new Dimension(200, 200));
+		infoPane.setPreferredSize(new Dimension(200, 190));
 		infoPane.addTab("个人信息", new JScrollPane());
 		footerWrapper.add(consoleTab);
 		footerWrapper.add(infoPane);
@@ -255,7 +260,7 @@ public class HelperFrame extends JFrame {
 				VeryCDUserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				try {
-					farmService.getFarmAndPlayerInfo();
+					farmService.refreshFarm();
 				} catch (ClientProtocolException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -263,7 +268,8 @@ public class HelperFrame extends JFrame {
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
-				refreshAccount();
+				refreshAccount(VeryCDUserDomain.getInstance(),
+						FarmDomain.getInstance());
 			}
 		});
 
@@ -274,7 +280,7 @@ public class HelperFrame extends JFrame {
 				VeryCDUserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				try {
-					farmService.getFarmAndPlayerInfo();
+					farmService.refreshFarm();
 				} catch (ClientProtocolException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -282,7 +288,8 @@ public class HelperFrame extends JFrame {
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
-				refreshAccount();
+				refreshAccount(VeryCDUserDomain.getInstance(),
+						FarmDomain.getInstance());
 				this.mouseReleased(e);
 			}
 		});
@@ -381,7 +388,7 @@ public class HelperFrame extends JFrame {
 			entry.add(ShopDomain.getCropName(unit.getA()).replace("种子", ""));
 			entry.add(EmCropStatus.getStatusName(unit.getB()));// 阶段
 			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
-			entry.add(formatCycle(cycle));
+			entry.add(cycle == 0L ? "-" : formatCycle(cycle));
 			entry.add(unit.getK());
 			entry.add(Integer.parseInt(unit.getS()) > 0 ? Integer.parseInt(unit
 					.getS()) : "-");
@@ -401,6 +408,7 @@ public class HelperFrame extends JFrame {
 		}
 		farmTable.setModel(tableModel);
 		farmTable.repaint();
+		// tableModel.fireTableDataChanged();
 	}
 
 	public void refreshAccount(VeryCDUserDomain userDomain,

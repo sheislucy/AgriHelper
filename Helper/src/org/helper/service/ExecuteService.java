@@ -64,16 +64,12 @@ public class ExecuteService {
 				JSONObject responseJson = ps.plow(fieldId);
 				StringBuilder logText = new StringBuilder("第");
 				logText.append(fieldId).append("块土地铲地");
-				// TODO decode response of plowing
-				if (null != responseJson.get("harvest")) {
+				if (null != responseJson.get("code")) {
 					int harvestCount = Integer.parseInt(String
-							.valueOf(responseJson.get("harvest")));
+							.valueOf(responseJson.get("code")));
 					if (harvestCount > 0) {
-						logText.append("成功，数量")
-								.append(String.valueOf(responseJson
-										.get("harvest")))
-								.append("，获得经验")
-								.append(String.valueOf(responseJson.get("exp")));
+						logText.append("成功，获得经验").append(
+								String.valueOf(responseJson.get("exp")));
 					}
 				} else {
 					logText.append("失败");
@@ -131,16 +127,15 @@ public class ExecuteService {
 				JSONObject responseJson = bs.buy("1", seedId);
 				StringBuilder logText = new StringBuilder("购买");
 				logText.append(ShopDomain.getCropName(seedId));
-				// TODO decode buy response
-				if (null != responseJson.get("harvest")) {
+				if (null != responseJson.get("code")) {
 					int harvestCount = Integer.parseInt(String
-							.valueOf(responseJson.get("harvest")));
+							.valueOf(responseJson.get("code")));
 					if (harvestCount > 0) {
 						logText.append("成功，数量")
+								.append(String.valueOf(responseJson.get("num")))
+								.append("，金钱")
 								.append(String.valueOf(responseJson
-										.get("harvest")))
-								.append("，获得经验")
-								.append(String.valueOf(responseJson.get("exp")));
+										.get("money")));
 					}
 				} else {
 					logText.append("失败");
@@ -163,18 +158,15 @@ public class ExecuteService {
 			PlantService ps = ServiceFactory.getService(PlantService.class);
 			try {
 				JSONObject responseJson = ps.plant(fieldId, seedId);
-				StringBuilder logText = new StringBuilder("播种");
-				logText.append(ShopDomain.getCropName(seedId));
-				// TODO decode plant response
-				if (null != responseJson.get("harvest")) {
+				StringBuilder logText = new StringBuilder("在");
+				logText.append(fieldId).append("号地播种")
+						.append(ShopDomain.getCropName(seedId));
+				if (null != responseJson.get("code")) {
 					int harvestCount = Integer.parseInt(String
-							.valueOf(responseJson.get("harvest")));
+							.valueOf(responseJson.get("code")));
 					if (harvestCount > 0) {
-						logText.append("成功，数量")
-								.append(String.valueOf(responseJson
-										.get("harvest")))
-								.append("，获得经验")
-								.append(String.valueOf(responseJson.get("exp")));
+						logText.append("成功，获得经验").append(
+								String.valueOf(responseJson.get("exp")));
 					}
 				} else {
 					logText.append("失败");

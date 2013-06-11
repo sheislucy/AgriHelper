@@ -21,8 +21,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -55,12 +53,6 @@ import java.util.TreeSet;
 public abstract class StringUtils {
 
 	private static final String FOLDER_SEPARATOR = "/";
-
-	private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
-
-	private static final String TOP_PATH = "..";
-
-	private static final String CURRENT_PATH = ".";
 
 	private static final char EXTENSION_SEPARATOR = '.';
 

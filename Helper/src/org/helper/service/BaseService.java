@@ -52,7 +52,9 @@ public abstract class BaseService {
 		init();
 		HttpPost postRequest = new HttpPost(getUrl());
 		List<BasicHeader> headers = buildCommonHeaders();
-		headers.addAll(extendRequestHeader());
+		if (null != extendRequestHeader()) {
+			headers.addAll(extendRequestHeader());
+		}
 
 		BasicHttpParams params = new BasicHttpParams();
 		params.setParameter(ClientPNames.DEFAULT_HEADERS, headers);

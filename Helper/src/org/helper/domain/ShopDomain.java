@@ -82,7 +82,7 @@ public class ShopDomain implements Serializable {
 				return cd.getGrowthCycle();
 			}
 		}
-		return "";
+		return "0";
 	}
 
 	public static String getCropName(String cId) {
@@ -90,6 +90,16 @@ public class ShopDomain implements Serializable {
 		for (CropDomain cd : cropList) {
 			if (Integer.parseInt(cd.getcId()) == cropId) {
 				return cd.getcName();
+			}
+		}
+		return "";
+	}
+	
+	public static String getCropType(String cId) {
+		int cropId = Integer.parseInt(cId);
+		for (CropDomain cd : cropList) {
+			if (Integer.parseInt(cd.getcId()) == cropId) {
+				return cd.getcType();
 			}
 		}
 		return "";

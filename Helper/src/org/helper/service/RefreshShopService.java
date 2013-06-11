@@ -1,9 +1,11 @@
 package org.helper.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.http.HttpResponse;
@@ -14,36 +16,45 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
-import org.helper.domain.ShopDomain;
 import org.helper.util.FarmKeyGenerator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class BuyService extends BaseService {
+public class RefreshShopService extends BaseService {
 
 	@Override
 	protected List<BasicHeader> extendRequestHeader() {
 		return null;
 	}
 
-	public JSONObject buy(String number, String seedId)
-			throws ClientProtocolException, IOException, ParseException {
+	public JSONObject refreshShopInfo() throws ClientProtocolException,
+			IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
-				"http://kxnc.manyou.yeswan.com/api.php?mod=shop&act=buy&farmKey=");
+				"http://kxnc.manyou.yeswan.com/api.php?mod=shop&act=getShopInfo&type=1&farmKey=");
 		url.append(FarmKeyGenerator.generatorFarmKey(time))
 				.append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
-		Map<String, String> loginParam = new HashMap<String, String>();
-		loginParam.put("number", number);
-		loginParam.put("id", seedId);
-		loginParam.put("type", ShopDomain.getCropType(seedId));// dont know what type is, seems always be 1
-		setFormParamMap(loginParam);
-
-		HttpResponse response = doPost();
+		HttpResponse response = doGet();
 		String responseBody = EntityUtils.toString(response.getEntity());
+		updateShopJsonFile(responseBody);
 		return (JSONObject) new JSONParser().parse(responseBody);
+	}
+
+	private void updateShopJsonFile(String responseBody) {
+		File shopFile = new File("shop.json");
+		try {
+			OutputStreamWriter output = new OutputStreamWriter(
+					new FileOutputStream(shopFile));
+			output.write(responseBody);
+			output.flush();
+			output.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
