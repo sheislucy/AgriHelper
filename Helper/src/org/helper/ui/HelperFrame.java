@@ -296,9 +296,12 @@ public class HelperFrame extends JFrame {
 			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
 			entry.add(formatCycle(cycle));
 			entry.add(unit.getK());
-			entry.add(new Boolean(unit.getS()) ? "YES" : "-");
-			entry.add(new Boolean(unit.getT()) ? "YES" : "-");
-			entry.add(new Boolean(unit.getU()) ? "YES" : "-");
+			entry.add(Integer.parseInt(unit.getS()) > 0 ? Integer.parseInt(unit
+					.getS()) : "-");
+			entry.add(Integer.parseInt(unit.getT()) > 0 ? Integer.parseInt(unit
+					.getT()) : "-");
+			entry.add(Integer.parseInt(unit.getU()) > 0 ? Integer.parseInt(unit
+					.getU()) : "-");
 			long harvest = Long.parseLong(unit.getQ());
 			if (harvest > 0L) {
 				Date harvestDate = new Date(
