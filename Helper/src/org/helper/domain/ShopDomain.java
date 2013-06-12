@@ -34,7 +34,7 @@ public class ShopDomain implements Serializable {
 			JSONArray cropsArray = (JSONArray) shopJson.get("1");
 
 			SAXReader reader = new SAXReader();
-			Document document = reader.read(new File("ini.xml"));
+			Document document = reader.read(new File("crop.xml"));
 			Element cropsElm = document.getRootElement().element("crops");
 			List crops = cropsElm.elements("crop");
 

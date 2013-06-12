@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -37,6 +40,7 @@ import org.helper.domain.CropDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.ShopDomain;
+import org.helper.domain.UserPreferenceDomain;
 import org.helper.domain.VeryCDUserDomain;
 import org.helper.service.ExecuteService;
 import org.helper.service.RefreshFarmStep4Service;
@@ -63,7 +67,7 @@ public class HelperFrame extends JFrame {
 	private JPanel footerWrapper;
 	private JTabbedPane consoleTab;
 	private JTabbedPane infoPane;
-	private CheckTableModel tableModel;
+	private CheckTableModel farmTableModel;
 	private LoginDialog loginDialog;
 	private JButton refreshBtn;
 	private JTextArea loggerArea;
@@ -79,16 +83,25 @@ public class HelperFrame extends JFrame {
 	private JButton refreshShopBtn;
 	private MouseAdapter loginEvent;
 	private MouseAdapter logoutEvent;
+	private Timer scheduleTimer;
+	private JButton autoCareBtn;
+	// private JTable storageTable;
+	// private DefaultTableModel storageTableModel;
 
 	private VeryCDUserDomain userDomain;
 	private FarmDomain farmDomain;
 	private List<EmOperations> operationList;
 	private List<String> checkedFieldIdList;
+	private boolean auto = true;
 
 	public HelperFrame() {
 		this.refreshBtn = new JButton("刷新");
 		this.execute = new JButton("执行护理");
 		this.refreshShopBtn = new JButton("刷新商店");
+		this.autoCareBtn = new JButton("开启自动护理");
+		this.autoCareBtn.setEnabled(false);
+		this.autoCareBtn.setToolTipText("自动护理将除三害，并自动收/铲/种");
+
 		this.loggerArea = new JTextArea();
 		this.loggerArea.setLineWrap(true);
 		this.operationList = new ArrayList<EmOperations>();
@@ -101,13 +114,17 @@ public class HelperFrame extends JFrame {
 		this.loginEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				loginDialog.showIt();
+				// startSchedule();
 			}
 		};
 		this.logoutEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				tableModel.setRowCount(0);
+				// stopSchedule();
+				autoCareBtn.setEnabled(false);
+				farmTableModel.setRowCount(0);
 				HelperLoggerAppender.clear();
-				((JScrollPane) infoPane.getComponentAt(0)).setViewportView(new JPanel());
+				((JScrollPane) infoPane.getComponentAt(0))
+						.setViewportView(new JPanel());
 				infoPane.repaint();
 				FarmDomain.reNew();
 				VeryCDUserDomain.reNew();
@@ -118,6 +135,10 @@ public class HelperFrame extends JFrame {
 
 		this.setJMenuBar(constructMenuBar(this));
 		this.getContentPane().add(constructMainPanel(), BorderLayout.CENTER);
+	}
+
+	public void enableAutoCare() {
+		this.autoCareBtn.setEnabled(true);
 	}
 
 	private JPanel constructMainPanel() {
@@ -165,10 +186,12 @@ public class HelperFrame extends JFrame {
 		ctrlWrapper2.add(execute);
 		ctrlWrapper2.add(refreshBtn);
 		ctrlWrapper2.add(refreshShopBtn);
+		ctrlWrapper2.add(autoCareBtn);
 		controlPanel.add(ctrlWrapper2);
 
 		bindRefreshEvent();
 		bindExecuteEvent();
+		bindAutoEvent();
 
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
@@ -193,7 +216,27 @@ public class HelperFrame extends JFrame {
 	private JComboBox constructSeedCombo() {
 		seedCombo = new JComboBox(ShopDomain.getCropList());// TODO
 		seedCombo.setRenderer(new ComboBoxRenderer());
+		seedCombo.setSelectedIndex(Integer.parseInt(UserPreferenceDomain
+				.getSeedComboIndex()));
 		return seedCombo;
+	}
+
+	private void bindAutoEvent() {
+		this.autoCareBtn.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				// TODO
+				if (auto) {
+					autoCareBtn.setText("停止自动护理");
+					startSchedule();
+				} else {
+					autoCareBtn.setText("开启自动护理");
+					stopSchedule();
+				}
+				auto = !auto;
+				autoCareBtn.repaint();
+				this.mouseReleased(e);
+			}
+		});
 	}
 
 	private void bindExecuteEvent() {
@@ -208,6 +251,11 @@ public class HelperFrame extends JFrame {
 				executeService.execute(operationList, checkedFieldIdList,
 						((CropDomain) seedCombo.getSelectedItem()).getcId());
 				this.mouseReleased(e);
+				UserPreferenceDomain.saveToFile(water.isSelected(),
+						worm.isSelected(), weed.isSelected(),
+						harvest.isSelected(), plow.isSelected(),
+						buy.isSelected(), plant.isSelected(),
+						String.valueOf(seedCombo.getSelectedIndex()));
 				refreshBtn.doClick();
 			}
 		});
@@ -215,10 +263,10 @@ public class HelperFrame extends JFrame {
 
 	private void collectFields() {
 		checkedFieldIdList.clear();
-		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			if ((Boolean) tableModel.getValueAt(i, 0)) {
-				checkedFieldIdList.add(String.valueOf(tableModel.getValueAt(i,
-						1)));
+		for (int i = 0; i < farmTableModel.getRowCount(); i++) {
+			if ((Boolean) farmTableModel.getValueAt(i, 0)) {
+				checkedFieldIdList.add(String.valueOf(farmTableModel
+						.getValueAt(i, 1)));
 			}
 		}
 	}
@@ -250,13 +298,13 @@ public class HelperFrame extends JFrame {
 
 	private List<JCheckBox> constructControlCheckbox() {
 		List<JCheckBox> checkboxSet = new ArrayList<JCheckBox>();
-		water = new JCheckBox("浇水");
-		worm = new JCheckBox("杀虫");
-		weed = new JCheckBox("除草");
-		harvest = new JCheckBox("收获");
-		plow = new JCheckBox("翻地");
-		buy = new JCheckBox("自动买种");
-		plant = new JCheckBox("播种");
+		water = new JCheckBox("浇水", null, UserPreferenceDomain.isWater());
+		worm = new JCheckBox("杀虫", null, UserPreferenceDomain.isWorm());
+		weed = new JCheckBox("除草", null, UserPreferenceDomain.isWeed());
+		harvest = new JCheckBox("收获", null, UserPreferenceDomain.isHarvest());
+		plow = new JCheckBox("翻地", null, UserPreferenceDomain.isPlow());
+		buy = new JCheckBox("自动买种", null, UserPreferenceDomain.isBuy());
+		plant = new JCheckBox("播种", null, UserPreferenceDomain.isPlant());
 		checkboxSet.add(water);
 		checkboxSet.add(worm);
 		checkboxSet.add(weed);
@@ -296,12 +344,57 @@ public class HelperFrame extends JFrame {
 
 	}
 
+	private void startSchedule() {
+		TimerTask refreshTask = new TimerTask() {
+			public void run() {
+				RefreshFarmStep4Service farmService = ServiceFactory
+						.getService(RefreshFarmStep4Service.class);
+				ExecuteService executeService = ServiceFactory
+						.getService(ExecuteService.class);
+
+				VeryCDUserDomain.setInstance(userDomain);
+				FarmDomain.setInstance(farmDomain);
+
+				try {
+					farmService.refreshFarm();
+					refreshAccount(VeryCDUserDomain.getInstance(),
+							FarmDomain.getInstance());
+					executeService.executeAll(((CropDomain) seedCombo
+							.getSelectedItem()).getcId());
+				} catch (ClientProtocolException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		};
+
+		TimerTask operationTask = new TimerTask() {
+			public void run() {
+				// TODO
+			}
+		};
+
+		scheduleTimer = new Timer(true);
+		scheduleTimer.schedule(refreshTask, 120000L,
+				120000L + 10000L * (long) (new Random()).nextFloat());
+		HelperLoggerAppender.writeLog("自动护理开启，间隔时间120秒");
+	}
+
+	private void stopSchedule() {
+		scheduleTimer.cancel();
+		HelperLoggerAppender.writeLog("自动护理关闭");
+	}
+
 	private JTable constructFarmFieldTable() {
-		tableModel = new CheckTableModel(new Object[] { "", "土地", "名称",
+		farmTableModel = new CheckTableModel(new Object[] { "", "土地", "名称",
 				"阶段  当前季/总季", "(花期)第一季/每季", "产量", "杂草", "虫害", "干旱", "收获时间" }, 0);
 
 		farmTable = new JTable();
-		farmTable.setModel(tableModel);
+		farmTable.setModel(farmTableModel);
 		farmTable.getTableHeader().setDefaultRenderer(
 				new TableHeaderCheckboxRender(farmTable));
 
@@ -360,7 +453,7 @@ public class HelperFrame extends JFrame {
 		menuLogin.repaint();
 	}
 
-	public void refreshAccount() {
+	private void refreshAccount() {
 		JScrollPane userInfoPane = (JScrollPane) infoPane.getComponentAt(0);
 		JPanel tempPanel = new JPanel();
 		BoxLayout lo = new BoxLayout(tempPanel, BoxLayout.Y_AXIS);
@@ -378,7 +471,7 @@ public class HelperFrame extends JFrame {
 		userInfoPane.setViewportView(tempPanel);
 		infoPane.repaint();
 
-		tableModel.setRowCount(0);
+		farmTableModel.setRowCount(0);
 		List<FieldUnitDomain> fieldList = FarmDomain.getInstance()
 				.getFieldList();
 		int i = 0;
@@ -422,9 +515,9 @@ public class HelperFrame extends JFrame {
 			} else {
 				entry.add("-");
 			}
-			tableModel.addRow(entry);
+			farmTableModel.addRow(entry);
 		}
-		farmTable.setModel(tableModel);
+		farmTable.setModel(farmTableModel);
 		farmTable.repaint();
 		HelperLoggerAppender.writeLog(" 刷新状态成功");
 	}

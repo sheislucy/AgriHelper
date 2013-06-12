@@ -1,6 +1,9 @@
 package org.helper.domain;
 
-public class CropDomain {
+import java.io.Serializable;
+
+public class CropDomain implements Serializable {
+	private static final long serialVersionUID = 9157897291931099291L;
 	private String cId;
 	private String cName;
 	private String cType;

@@ -18,6 +18,7 @@ public class FarmDomain implements Serializable {
 	private String charm;
 	private String serverTime;
 	private List<FieldUnitDomain> fieldList = new ArrayList<FieldUnitDomain>();
+	private List<StoreUnitDomain> storeList = new ArrayList<StoreUnitDomain>();
 
 	private static ThreadLocal<FarmDomain> farmDomain;
 
@@ -53,6 +54,10 @@ public class FarmDomain implements Serializable {
 
 	public void addField(FieldUnitDomain unit) {
 		fieldList.add(unit);
+	}
+	
+	public void addStore(StoreUnitDomain unit) {
+		storeList.add(unit);
 	}
 
 	public static void setInstance(FarmDomain domain) {
@@ -176,6 +181,14 @@ public class FarmDomain implements Serializable {
 
 	public void setFieldList(List<FieldUnitDomain> fieldList) {
 		this.fieldList = fieldList;
+	}
+
+	public List<StoreUnitDomain> getStoreList() {
+		return storeList;
+	}
+
+	public void setStoreList(List<StoreUnitDomain> storeList) {
+		this.storeList = storeList;
 	}
 
 }

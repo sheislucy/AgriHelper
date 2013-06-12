@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
+import org.helper.domain.StoreUnitDomain;
 import org.htmlparser.util.ParserException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,12 +22,16 @@ public class RefreshFarmService {
 				.getService(RefreshFarmStep3Service.class);
 		RefreshFarmStep4Service step4 = ServiceFactory
 				.getService(RefreshFarmStep4Service.class);
+		RefreshStorageService storeService = ServiceFactory
+				.getService(RefreshStorageService.class);
 		try {
 			String url2 = step1.step1GetMethod();
 			String url3 = step2.step2GetMethod(url2);
 			step3.step3GetMethod(url3);
-			JSONObject farmJson = step4.getFarmAndPlayerInfo();
-			buildFarm(farmJson);
+			JSONObject fieldJson = step4.getFarmAndPlayerInfo();
+			buildFarm(fieldJson);
+			JSONArray storeArray = storeService.refreshStorage();
+			buildStore(storeArray);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (ParserException e) {
@@ -35,6 +40,18 @@ public class RefreshFarmService {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void buildStore(JSONArray storeArray) {
+		for (Object jsonUnit : storeArray) {
+			StoreUnitDomain unit = new StoreUnitDomain();
+			unit.setcId(String.valueOf(((JSONObject) jsonUnit).get("cId")));
+			unit.setcName(String.valueOf(((JSONObject) jsonUnit).get("cName")));
+			unit.setcType(String.valueOf(((JSONObject) jsonUnit).get("cType")));
+			unit.setAmount(String.valueOf(((JSONObject) jsonUnit).get("amount")));
+			unit.setPrice(String.valueOf(((JSONObject) jsonUnit).get("price")));
+			FarmDomain.getInstance().addStore(unit);
 		}
 	}
 

@@ -46,6 +46,18 @@ public class ExecuteService {
 		}
 	}
 
+	public void executeAll(String seedId) {
+		for (int i = 0; i < FarmDomain.getInstance().getFieldList().size(); i++) {
+			doWatering(String.valueOf(i));
+			doWorm(String.valueOf(i));
+			doWeed(String.valueOf(i));
+			doHarvest(String.valueOf(i));
+			doPlow(String.valueOf(i));
+			doBuySeed(String.valueOf(i), seedId);
+			doPlant(String.valueOf(i), seedId);
+		}
+	}
+
 	private void doWatering(String fieldId) {
 		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
 				.get(Integer.parseInt(fieldId));

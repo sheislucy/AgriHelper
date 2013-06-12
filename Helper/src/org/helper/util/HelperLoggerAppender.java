@@ -7,12 +7,16 @@ import java.util.Date;
 import javax.swing.JTextArea;
 
 import org.helper.ui.HelperFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HelperLoggerAppender {
 
 	private HelperFrame mainframe;
 	private static HelperLoggerAppender logger;
 	private DateFormat sdf;
+	private static Logger fileLogger = LoggerFactory
+			.getLogger(HelperLoggerAppender.class);
 
 	private HelperLoggerAppender() {
 	}
@@ -31,9 +35,10 @@ public class HelperLoggerAppender {
 		loggerArea.append(logger.sdf.format(new Date()) + " " + logText + "\n");
 		loggerArea.paintImmediately(loggerArea.getBounds());
 		loggerArea.setCaretPosition(loggerArea.getDocument().getLength());
+		fileLogger.info(logText);
 	}
-	
-	public static void clear(){
+
+	public static void clear() {
 		logger.mainframe.getLoggerArea().setText("");
 	}
 }

@@ -13,7 +13,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
 import org.helper.util.FarmKeyGenerator;
-import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -24,7 +24,7 @@ public class RefreshStorageService extends BaseService {
 		return null;
 	}
 
-	public JSONObject refreshStorage() throws ClientProtocolException,
+	public JSONArray refreshStorage() throws ClientProtocolException,
 			IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
@@ -35,7 +35,7 @@ public class RefreshStorageService extends BaseService {
 
 		HttpResponse response = doGet();
 		String responseBody = EntityUtils.toString(response.getEntity());
-		return (JSONObject) new JSONParser().parse(responseBody);
+		return (JSONArray) new JSONParser().parse(responseBody);
 	}
 
 	@Override

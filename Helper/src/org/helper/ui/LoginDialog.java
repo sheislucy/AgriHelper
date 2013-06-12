@@ -143,6 +143,7 @@ public class LoginDialog extends JDialog {
 			RefreshFarmService farmService = ServiceFactory
 					.getService(RefreshFarmService.class);
 			farmService.refresh();
+			parentFrame.enableAutoCare();
 		}
 		parentFrame.refreshAccount(VeryCDUserDomain.getInstance(),
 				FarmDomain.getInstance());
