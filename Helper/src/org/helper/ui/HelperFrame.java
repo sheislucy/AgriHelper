@@ -77,6 +77,8 @@ public class HelperFrame extends JFrame {
 	private JButton execute;
 	private JComboBox seedCombo;
 	private JButton refreshShopBtn;
+	private MouseAdapter loginEvent;
+	private MouseAdapter logoutEvent;
 
 	private VeryCDUserDomain userDomain;
 	private FarmDomain farmDomain;
@@ -96,6 +98,22 @@ public class HelperFrame extends JFrame {
 		this.setSize(800, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(true);
+		this.loginEvent = new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				loginDialog.showIt();
+			}
+		};
+		this.logoutEvent = new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				tableModel.setRowCount(0);
+				HelperLoggerAppender.clear();
+				((JScrollPane) infoPane.getComponentAt(0)).setViewportView(new JPanel());
+				infoPane.repaint();
+				FarmDomain.reNew();
+				VeryCDUserDomain.reNew();
+				changeLogoutToLogin();
+			}
+		};
 		HelperLoggerAppender.setInstance(this);
 
 		this.setJMenuBar(constructMenuBar(this));
@@ -155,7 +173,9 @@ public class HelperFrame extends JFrame {
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
 		consoleTab.setPreferredSize(new Dimension(580, 190));
-		consoleTab.addTab("操作日志", loggerArea);
+		JScrollPane scroll = new JScrollPane(loggerArea);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		consoleTab.addTab("操作日志", scroll);
 
 		infoPane = new JTabbedPane();
 		infoPane.setPreferredSize(new Dimension(200, 190));
@@ -183,7 +203,6 @@ public class HelperFrame extends JFrame {
 				FarmDomain.setInstance(farmDomain);
 				collectOperations();
 				collectFields();
-				// TODO
 				ExecuteService executeService = ServiceFactory
 						.getService(ExecuteService.class);
 				executeService.execute(operationList, checkedFieldIdList,
@@ -215,11 +234,11 @@ public class HelperFrame extends JFrame {
 		if (weed.isSelected()) {
 			operationList.add(EmOperations.WEED);
 		}
-		if (plow.isSelected()) {
-			operationList.add(EmOperations.PLOW);
-		}
 		if (harvest.isSelected()) {
 			operationList.add(EmOperations.HARVEST);
+		}
+		if (plow.isSelected()) {
+			operationList.add(EmOperations.PLOW);
 		}
 		if (buy.isSelected()) {
 			operationList.add(EmOperations.BUY);
@@ -234,15 +253,15 @@ public class HelperFrame extends JFrame {
 		water = new JCheckBox("浇水");
 		worm = new JCheckBox("杀虫");
 		weed = new JCheckBox("除草");
-		plow = new JCheckBox("翻地");
 		harvest = new JCheckBox("收获");
+		plow = new JCheckBox("翻地");
 		buy = new JCheckBox("自动买种");
 		plant = new JCheckBox("播种");
 		checkboxSet.add(water);
 		checkboxSet.add(worm);
 		checkboxSet.add(weed);
-		checkboxSet.add(plow);
 		checkboxSet.add(harvest);
+		checkboxSet.add(plow);
 		checkboxSet.add(buy);
 		checkboxSet.add(plant);
 
@@ -255,6 +274,7 @@ public class HelperFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				refreshBtn.setEnabled(false);
 				RefreshFarmStep4Service farmService = ServiceFactory
 						.getService(RefreshFarmStep4Service.class);
 				VeryCDUserDomain.setInstance(userDomain);
@@ -270,34 +290,15 @@ public class HelperFrame extends JFrame {
 				}
 				refreshAccount(VeryCDUserDomain.getInstance(),
 						FarmDomain.getInstance());
+				refreshBtn.setEnabled(true);
 			}
 		});
 
-		this.refreshBtn.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				RefreshFarmStep4Service farmService = ServiceFactory
-						.getService(RefreshFarmStep4Service.class);
-				VeryCDUserDomain.setInstance(userDomain);
-				FarmDomain.setInstance(farmDomain);
-				try {
-					farmService.refreshFarm();
-				} catch (ClientProtocolException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
-				refreshAccount(VeryCDUserDomain.getInstance(),
-						FarmDomain.getInstance());
-				this.mouseReleased(e);
-			}
-		});
 	}
 
 	private JTable constructFarmFieldTable() {
-		tableModel = new CheckTableModel(new Object[] { "", "土地", "名称", "阶段",
-				"花期", "产量", "杂草", "虫害", "干旱", "收获时间" }, 0);
+		tableModel = new CheckTableModel(new Object[] { "", "土地", "名称",
+				"阶段  当前季/总季", "(花期)第一季/每季", "产量", "杂草", "虫害", "干旱", "收获时间" }, 0);
 
 		farmTable = new JTable();
 		farmTable.setModel(tableModel);
@@ -311,10 +312,10 @@ public class HelperFrame extends JFrame {
 
 		tcm.getColumn(1).setMaxWidth(50);
 
-		tcm.getColumn(2).setWidth(300);// NAME
-		tcm.getColumn(3).setMaxWidth(50);// status
+		tcm.getColumn(2).setMaxWidth(100);// NAME
+		tcm.getColumn(3).setWidth(150);// status
 
-		tcm.getColumn(4).setMaxWidth(100);
+		tcm.getColumn(4).setWidth(100);
 		tcm.getColumn(5).setMaxWidth(50);
 		tcm.getColumn(6).setMaxWidth(50);
 		tcm.getColumn(7).setMaxWidth(50);
@@ -328,11 +329,7 @@ public class HelperFrame extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		menuLogin = new JMenu("登录L");
 		menuLogin.setMnemonic(KeyEvent.VK_L);
-		menuLogin.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				loginDialog.showIt();
-			}
-		});
+		menuLogin.addMouseListener(loginEvent);
 
 		JMenu menuShop = new JMenu("商店S");
 		menuShop.setMnemonic(KeyEvent.VK_S);
@@ -347,14 +344,19 @@ public class HelperFrame extends JFrame {
 		return menuBar;
 	}
 
-	public void changeLoginMenuName() {
+	public void changeLoginToLogout() {
 		menuLogin.setText("登出O");
+		menuLogin.removeMouseListener(loginEvent);
 		menuLogin.setMnemonic(KeyEvent.VK_O);
-		menuLogin.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				// new LoginDialog(frame);
-			}
-		});
+		menuLogin.addMouseListener(logoutEvent);
+		menuLogin.repaint();
+	}
+
+	private void changeLogoutToLogin() {
+		menuLogin.setText("登录L");
+		menuLogin.removeMouseListener(logoutEvent);
+		menuLogin.setMnemonic(KeyEvent.VK_L);
+		menuLogin.addMouseListener(loginEvent);
 		menuLogin.repaint();
 	}
 
@@ -386,16 +388,32 @@ public class HelperFrame extends JFrame {
 			entry.add(new Boolean(true));
 			entry.add(i++);
 			entry.add(ShopDomain.getCropName(unit.getA()).replace("种子", ""));
-			entry.add(EmCropStatus.getStatusName(unit.getB()));// 阶段
+			StringBuilder status = new StringBuilder(
+					EmCropStatus.getStatusName(unit.getB()));
+			status.append(" ").append(unit.getJ()).append("/")
+					.append(ShopDomain.getSeasonNuber(unit.getA()));
+			entry.add(status);// 阶段 当前季/总季
+			int season = Integer
+					.parseInt(ShopDomain.getSeasonNuber(unit.getA()));
 			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
-			entry.add(cycle == 0L ? "-" : formatCycle(cycle));
+			StringBuilder cycleTime = new StringBuilder();
+			if (season == 0) {
+				cycleTime.append("-");
+			} else if (season > 1) {
+				long reMaturingCycle = Long.parseLong(ShopDomain
+						.getReMaturingTime(unit.getA()));
+				cycleTime.append(formatCycle(cycle)).append(" / ")
+						.append(formatCycle(reMaturingCycle));
+			} else {
+				cycleTime.append(formatCycle(cycle)).append(" / ").append("-");
+			}
+			entry.add(cycleTime);// 花期(第一季/每季)
 			entry.add(unit.getK());
-			entry.add(Integer.parseInt(unit.getS()) > 0 ? Integer.parseInt(unit
-					.getS()) : "-");
-			entry.add(Integer.parseInt(unit.getT()) > 0 ? Integer.parseInt(unit
-					.getT()) : "-");
-			entry.add(Integer.parseInt(unit.getU()) > 0 ? Integer.parseInt(unit
-					.getU()) : "-");
+			entry.add(Integer.parseInt(unit.getF()) > 0 ? Integer.parseInt(unit
+					.getF()) : "-");// "杂草"
+			entry.add(Integer.parseInt(unit.getG()) > 0 ? Integer.parseInt(unit
+					.getG()) : "-");// "虫害"
+			entry.add(Integer.parseInt(unit.getH()) == 0 ? "旱" : "-");// "干旱"
 			long harvest = Long.parseLong(unit.getQ());
 			if (harvest > 0L) {
 				Date harvestDate = new Date(
@@ -408,7 +426,7 @@ public class HelperFrame extends JFrame {
 		}
 		farmTable.setModel(tableModel);
 		farmTable.repaint();
-		// tableModel.fireTableDataChanged();
+		HelperLoggerAppender.writeLog(" 刷新状态成功");
 	}
 
 	public void refreshAccount(VeryCDUserDomain userDomain,

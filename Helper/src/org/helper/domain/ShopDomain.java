@@ -7,9 +7,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,16 +25,19 @@ public class ShopDomain implements Serializable {
 	private static List<CropDomain> cropList = new ArrayList<CropDomain>();
 
 	static {
-		File shopFile = new File("shop.json");
-		InputStreamReader inputStreamReader = null;
 		try {
-			inputStreamReader = new InputStreamReader(new FileInputStream(
-					shopFile));
+			InputStreamReader inputStreamReader = new InputStreamReader(
+					new FileInputStream(new File("shop.json")));
 			JSONObject shopJson = (JSONObject) new JSONParser()
 					.parse(inputStreamReader);
 			inputStreamReader.close();
-
 			JSONArray cropsArray = (JSONArray) shopJson.get("1");
+
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(new File("ini.xml"));
+			Element cropsElm = document.getRootElement().element("crops");
+			List crops = cropsElm.elements("crop");
+
 			cropList.clear();
 			for (Object jsonUnit : cropsArray) {
 				CropDomain crop = new CropDomain();
@@ -59,6 +67,26 @@ public class ShopDomain implements Serializable {
 						.get("cCharm")));
 				crop.setCropChr(String.valueOf(((JSONObject) jsonUnit)
 						.get("cropChr")));
+
+				int season = Integer.parseInt(crop.getMaturingTime());
+				if ( season > 1) {
+					for (Iterator it = crops.iterator(); it.hasNext();) {
+						Element cropEl = (Element) it.next();
+						int cropELId = Integer.parseInt(cropEl
+								.attributeValue("id"));
+						String timeArrayStr = cropEl.element("cropGrow")
+								.attributeValue("value");
+						String[] timeArray = timeArrayStr.split(",");
+						if (cropELId == Integer.parseInt(crop.getcId())
+								&& null != timeArray && timeArray.length > 2) {
+							long halfTime = Long.parseLong(timeArray[2]);
+							long totalMaturingTime = Long.parseLong(crop
+									.getGrowthCycle());
+							crop.setReMaturingTime(String
+									.valueOf(totalMaturingTime - halfTime));
+						}
+					}
+				}
 				cropList.add(crop);
 			}
 
@@ -67,6 +95,8 @@ public class ShopDomain implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
 	}
@@ -85,6 +115,26 @@ public class ShopDomain implements Serializable {
 		return "0";
 	}
 
+	public static String getSeasonNuber(String cId) {
+		int cropId = Integer.parseInt(cId);
+		for (CropDomain cd : cropList) {
+			if (Integer.parseInt(cd.getcId()) == cropId) {
+				return cd.getMaturingTime();
+			}
+		}
+		return "";
+	}
+
+	public static String getReMaturingTime(String cId) {
+		int cropId = Integer.parseInt(cId);
+		for (CropDomain cd : cropList) {
+			if (Integer.parseInt(cd.getcId()) == cropId) {
+				return cd.getReMaturingTime();
+			}
+		}
+		return "";
+	}
+
 	public static String getCropName(String cId) {
 		int cropId = Integer.parseInt(cId);
 		for (CropDomain cd : cropList) {
@@ -94,7 +144,7 @@ public class ShopDomain implements Serializable {
 		}
 		return "";
 	}
-	
+
 	public static String getCropType(String cId) {
 		int cropId = Integer.parseInt(cId);
 		for (CropDomain cd : cropList) {

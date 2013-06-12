@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EmCropStatus {
-	SEED(1, "未成熟"), SPROUT(2, "发芽"), LEAF(3, "嫩叶"), TEMP(4, "嫩叶2"), FLOWER(5,
-			"开花"), RIPE(6, "成熟"), WITHERED(7, "待铲地"), EMPTY(0, "空盆");
+	SEED(1, "未成熟"), SPROUT(2, "未成熟"), LEAF(3, "未成熟"), TEMP(4, "未成熟"), FLOWER(5,
+			"未成熟"), RIPE(6, "成熟"), WITHERED(7, "待铲地"), EMPTY(0, "空盆");
 	private int id;
 	private String status;
 

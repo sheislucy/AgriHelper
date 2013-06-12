@@ -23,6 +23,11 @@ public class VeryCDUserDomain implements Serializable {
 		}
 		return userDomain.get();
 	}
+	
+	public static void reNew() {
+		userDomain = new ThreadLocal<VeryCDUserDomain>();
+		userDomain.set(new VeryCDUserDomain());
+	}
 
 	public static void setInstance(VeryCDUserDomain domain) {
 		userDomain.set(domain);

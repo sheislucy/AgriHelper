@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<main>
+<postUrl url = "http://kxnc.manyou.yeswan.com/api.php?" />
+<loading url="http://kxnc.manyou.yeswan.com/images/v3_3/module/loading.swf?v=3" />
+<soundFolder url="http://kxnc.manyou.yeswan.com/images/v3_3/module/sound/sound.swf" />
+<folder url = "http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/" />
+<defaultIcon url="http://kxnc.manyou.yeswan.com/images/v3_3/module/null.gif" />
+<version value = "manyou" loginurl = "" language = "cn" />
+<openControl>
+	<item name = "tool" open = "true" />
+	<item name = "pack" open = "true" />
+	<item name="pet" open="true" />
+</openControl>
+<security host="222.73.180.83" port="3333" />
+<dogsound>
+	<item id="1" className="d1as" />
+	<item id="7" className="d1as" />
+</dogsound>
+<resource>
+	<item url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/material.xml?v=8" name="materialResource" />
+</resource>
+<moduleList>
+	<module name="main" url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/Main.swf?v=10" statusText="加载主文件..." size="246350">
+		<material url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/ui/main/newSign.swf?v=1" statusText="加载素材 ... 1" size="15403" />
+		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/commonualUI.swf?v=3" statusText="加载素材 ... 1" size="156403" />
+		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/maininterface.swf?v=3" statusText="加载素材 ... 2" size="43250" />
+		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/matterandcursor.swf?v=5" statusText="加载素材 ... 3" size="77501" />
+		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/newUI2.swf?v=3" statusText="加载素材 ... 4" size="64597" />
+		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/defaultbg.swf?v=5" statusText="加载UI素材... 5" size="28866" />
+	</module>
+	<module name="farm" url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/Farm.swf?v=10" size="136681">
+	</module>
+</moduleList>
+<pay>
+	<increase url="" />
+</pay>
+<debug open="false" />
+<crops sort="2,3,4,5,6,7,8,9,10,11,1,13,14,15,16,17,18,19,20,22,23,26,27,29,31,33,34,35,36,37,20,21,22,24,25,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132">
+<crop id="1" type="crop" className="Strawberry" seed="StrawberrySeed">
+<insect position="0|110,-45,70,-10,55,10,80,-35|110,-45,60,-10,115,-20,80,-35|0"/>
+<cropGrow value="14400,28800,46800,64800,86405,90000000"/>
+</crop>
+<crop id="2" type="crop" className="Radish" seed="RadishSeed">
+<insect position="0|61,0,97,-10,112,27,77,-5|61,0,97,-10,112,27,77,-5|0"/>
+<cropGrow value="7200,14400,25200,36000,36005,90000000"/>
+</crop>
+<crop id="3" type="crop" className="Carrot" seed="CarrotSeed">
+<insect position="0|61,0,97,-10,112,27,77,-5|61,0,97,-10,112,27,77,-5|0"/>
+<cropGrow value="7200,18000,32400,46800,46805,90000000"/>
+</crop>
+<crop id="4" type="crop" className="Maize" seed="MaizeSeed">
+<insect position="0|72,-35,100,-30,75,8,75,-20|72,-30,100,-30,75,13,75,-20|0"/>
+<cropGrow value="7200,14400,25200,36000,50405,90000000"/>
+</crop>
+<crop id="5" type="crop" className="Potato" seed="PotatoSeed">
+<insect position="0|80,-31,95,-40,80,5,90,-10|80,-37,95,-40,80,5,90,-20|0"/>
+<cropGrow value="7200,14400,25200,39600,54005,90000000"/>
+</crop>
+<crop id="6" type="crop" className="Melongena" seed="MelongenaSeed">
+<insect position="0|60,-24,100,-30,70,15,80,-20|60,-24,100,-30,70,15,80,-20|0"/>
+<cropGrow value="7200,18000,28800,43200,57605,90000000"/>
+</crop>
+<crop id="7" type="crop" className="Tomato" seed="TomatoSeed">
+<insect position="0|90,0,78,-19,125,-30,100,-32|90,0,78,-19,125,-30,100,-32|0"/>
+<cropGrow value="7200,18000,32400,46800,61205,90000000"/>
+</crop>
+<crop id="8" type="crop" className="Pea" seed="PeaSeed">
+<insect position="0|65,13,92,-50,120,-15,92,-11|65,13,92,-50,120,-15,92,-11|0"/>
+<cropGrow value="10800,21600,32400,46800,64805,90000000"/>
+</crop>
+<crop id="9" type="crop" className="Chili" seed="ChiliSeed">
+<insect position="0|65,13,50,-30,120,-15,72,-20|65,13,50,-30,120,-15,72,-20|0"/>
+<cropGrow value="10800,25200,39600,54000,72005,90000000"/>
+</crop>
+<crop id="10" type="crop" className="Pumpkin" seed="PumpkinSeed">
+<insect position="0|65,13,92,-30,120,-15,85,-11|65,13,92,-30,120,-15,85,-11|0"/>
+<cropGrow value="10800,25200,43200,61200,79205,90000000"/>
+</crop>
+<crop id="11" type="crop" className="Apple" seed="AppleSeed">
+<insect position="0|65,0,92,-45,120,-15,92,-11|65,0,92,-45,120,-15,92,-11|0"/>
+<cropGrow value="14400,28800,43200,57600,75605,90000000"/>
+</crop>
+<crop id="12" type="crop" className="HamiMelon" seed="HamiMelonSeed">
+<insect position="0|55,33,48,10,120,20,85,20|55,33,48,10,120,20,85,20|0"/>
+<cropGrow value="14400,32400,54000,72000,93600,90000000"/>
+</crop>
+<crop id="13" type="crop" className="Grape" seed="GrapeSeed">
+<insect position="0|65,-13,92,-50,120,-30,92,-26|65,-13,92,-50,120,-30,92,-26|0"/>
+<cropGrow value="28800,61200,93600,129600,165605,90000000"/>
+</crop>
+<crop id="14" type="crop" className="Watermelon" seed="WatermelonSeed">
+<insect position="0|65,30,60,13,119,13,80,13|65,30,60,13,119,13,80,13|0"/>
+<cropGrow value="14400,32400,54000,75600,100805,90000000"/>
+</crop>
+<crop id="15" type="crop" className="Banana" seed="BananaSeed">
+<insect position="0|85,-45,60,-10,115,-30,80,-35|85,-45,60,-26,115,-30,80,-35|0"/>
+<cropGrow value="18000,39600,61200,86400,111605,90000000"/>
+</crop>
+<crop id="16" type="crop" className="Lemon" seed="LemonSeed">
+<insect position="0|63,-6,80,-30,111,-13,80,-10|63,-6,80,-30,111,-13,80,-10|0"/>
+<cropGrow value="21600,46800,72000,97200,126005,90000000"/>
+</crop>
+<crop id="17" type="crop" className="Loquat" seed="LoquatSeed">
+<insect position="0|65,7,65,-42,112,-20,85,-17|65,3,92,-40,120,-24,92,-25|0"/>
+<cropGrow value="25200,54000,82800,111600,140405,90000000"/>
+</crop>
+<crop id="18" type="crop" className="Peach" seed="PeachSeed">
+<insect position="0|71,-24,99,-13,110,-53,80,-50|71,-24,99,-13,110,-53,80,-50|0"/>
+<cropGrow value="28800,57600,86400,118800,151205,90000000"/>
+</crop>
+<crop id="19" type="crop" className="Orange" seed="OrangeSeed">
+<insect position="0|60,-7,80,-39,105,-10,80,-20|60,-7,80,-39,105,-10,80,-20|0"/>
+<cropGrow value="25200,50400,75600,104400,133205,90000000"/>
+</crop>
+<crop id="23" type="crop" className="Pomegranate" seed="PomegranateSeed">
+<insect position="0|55,-30,92,-40,120,-15,87,-15|55,-30,92,-40,120,-15,87,-15|0"/>
+<cropGrow value="36000,72000,108000,147600,187205,90000000"/>
+</crop>
+<crop id="26" type="crop" className="Pomelo" seed="PomeloSeed">
+<insect position="0|54,-5,87,-40,130,-21,82,-20|54,-5,87,-40,130,-21,82,-20|0"/>
+<cropGrow value="39600,82800,126000,172800,219605,90000000"/>
+</crop>
+<crop id="27" type="crop" className="Pineapple" seed="PineappleSeed">
+<insect position="0|68,23,95,25,126,10,82,-15|68,23,95,25,126,10,82,-15|0"/>
+<cropGrow value="43200,90000,136800,183600,230405,90000000"/>
+</crop>
+<crop id="29" type="crop" className="Coconut" seed="CoconutSeed">
+<insect position="0|50,-30,96,-45,120,-35,68,-50|50,-43,96,-45,120,-35,68,-50|0"/>
+<cropGrow value="36000,75600,115200,154800,198005,90000000"/>
+</crop>
+<crop id="31" type="crop" className="Calabash" seed="CalabashSeed">
+<insect position="0|60,-5,80,-45,110,-24,70,-27|60,-5,80,-45,110,-24,70,-27|0"/>
+<cropGrow value="39600,82800,126000,172800,219605,90000000"/>
+</crop>
+<crop id="33" type="crop" className="DragonFruit" seed="DragonFruitSeed">
+<insect position="0|55,10,80,-40,110,-14,64,-20|55,10,80,-40,110,-14,64,-20|0"/>
+<cropGrow value="46800,97200,147600,198000,252005,90000000"/>
+</crop>
+<crop id="34" type="crop" className="Cherry" seed="CherrySeed">
+<insect position="0|65,-5,80,-35,130,0,87,-5|51,-5,80,-35,140,-10,87,-5|0"/>
+<cropGrow value="50400,100800,151200,205200,259205,90000000"/>
+</crop>
+<crop id="35" type="crop" className="Lichee" seed="LicheeSeed">
+<insect position="0|65,-5,80,-35,120,-24,87,-5|65,-5,80,-35,120,-24,87,-5|0"/>
+<cropGrow value="54000,108000,165600,219600,277205,90000000"/>
+</crop>
+<crop id="36" type="crop" className="Kiwi" seed="KiwiSeed">
+<insect position="0|65,-5,80,-35,120,-12,87,-5|65,-5,80,-35,120,-12,87,-5|0"/>
+<cropGrow value="57600,115200,172800,230400,291605,90000000"/>
+</crop>
+<crop id="20" type="crop" className="SugarCane" seed="SugarCaneSeed">
+<insect position="0|90,20,100,-30,86,8,80,-30|70,-33,120,-30,85,8,80,-30|0"/>
+<cropGrow value="25200,54000,82800,115200,147605,90000000"/>
+</crop>
+<crop id="21" type="crop" className="Mushroom" seed="MushroomSeed">
+<insect position="0|70,-20,95,-20,100,12,75,12|110,-33,72,-20,100,12,75,12|0"/>
+<cropGrow value="32400,64800,100800,136800,176405,90000000"/>
+</crop>
+<crop id="22" type="crop" className="Waxberry" seed="WaxberrySeed">
+<insect position="0|65,-13,92,-58,120,-25,92,-23|65,-13,92,-58,120,-25,92,-23|0"/>
+<cropGrow value="36000,75600,115200,154800,198005,90000000"/>
+</crop>
+<crop id="24" type="crop" className="Olive" seed="OliveSeed">
+<insect position="0|65,-13,92,-58,120,-25,92,-23|65,-13,92,-58,120,-25,92,-23|0"/>
+<cropGrow value="39600,79200,118800,162000,208805,90000000"/>
+</crop>
+<crop id="25" type="crop" className="Mango" seed="MangoSeed">
+<insect position="0|65,-13,92,-58,120,-25,92,-23|65,-13,92,-58,120,-25,92,-23|0"/>
+<cropGrow value="43200,86400,129600,172800,223205,90000000"/>
+</crop>
+<crop id="28" type="crop" className="Sweetpotato" seed="SweetpotatoSeed">
+<insect position="0|65,-13,92,-50,120,-20,92,-10|65,-13,92,-50,120,-20,92,-10|0"/>
+<cropGrow value="43200,86400,129600,165600,205203,90000000"/>
+</crop>
+<crop id="30" type="crop" className="Cranberry" seed="CranberrySeed">
+<insect position="0|65,-13,92,20,120,-25,92,-23|65,-13,92,20,120,-25,92,-23|0"/>
+<cropGrow value="46800,93600,140400,183600,230403,90000000"/>
+</crop>
+<crop id="32" type="crop" className="pawpaw" seed="pawpawSeed">
+<insect position="0|60,-7,80,-39,105,-10,80,-20|60,-7,80,-39,105,-10,80,-20|0"/>
+<cropGrow value="50400,100800,151200,198000,248403,90000000"/>
+</crop>
+<crop id="101" type="flower" fclass="Rose" className="RoseRed" seed="RoseRedSeed" color="1">
+<insect position="0|83,-30,84,10,114,2,76,-20|83,-30,84,10,114,-10,76,-20|0"/>
+<cropGrow value="7200,18000,28800,43200,57605,90000000" />
+</crop>
+<crop id="102" type="flower" fclass="Rose" className="RosePink" seed="RosePinkSeed" color="8">
+<insect position="0|83,-30,84,10,114,2,76,-20|83,-30,84,10,114,-10,76,-20|0"/>
+<cropGrow value="7200,18000,28800,43200,57605,90000000" />
+</crop>
+<crop id="103" type="flower" fclass="Rose" className="RoseWhite" seed="RoseWhiteSeed" color="4">
+<insect position="0|83,-30,84,10,114,2,76,-20|83,-30,84,10,114,-10,76,-20|0"/>
+<cropGrow value="7200,18000,28800,43200,57605,90000000" />
+</crop>
+<crop id="104" type="flower" fclass="Rose" className="RoseYellow" seed="RoseYellowSeed" color="2">
+<insect position="0|83,-30,84,10,114,2,76,-20|83,-30,84,10,114,-10,76,-20|0"/>
+<cropGrow value="7200,18000,28800,43200,57605,90000000" />
+</crop>
+<crop id="105" type="flower" fclass="Helianthus" className="HelianthusYellow" seed="HelianthusYellowSeed" color="2">
+<insect position="0|60,30,86,40,120,25,78,-8|55,10,80,-20,126,-10,78,-18|0" />
+<cropGrow value="10800,25200,43200,64800,86405,90000000" />
+</crop>
+<crop id="106" type="flower" fclass="Helianthus" className="HelianthusPink" seed="HelianthusPinkSeed" color="8">
+<insect position="0|60,30,86,40,120,25,78,-8|55,10,80,-20,126,-10,78,-18|0" />
+<cropGrow value="10800,25200,43200,64800,86405,90000000" />
+</crop>
+<crop id="107" type="flower" fclass="Helianthus" className="HelianthusWhite" seed="HelianthusWhiteSeed" color="4">
+<insect position="0|60,30,86,40,120,25,78,-8|55,10,80,-20,126,-10,78,-18|0" />
+<cropGrow value="10800,25200,43200,64800,86405,90000000" />
+</crop>
+<crop id="108" type="flower" fclass="Helianthus" className="HelianthusBeige" seed="HelianthusBeigeSeed" color="10">
+<insect position="0|60,30,86,40,120,25,78,-8|55,10,80,-20,126,-10,78,-18|0" />
+<cropGrow value="10800,25200,43200,64800,86405,90000000" />
+</crop>
+<crop id="109" type="flower" fclass="Carnation" className="CarnationWhite" seed="CarnationWhiteSeed" color="4">
+<insect position="0|78,-30,90,-17,105,-30,78,-8|78,-30,90,-17,105,-30,78,-8|0" />
+<cropGrow value="10800,25200,46800,68400,93605,90000000" />
+</crop>
+<crop id="110" type="flower" fclass="Carnation" className="CarnationPink" seed="CarnationPinkSeed" color="8">
+<insect position="0|78,-30,90,-17,105,-30,78,-8|78,-30,90,-17,105,-30,78,-8|0" />
+<cropGrow value="10800,25200,46800,68400,93605,90000000" />
+</crop>
+<crop id="111" type="flower" fclass="Carnation" className="CarnationYellow"	seed="CarnationYellowSeed" color="2">
+<insect position="0|78,-30,90,-17,105,-30,78,-8|78,-30,90,-17,105,-30,78,-8|0" />
+<cropGrow value="10800,25200,46800,68400,93605,90000000" />
+</crop>
+<crop id="112" type="flower" fclass="Carnation" className="CarnationPurple" seed="CarnationPurpleSeed" color="3">
+<insect position="0|78,-30,90,-17,105,-30,78,-8|78,-30,90,-17,105,-30,78,-8|0" />
+<cropGrow value="10800,25200,46800,68400,93605,90000000" />
+</crop>
+<crop id="113" type="flower" fclass="Tulip" className="TulipPurple" seed="TulipPurpleSeed" color="3">
+<insect position="0|110,-10,86,25,120,0,78,-8|62,-5,80,-35,126,-24,78,-18|0" />
+<cropGrow value="10800,25200,46800,68400,97205,90000000" />
+</crop>
+<crop id="114" type="flower" fclass="Tulip" className="TulipRed" seed="TulipRedSeed" color="1">
+<insect position="0|110,-10,86,25,120,0,78,-8|62,-5,80,-35,126,-24,78,-18|0" />
+<cropGrow value="10800,25200,46800,68400,97205,90000000" />
+</crop>
+<crop id="115" type="flower" fclass="Tulip" className="TulipPink" seed="TulipPinkSeed" color="8">
+<insect position="0|110,-10,86,25,120,0,78,-8|62,-5,80,-35,126,-24,78,-18|0" />
+<cropGrow value="10800,25200,46800,68400,97205,90000000" />
+</crop>
+<crop id="116" type="flower" fclass="Tulip" className="TulipWhite" seed="TulipWhiteSeed" color="4">
+<insect position="0|110,-10,86,25,120,0,78,-8|62,-5,80,-35,126,-24,78,-18|0" />
+<cropGrow value="10800,25200,46800,68400,97205,90000000" />
+</crop>
+<crop id="117" type="flower" fclass="Daffodil" className="DaffodilWhite" seed="DaffodilWhiteSeed" color="4">
+<insect position="0|55,-5,80,-20,126,-10,78,-3|55,-5,80,-20,126,-10,78,-3|0" />
+<cropGrow value="14400,28800,54000,75600,100805,90000000" />
+</crop>
+<crop id="118" type="flower" fclass="Daffodil" className="DaffodilYellow" seed="DaffodilYellowSeed" color="2">
+<insect position="0|55,-5,80,-20,126,-10,78,-3|55,-5,80,-20,126,-10,78,-3|0" />
+<cropGrow value="14400,28800,54000,75600,100805,90000000" />
+</crop>
+<crop id="119" type="flower" fclass="Daffodil" className="DaffodilPink" seed="DaffodilPinkSeed" color="8">
+<insect position="0|55,-5,80,-20,126,-10,78,-3|55,-5,80,-20,126,-10,78,-3|0" />
+<cropGrow value="14400,28800,54000,75600,100805,90000000" />
+</crop>
+<crop id="120" type="flower" fclass="Daffodil" className="DaffodilPurple" seed="DaffodilPurpleSeed" color="3">
+<insect position="0|55,-5,80,-20,126,-10,78,-3|55,-5,80,-20,126,-10,78,-3|0" />
+<cropGrow value="14400,28800,54000,75600,100805,90000000" />
+</crop>	
+<crop id="121" type="flower" fclass="Hyacinth" className="HyacinthWhite" seed="HyacinthWhiteSeed" color="4">
+<insect position="0|60,45,95,0,125,30,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,50400,79200,108005,90000000" />
+</crop>
+<crop id="122" type="flower" fclass="Hyacinth" className="HyacinthPurple" seed="HyacinthPurpleSeed" color="3">
+<insect position="0|60,45,95,0,125,30,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,50400,79200,108005,90000000" />
+</crop>
+<crop id="123" type="flower" fclass="Hyacinth" className="HyacinthRed" seed="HyacinthRedSeed" color="1">
+<insect position="0|60,45,95,0,125,30,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,50400,79200,108005,90000000" />
+</crop>
+<crop id="124" type="flower" fclass="Hyacinth" className="HyacinthYellow" seed="HyacinthYellowSeed" color="2">
+<insect position="0|60,45,95,0,125,30,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,50400,79200,108005,90000000" />
+</crop>	
+<crop id="125" type="flower" fclass="Violet" className="VioletPurple" seed="VioletPurpleSeed" color="3">
+<insect position="0|80,-5,95,0,100,10,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,54000,82800,115205,90000000" />
+</crop>	
+<crop id="126" type="flower" fclass="Violet" className="VioletWhite" seed="VioletWhiteSeed" color="4">
+<insect position="0|80,-5,95,0,100,10,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,54000,82800,115205,90000000" />
+</crop>	
+<crop id="127" type="flower" fclass="Violet" className="VioletPink" seed="VioletPinkSeed" color="8">
+<insect position="0|80,-5,95,0,100,10,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,54000,82800,115205,90000000" />
+</crop>	
+<crop id="128" type="flower" fclass="Violet" className="VioletYellow" seed="VioletYellowSeed" color="2">
+<insect position="0|80,-5,95,0,100,10,78,8|100,-15,80,-15,110,6,78,8|0" />
+<cropGrow value="14400,32400,54000,82800,115205,90000000" />
+</crop>	
+<crop id="129" type="flower" fclass="Lily" className="LilyWhite" seed="LilyWhiteSeed" color="4">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,65,-45,96,-33,78,8|0" />
+<cropGrow value="7200,32400,61200,93600,129605,90000000" />
+</crop>	
+<crop id="130" type="flower" fclass="Lily" className="LilyPink" seed="LilyPinkSeed" color="8">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,65,-45,96,-33,78,8|0" />
+<cropGrow value="7200,32400,61200,93600,129605,90000000" />
+</crop>	
+<crop id="131" type="flower" fclass="Lily" className="LilyRed" seed="LilyRedSeed" color="1">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,65,-45,96,-33,78,8|0" />
+<cropGrow value="7200,32400,61200,93600,129605,90000000" />
+</crop>	
+<crop id="132" type="flower" fclass="Lily" className="LilyYellow" seed="LilyYellowSeed" color="2">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,65,-45,96,-33,78,8|0" />
+<cropGrow value="7200,32400,61200,93600,129605,90000000" />
+</crop>
+<crop id="137" type="flower" fclass="Sunflower" className="SunflowerYellow" seed="SunflowerYellowSeed" color="2">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,95,0,96,-33,78,8|0" />
+<cropGrow value="18000,39600,64800,104400,158405,90000000" />
+</crop>
+<crop id="138" type="flower" fclass="Sunflower" className="SunflowerWhite" seed="SunflowerWhiteSeed" color="4">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,95,0,96,-33,78,8|0" />
+<cropGrow value="18000,39600,64800,104400,158405,90000000" />
+</crop>
+<crop id="139" type="flower" fclass="Sunflower" className="SunflowerOrange" seed="SunflowerOrangeSeed" color="7">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,95,0,96,-33,78,8|0" />
+<cropGrow value="18000,39600,64800,104400,158405,90000000" />
+</crop>
+<crop id="140" type="flower" fclass="Sunflower" className="SunflowerPurple" seed="SunflowerPurpleSeed" color="3">
+<insect position="0|90,-17,95,0,96,-33,78,8|90,-17,95,0,96,-33,78,8|0" />
+<cropGrow value="18000,39600,64800,104400,158405,90000000" />
+</crop>
+<crop id="141" type="flower" fclass="CallaLily" className="CallaLilyPurple" seed="CallaLilyPurpleSeed" color="3">
+<insect position="0|65,30,60,13,119,13,80,13|65,30,60,13,119,13,80,13|0"/>
+<cropGrow value="18000,50400,86400,126000,172805,90000000" />
+</crop>
+<crop id="142" type="flower" fclass="CallaLily" className="CallaLilyWhite" seed="CallaLilyWhiteSeed" color="4">
+<insect position="0|65,30,60,13,119,13,80,13|65,30,60,13,119,13,80,13|0"/>
+<cropGrow value="18000,50400,86400,126000,172805,90000000" />
+</crop>
+<crop id="143" type="flower" fclass="CallaLily" className="CallaLilyYellow" seed="CallaLilyYellowSeed" color="2">
+<insect position="0|65,30,60,13,119,13,80,13|65,30,60,13,119,13,80,13|0"/>
+<cropGrow value="18000,50400,86400,126000,172805,90000000" />
+</crop>
+<crop id="144" type="flower" fclass="CallaLily" className="CallaLilyOrange" seed="CallaLilyOrangeSeed" color="7">
+<insect position="0|65,30,60,13,119,13,80,13|65,30,60,13,119,13,80,13|0"/>
+<cropGrow value="18000,50400,86400,126000,172805,90000000" />
+</crop>
+
+<crop id="2001" type="toy" fclass="Cat" headName="CatHead" toyName="猫子座" giftName="ToyCat" className="Cat" seed="MysterySeed" FBPrice="3" charm="40">
+<insect position="0|55,-5,86,-25,120,-20,78,-8|55,-5,86,-25,120,-20,78,-8|0" />
+<cropGrow value="7200,25200,50400,79200,144000,90000000" />
+</crop>
+<crop id="2002" type="toy" fclass="Rabbit" headName="RabbitHead" toyName="兔卡巴" giftName="ToyRabbit" className="Rabbit" seed="MysterySeed" FBPrice="3" charm="40">
+<insect position="0|55,-5,86,-25,120,-20,78,-8|55,-5,86,-25,120,-20,78,-8|0" />
+<cropGrow value="7200,25200,50400,79200,144000,90000000" />
+</crop>
+<crop id="2003" type="toy" fclass="Pig" headName="PigHead" toyName="猪无戒" giftName="ToyPig" className="Pig" seed="MysterySeed" FBPrice="3" charm="40">
+<insect position="0|55,-5,86,-25,120,-20,78,-8|55,-5,86,-25,120,-20,78,-8|0" />
+<cropGrow value="7200,25200,50400,79200,144000,90000000" />
+</crop>
+</crops>
+<gifts sort="10,11,1,2,3,4,5,6,7,8">
+<flowerGift id="1" type="1" fclass="玫瑰" className="Rose" flowerId="101,102,103,104" number="11,33,99">
+<item id="1" className="Rose_101_11" words="热情似火" giftName="11朵红色玫瑰花" charm="26" />
+<item id="2" className="Rose_102_11" words="告白" giftName="11朵粉色玫瑰花" charm="26" />
+<item id="3" className="Rose_103_11"  words="天真之吻" giftName="11朵白色玫瑰花" charm="26" />
+<item id="4" className="Rose_104_11"  words="歉意" giftName="11朵黄色玫瑰花" charm="26" />
+<item id="5" className="Rose_101_33" words="热情似火" giftName="33朵红色玫瑰花" charm="82" />
+<item id="6" className="Rose_102_33"  words="告白" giftName="33朵粉色玫瑰花" charm="82" />
+<item id="7" className="Rose_103_33" words="天真之吻" giftName="33朵白色玫瑰花" charm="82" />
+<item id="8" className="Rose_104_33"  words="歉意" giftName="33朵黄色玫瑰花" charm="82" />
+<item id="9" className="Rose_101_99" words="热情似火" giftName="99朵红色玫瑰花" charm="246" />
+<item id="10" className="Rose_102_99"  words="告白" giftName="99朵粉色玫瑰花" charm="246" />
+<item id="11" className="Rose_103_99"  words="天真之吻" giftName="99朵白色玫瑰花" charm="246" />
+<item id="12" className="Rose_104_99" words="歉意" giftName="99朵黄色玫瑰花" charm="246" />
+</flowerGift>
+<flowerGift id="2" type="1" fclass="太阳花" className="Helianthus" flowerId="105,106,107,108" number="11,22,123">
+<item id="13" className="Helianthus_105_11"  words="激情" giftName="11支黄色太阳花"  charm="54" />
+<item id="14" className="Helianthus_106_11"  words="幸福" giftName="11支粉色太阳花"  charm="54" />
+<item id="15" className="Helianthus_107_11"  words="情有独钟" giftName="11支白色太阳花" charm="54" />
+<item id="16" className="Helianthus_108_11"  words="永远的快乐" giftName="11支米色太阳花" charm="54" />
+<item id="17" className="Helianthus_105_22"  words="激情" giftName="1束黄色太阳花" charm="110" />
+<item id="18" className="Helianthus_106_22"   words="幸福" giftName="1束粉色太阳花" charm="110" />
+<item id="19" className="Helianthus_107_22"  words="情有独钟" giftName="1束白色太阳花" charm="110" />
+<item id="20" className="Helianthus_108_22"  words="永远的快乐" giftName="1束米色太阳花" charm="110" />
+<item id="21" className="Helianthus_105_123"  words="激情" giftName="1捧黄色太阳花" charm="614" />
+<item id="22" className="Helianthus_106_123"  words="幸福" giftName="1捧粉色太阳花" charm="614" />
+<item id="23" className="Helianthus_107_123"  words="情有独钟" giftName="1捧白色太阳花" charm="614" />
+<item id="24" className="Helianthus_108_123"  words="永远的快乐" giftName="1捧米色太阳花" charm="614" />
+</flowerGift>
+<flowerGift id="3" type="1" fclass="康乃馨" className="Carnation" flowerId="109,110,111,112" number="8,36,88">
+<item id="25" className="Carnation_109_8"  words="健康" giftName="8支白色康乃馨"  charm="28" />
+<item id="26" className="Carnation_110_8"  words="青春永驻" giftName="8支粉色康乃馨"  charm="28" />
+<item id="27" className="Carnation_111_8"  words="友谊天长地久" giftName="'8支黄色康乃馨" charm="28" />
+<item id="28" className="Carnation_112_8"  words="纯洁友谊" giftName="8支紫色康乃馨" charm="28" />
+<item id="29" className="Carnation_109_36"  words="健康" giftName="1束白色康乃馨" charm="126" />
+<item id="30" className="Carnation_110_36"   words="青春永驻" giftName="1束粉色康乃馨" charm="126" />
+<item id="31" className="Carnation_111_36"  words="友谊天长地久" giftName="1束黄色康乃馨" charm="126" />
+<item id="32" className="Carnation_112_36"  words="纯洁友谊" giftName="1束紫色康乃馨" charm="126" />
+<item id="33" className="Carnation_109_88"  words="健康" giftName="1捧白色康乃馨" charm="308" />
+<item id="34" className="Carnation_110_88"  words="青春永驻" giftName="1捧粉色康乃馨" charm="308" />
+<item id="35" className="Carnation_111_88"  words="友谊天长地久" giftName="1捧黄色康乃馨" charm="308" />
+<item id="36" className="Carnation_112_88"  words="纯洁友谊" giftName="1捧紫色康乃馨" charm="308" />
+</flowerGift>
+<flowerGift id="4" type="1" fclass="郁金香" className="Tulip" flowerId="113,114,115,116" number="12,44,100">
+<item id="37" className="Tulip_113_12"  words="信念" giftName="12支紫色郁金香"  charm="66" />
+<item id="38" className="Tulip_114_12"  words="爱的宣言" giftName="12支红色郁金香"  charm="66" />
+<item id="39" className="Tulip_115_12"  words="幸福" giftName="12支粉色郁金香" charm="66" />
+<item id="40" className="Tulip_116_12"  words="纯洁" giftName="12支白色郁金香" charm="66" />
+<item id="41" className="Tulip_113_44"  words="信念" giftName="1束紫色郁金香" charm="242" />
+<item id="42" className="Tulip_114_44"   words="爱的宣言" giftName="1束红色郁金香" charm="242" />
+<item id="43" className="Tulip_115_44"  words="幸福" giftName="1束粉色郁金香" charm="242" />
+<item id="44" className="Tulip_116_44"  words="纯洁" giftName="1束白色郁金香" charm="242" />
+<item id="45" className="Tulip_113_100"  words="信念" giftName="1捧紫色郁金香" charm="550" />
+<item id="46" className="Tulip_114_100"  words="爱的宣言" giftName="1捧红色郁金香" charm="550" />
+<item id="47" className="Tulip_115_100"  words="幸福" giftName="1捧粉色郁金香" charm="550" />
+<item id="48" className="Tulip_116_100"  words="纯洁" giftName="1捧白色郁金香" charm="550" />
+</flowerGift>
+<flowerGift id="5" type="1" fclass="水仙花" className="Daffodil" flowerId="117,118,119,120" number="6,22,66">
+<item id="49" className="Daffodil_117_6"  words="敬意" giftName="1小花盆白色水仙花"  charm="32" />
+<item id="50" className="Daffodil_118_6"  words="好运" giftName="1小花盆黄色水仙花"  charm="32" />
+<item id="51" className="Daffodil_119_6"  words="等爱" giftName="1小花盆粉色水仙花" charm="32" />
+<item id="52" className="Daffodil_120_6"  words="惜缘" giftName="1小花盆紫色水仙花" charm="32" />
+<item id="53" className="Daffodil_117_22"  words="敬意" giftName="1花盆白色水仙花" charm="120" />
+<item id="54" className="Daffodil_118_22"   words="好运" giftName="1花盆黄色水仙花" charm="120" />
+<item id="55" className="Daffodil_119_22"  words="等爱" giftName="1花盆粉色水仙花" charm="120" />
+<item id="56" className="Daffodil_120_22"  words="惜缘" giftName="1花盆紫色水仙花" charm="120" />
+<item id="57" className="Daffodil_117_66"  words="敬意" giftName="1大花盆白色水仙花" charm="362" />
+<item id="58" className="Daffodil_118_66"  words="好运" giftName="1大花盆黄色水仙花" charm="362" />
+<item id="59" className="Daffodil_119_66"  words="等爱" giftName="1大花盆粉色水仙花" charm="362" />
+<item id="60" className="Daffodil_120_66"  words="惜缘" giftName="1大花盆紫色水仙花" charm="362" />
+</flowerGift>
+<flowerGift id="6" type="1" fclass="风信子" className="Hyacinth" flowerId="121,122,123,124" number="8,58,88">
+<item id="61" className="Hyacinth_121_8"  words="默默关怀" giftName="8朵白色风信子"  charm="68" />
+<item id="62" className="Hyacinth_122_8"  words="浪漫情怀" giftName="8朵紫色风信子"  charm="68" />
+<item id="63" className="Hyacinth_123_8"  words="感谢你" giftName="8朵红色风信子" charm="68" />
+<item id="64" className="Hyacinth_124_8"  words="幸福围绕" giftName="8朵黄色风信子" charm="68" />
+<item id="65" className="Hyacinth_121_58"  words="默默关怀" giftName="58朵白色风信子" charm="492" />
+<item id="66" className="Hyacinth_122_58"  words="浪漫情怀" giftName="58朵紫色风信子" charm="492" />
+<item id="67" className="Hyacinth_123_58"  words="感谢你" giftName="58朵红色风信子" charm="492" />
+<item id="68" className="Hyacinth_124_58"  words="幸福围绕" giftName="58朵黄色风信子" charm="492" />
+<item id="69" className="Hyacinth_121_88"  words="默默关怀" giftName="88朵白色风信子" charm="744" />
+<item id="70" className="Hyacinth_122_88"  words="浪漫情怀" giftName="88朵紫色风信子" charm="744" />
+<item id="71" className="Hyacinth_123_88"  words="感谢你" giftName="88朵红色风信子" charm="744" />
+<item id="72" className="Hyacinth_124_88"  words="幸福围绕" giftName="88朵黄色风信子" charm="744" />
+</flowerGift>
+<flowerGift id="7" type="1" fclass="紫罗兰" className="Violet" flowerId="125,126,127,128" number="5,20,77">
+<item id="73" className="Violet_125_5"  words="思念" giftName="5朵紫色紫罗兰"  charm="26" />
+<item id="74" className="Violet_126_5"  words="诚实" giftName="5朵白色紫罗兰"  charm="26" />
+<item id="75" className="Violet_127_5"  words="誓言" giftName="5朵粉色紫罗兰" charm="26" />
+<item id="76" className="Violet_128_5"  words="微笑" giftName="5朵黄色紫罗兰" charm="26" />
+<item id="77" className="Violet_125_20"  words="思念" giftName="20朵紫色紫罗兰" charm="110" />
+<item id="78" className="Violet_126_20"  words="诚实" giftName="20朵白色紫罗兰" charm="110" />
+<item id="79" className="Violet_127_20"  words="誓言" giftName="20朵粉色紫罗兰" charm="110" />
+<item id="80" className="Violet_128_20"  words="微笑" giftName="20朵黄色紫罗兰" charm="110" />
+<item id="81" className="Violet_125_77"  words="思念" giftName="77朵紫色紫罗兰" charm="422" />
+<item id="82" className="Violet_126_77"  words="诚实" giftName="77朵白色紫罗兰" charm="422" />
+<item id="83" className="Violet_127_77"  words="誓言" giftName="77朵粉色紫罗兰" charm="422" />
+<item id="84" className="Violet_128_77"  words="微笑" giftName="77朵黄色紫罗兰" charm="422" />
+</flowerGift>
+<flowerGift id="8" type="1" fclass="百合" className="Lily" flowerId="129,130,131,132" number="8,33,77">
+<item id="85" className="Lily_129_8"  words="纯真" giftName="8支白色百合花"  charm="92" />
+<item id="86" className="Lily_130_8"  words="梦想成真" giftName="8支粉色百合花"  charm="92" />
+<item id="87" className="Lily_131_8"  words="相逢" giftName="8支红色百合花" charm="92" />
+<item id="88" className="Lily_132_8"  words="高贵" giftName="8支黄色百合花" charm="92" />
+<item id="89" className="Lily_129_33"  words="纯真" giftName="1束白色百合花" charm="378" />
+<item id="90" className="Lily_130_33"  words="梦想成真" giftName="1束粉色百合花" charm="378" />
+<item id="91" className="Lily_131_33"  words="相逢" giftName="1束红色百合花" charm="378" />
+<item id="92" className="Lily_132_33"  words="高贵" giftName="1束黄色百合花" charm="378" />
+<item id="93" className="Lily_129_77"  words="纯真" giftName="1捧白色百合花" charm="884" />
+<item id="94" className="Lily_130_77"  words="梦想成真" giftName="1捧粉色百合花" charm="884" />
+<item id="95" className="Lily_131_77"  words="相逢" giftName="1捧红色百合花" charm="730" />
+<item id="96" className="Lily_132_77"  words="高贵" giftName="1捧黄色百合花" charm="730" />
+</flowerGift>
+<flowerGift id="10" type="1" className="Sunflower" flowerId="137,138,139,140" number="8,58,88">
+<item id="109" className="Sunflower_137_8"  words="父爱" giftName="8朵黄色向日葵花"  charm="86" />
+<item id="110" className="Sunflower_138_8"  words="希望" giftName="8朵白色向日葵花"  charm="86" />
+<item id="111" className="Sunflower_139_8"  words="博学" giftName="8朵橙色向日葵花" charm="86" />
+<item id="112" className="Sunflower_140_8"  words="惜缘" giftName="8朵紫色向日葵花" charm="86" />
+<item id="113" className="Sunflower_137_58"  words="父爱" giftName="58朵黄色向日葵花" charm="1014" />
+<item id="114" className="Sunflower_138_58"  words="希望" giftName="58朵白色向日葵花" charm="1014" />
+<item id="115" className="Sunflower_139_58"  words="博学" giftName="58朵橙色向日葵花" charm="1014" />
+<item id="116" className="Sunflower_140_58"  words="惜缘" giftName="58朵紫色向日葵花" charm="1014" />
+<item id="117" className="Sunflower_137_88"  words="父爱" giftName="88朵黄色向日葵花" charm="1540" />
+<item id="118" className="Sunflower_138_88"  words="希望" giftName="88朵白色向日葵花" charm="1540" />
+<item id="119" className="Sunflower_139_88"  words="博学" giftName="88朵橙色向日葵花" charm="1540" />
+<item id="120" className="Sunflower_140_88"  words="惜缘" giftName="88朵紫色向日葵花" charm="1540" />
+</flowerGift>
+<flowerGift id="11" type="1" className="CallaLily" flowerId="141,142,143,144" number="5,22,101">
+<item id="121" className="CallaLily_141_5"  words="永情不渝" giftName="5支紫色海芋"  charm="112" />
+<item id="122" className="CallaLily_142_5"  words="幸运" giftName="5支白色海芋"  charm="112" />
+<item id="123" className="CallaLily_143_5"  words="尊敬" giftName="5支黄色海芋" charm="112" />
+<item id="124" className="CallaLily_144_5"  words="喜欢" giftName="5支橙色海芋" charm="112" />
+<item id="125" className="CallaLily_141_22"  words="永情不渝" giftName="1束紫色海芋" charm="494" />
+<item id="126" className="CallaLily_142_22"  words="幸运" giftName="1束白色海芋" charm="494" />
+<item id="127" className="CallaLily_143_22"  words="尊敬" giftName="1束黄色海芋" charm="494" />
+<item id="128" className="CallaLily_144_22"  words="喜欢" giftName="1束橙色海芋" charm="494" />
+<item id="129" className="CallaLily_141_101"  words="永情不渝" giftName="1捧紫色海芋" charm="2272" />
+<item id="130" className="CallaLily_142_101"  words="幸运" giftName="1捧白色海芋" charm="2272" />
+<item id="131" className="CallaLily_143_101"  words="尊敬" giftName="1捧黄色海芋" charm="2272" />
+<item id="132" className="CallaLily_144_101"  words="喜欢" giftName="1捧橙色海芋" charm="2272" />
+</flowerGift>
+<gift>
+<item id="3006" className="CronCandy"  giftName="糖果玉米" num="1" charm="0" />
+<item id="3007" className="Roll"  giftName="巧克力卷" num="1" charm="0" />
+<item id="3008" className="Kisses"  giftName="Swiss巧克力" num="1" charm="0" />
+<item id="3009" className="BlackCat"  giftName="黑猫南瓜" num="1" charm="0" />
+</gift>
+<gift>
+<item id="3001" className="chaoshiMoonCake"  desc="" cakename="潮式月饼" num="1" charm="40" />
+<item id="3002" className="tanshaoMoonCake"  desc="" cakename="炭烧月饼" num="1" charm="40" />
+<item id="3003" className="guangshiMoonCake"  desc="" cakename="广式月饼" num="1" charm="40" />
+<item id="3004" className="bingpiMoonCake"  desc="" cakename="冰皮月饼" num="1" charm="40" />
+<item id="3005" className="sushiMoonCake"  desc="" cakename="苏式月饼" num="1" charm="40" />	
+</gift>
+</gifts>
+<exchange sort="0,1">
+<item train="0" random="9" exchangeRule="" number="3" className="ExDogFood" crop="任意9种作物果实各3个就可以兑换1袋狗粮哦，快点去收集吧！"  />
+<item train="1" random="5" exchangeRule="" number="15" className="ExToySeed" crop="任意5种作物果实各15个就可以兑换1粒玩具种子，快点去收集吧！"  />
+</exchange>
+<newItem>
+<item type="1" id="28,30,32,137,141"/>
+<item type="5" id="11,12,9"/>
+<item type="7" id="137,141"/>
+</newItem>
+</main>

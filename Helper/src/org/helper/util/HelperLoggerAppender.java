@@ -30,5 +30,10 @@ public class HelperLoggerAppender {
 		}
 		loggerArea.append(logger.sdf.format(new Date()) + " " + logText + "\n");
 		loggerArea.paintImmediately(loggerArea.getBounds());
+		loggerArea.setCaretPosition(loggerArea.getDocument().getLength());
+	}
+	
+	public static void clear(){
+		logger.mainframe.getLoggerArea().setText("");
 	}
 }

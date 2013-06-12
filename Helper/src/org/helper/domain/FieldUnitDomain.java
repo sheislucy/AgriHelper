@@ -6,9 +6,10 @@ public class FieldUnitDomain implements Serializable {
 	private static final long serialVersionUID = 2980926554209171836L;
 	private String a; // crop id
 	private String b;
-	private String f;
-	private String g;
-	private String h; // season number
+	private String f; // weed number
+	private String g; // worm number
+	private String h; // if need watering
+	private String j; // season number
 	private String k; // remaining product amount
 	private String l; // minimum product amount
 	private String m; // maximum product amount
@@ -129,6 +130,14 @@ public class FieldUnitDomain implements Serializable {
 
 	public void setU(String u) {
 		this.u = u;
+	}
+
+	public String getJ() {
+		return j;
+	}
+
+	public void setJ(String j) {
+		this.j = j;
 	}
 
 }

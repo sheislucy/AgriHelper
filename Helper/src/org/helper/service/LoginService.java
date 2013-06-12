@@ -32,7 +32,8 @@ public class LoginService extends BaseService {
 
 	public VeryCDResponse login(String userId, String password)
 			throws HttpException, IOException, ParseException {
-		setUrl("http://www.verycd.com/signin");
+//		setUrl("http://www.verycd.com/signin");
+		setUrl("http://secure.verycd.com/signin");
 		Map<String, String> loginParam = new HashMap<String, String>();
 		loginParam.put("username", userId);
 		loginParam.put("password", password);

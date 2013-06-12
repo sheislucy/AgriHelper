@@ -77,6 +77,7 @@ public class RefreshFarmStep4Service extends BaseService {
 			unit.setF(String.valueOf(((JSONObject) jsonUnit).get("f")));
 			unit.setG(String.valueOf(((JSONObject) jsonUnit).get("g")));
 			unit.setH(String.valueOf(((JSONObject) jsonUnit).get("h")));
+			unit.setJ(String.valueOf(((JSONObject) jsonUnit).get("j")));
 			unit.setK(String.valueOf(((JSONObject) jsonUnit).get("k")));
 			unit.setL(String.valueOf(((JSONObject) jsonUnit).get("l")));
 			unit.setM(String.valueOf(((JSONObject) jsonUnit).get("m")));

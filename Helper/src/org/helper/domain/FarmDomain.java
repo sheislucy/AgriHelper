@@ -32,6 +32,11 @@ public class FarmDomain implements Serializable {
 		return farmDomain.get();
 	}
 
+	public static void reNew() {
+		farmDomain = new ThreadLocal<FarmDomain>();
+		farmDomain.set(new FarmDomain());
+	}
+
 	public FieldUnitDomain getFieldUnitDomainById(String id) {
 		int fid = Integer.parseInt(id);
 		for (FieldUnitDomain d : fieldList) {

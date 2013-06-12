@@ -15,6 +15,7 @@ public class CropDomain {
 	private String cropExp;
 	private String cCharm;
 	private String cropChr;
+	private String reMaturingTime;
 
 	public String getcId() {
 		return cId;
@@ -126,6 +127,14 @@ public class CropDomain {
 
 	public void setCropChr(String cropChr) {
 		this.cropChr = cropChr;
+	}
+
+	public String getReMaturingTime() {
+		return reMaturingTime;
+	}
+
+	public void setReMaturingTime(String reMaturingTime) {
+		this.reMaturingTime = reMaturingTime;
 	}
 
 }
