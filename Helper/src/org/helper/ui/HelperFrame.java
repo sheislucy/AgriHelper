@@ -119,7 +119,7 @@ public class HelperFrame extends JFrame {
 		};
 		this.logoutEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				// stopSchedule();
+				stopSchedule();
 				autoCareBtn.setEnabled(false);
 				farmTableModel.setRowCount(0);
 				HelperLoggerAppender.clear();
@@ -224,7 +224,6 @@ public class HelperFrame extends JFrame {
 	private void bindAutoEvent() {
 		this.autoCareBtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				// TODO
 				if (auto) {
 					autoCareBtn.setText("停止自动护理");
 					startSchedule();
@@ -379,9 +378,9 @@ public class HelperFrame extends JFrame {
 		};
 
 		scheduleTimer = new Timer(true);
-		scheduleTimer.schedule(refreshTask, 120000L,
-				120000L + 10000L * (long) (new Random()).nextFloat());
-		HelperLoggerAppender.writeLog("自动护理开启，间隔时间120秒");
+		long random = (long) (10000 * (new Random()).nextFloat());
+		scheduleTimer.schedule(refreshTask, 120000L, 120000L + random);
+		HelperLoggerAppender.writeLog("自动护理开启，间隔时间" + random + "毫秒");
 	}
 
 	private void stopSchedule() {
