@@ -107,7 +107,7 @@ public class HelperFrame extends JFrame {
 		this.operationList = new ArrayList<EmOperations>();
 		this.checkedFieldIdList = new ArrayList<String>();
 
-		this.setTitle("Helper Version 0.0.1");
+		this.setTitle("Helper for VeryCD - Version 0.0.1");
 		this.setSize(800, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(true);
