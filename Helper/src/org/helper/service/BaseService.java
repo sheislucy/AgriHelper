@@ -45,7 +45,7 @@ public abstract class BaseService {
 
 	private void init() {
 		schemeRegistry = new org.apache.http.conn.scheme.SchemeRegistry();
-		proxy = new HttpHost("127.0.0.1", 8888);
+//		proxy = new HttpHost("127.0.0.1", 8888);
 	}
 
 	protected HttpResponse doPost() throws ClientProtocolException, IOException {

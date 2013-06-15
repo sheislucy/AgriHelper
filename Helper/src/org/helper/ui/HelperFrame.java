@@ -107,7 +107,7 @@ public class HelperFrame extends JFrame {
 		this.operationList = new ArrayList<EmOperations>();
 		this.checkedFieldIdList = new ArrayList<String>();
 
-		this.setTitle("Helper for VeryCD - Version 0.0.1");
+		this.setTitle("Helper for VeryCD - Version 0.0.2");
 		this.setSize(800, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(true);
@@ -120,7 +120,9 @@ public class HelperFrame extends JFrame {
 		this.logoutEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				stopSchedule();
+				autoCareBtn.setText("停止自动护理");
 				autoCareBtn.setEnabled(false);
+				auto = !auto;
 				farmTableModel.setRowCount(0);
 				HelperLoggerAppender.clear();
 				((JScrollPane) infoPane.getComponentAt(0))
@@ -378,13 +380,15 @@ public class HelperFrame extends JFrame {
 		};
 
 		scheduleTimer = new Timer(true);
-		long random = (long) (10000 * (new Random()).nextFloat());
-		scheduleTimer.schedule(refreshTask, 120000L, 120000L + random);
+		long random = 120000L + (long) (10000 * (new Random()).nextFloat());
+		scheduleTimer.schedule(refreshTask, 120000L, random);
 		HelperLoggerAppender.writeLog("自动护理开启，间隔时间" + random + "毫秒");
 	}
 
 	private void stopSchedule() {
-		scheduleTimer.cancel();
+		if (null != scheduleTimer) {
+			scheduleTimer.cancel();
+		}
 		HelperLoggerAppender.writeLog("自动护理关闭");
 	}
 

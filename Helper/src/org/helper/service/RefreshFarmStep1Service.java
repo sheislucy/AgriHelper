@@ -1,7 +1,6 @@
 package org.helper.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -24,9 +23,7 @@ public class RefreshFarmStep1Service extends BaseService {
 
 	@Override
 	protected List<BasicHeader> extendRequestHeader() {
-		List<BasicHeader> headers = new ArrayList<BasicHeader>();
-		headers.add(new BasicHeader("Host", "home.verycd.com"));
-		return headers;
+		return null;
 	}
 
 	public String step1GetMethod() throws ClientProtocolException, IOException,

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.helper.service;
+package org.helper.service.login;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.VeryCDResponse;
+import org.helper.service.BaseService;
 import org.helper.util.CookieSplitter;
 import org.helper.util.HttpResponseStatus;
 import org.json.simple.JSONObject;
