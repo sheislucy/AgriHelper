@@ -2,7 +2,7 @@ package org.helper.util;
 
 import org.apache.http.Header;
 import org.helper.domain.FarmDomain;
-import org.helper.domain.login.UserDomain;
+import org.helper.domain.login.ZhineiUserDomain;
 
 public class CookieSplitter {
 
@@ -12,41 +12,26 @@ public class CookieSplitter {
 		}
 	}
 
-	public static void splitLoginForVC(Header... headers) {
+	public static void splitLogin(Header... headers) {
 		for (Header header : headers) {
 			for (String pair : cut(header.getValue())) {
-				saveUserInfoForVC(pair);
-			}
-		}
-	}
-	
-	public static void splitLoginForZN(Header... headers) {
-		for (Header header : headers) {
-			for (String pair : cut(header.getValue())) {
-				saveUserInfoZN(pair);
+				saveUserInfo(pair);
 			}
 		}
 	}
 
 	private static void saveFarmInfo(String pairStr) {
 		String[] pair = pairStr.split("=");
-		if (pair != null && pair.length > 1 ) {
+		if (pair != null && pair.length > 1) {
 			FarmDomain.getInstance().addCookie(pair[0], pair[1]);
 		}
 	}
 
-	private static void saveUserInfoForVC(String pairStr) {
-		String[] pair = pairStr.split("=");
-		if (pair != null && pair.length > 1 && EmCookieKeys.contains(pair[0])) {
-			UserDomain.getInstance().addCookie(pair[0], pair[1]);
-		}
-	}
-	
-	private static void saveUserInfoZN(String pairStr) {
+	private static void saveUserInfo(String pairStr) {
 		String[] pair = pairStr.split("=");
 		if (pair != null && pair.length > 1 && EmCookieKeys.contains(pair[0])) {
 			if (!pair[1].equalsIgnoreCase("deleted")) {
-				UserDomain.getInstance().addCookie(pair[0], pair[1]);
+				ZhineiUserDomain.getInstance().addCookie(pair[0], pair[1]);
 			}
 		}
 	}

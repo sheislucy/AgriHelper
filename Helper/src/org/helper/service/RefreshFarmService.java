@@ -2,10 +2,10 @@ package org.helper.service;
 
 import java.io.IOException;
 
-import org.apache.http.client.ClientProtocolException;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.StoreUnitDomain;
+import org.helper.util.HelperLoggerAppender;
 import org.htmlparser.util.ParserException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,16 +30,11 @@ public class RefreshFarmService {
 			step3.step3GetMethod(url3);
 			JSONObject fieldJson = step4.getFarmAndPlayerInfo();
 			buildFarm(fieldJson);
-			JSONArray storeArray = storeService.refreshStorage();
+			JSONArray storeArray = storeService.getStorageInfo();
 			buildStore(storeArray);
-		} catch (ClientProtocolException e) {
+		} catch (ParserException | IOException | ParseException e) {
 			e.printStackTrace();
-		} catch (ParserException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
+			HelperLoggerAppender.writeLog(e.getMessage());
 		}
 	}
 

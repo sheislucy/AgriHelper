@@ -6,9 +6,8 @@ import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import org.helper.domain.CropDomain;
-import org.helper.domain.UserPreferenceDomain;
 
-public class ComboBoxRenderer extends BasicComboBoxRenderer {
+public class SeedComboBoxRenderer extends BasicComboBoxRenderer {
 	private static final long serialVersionUID = -3305370701169717328L;
 
 	@SuppressWarnings("rawtypes")

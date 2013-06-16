@@ -4,12 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EmCookieKeys {
-	M_GROUP_ID("mgroupId"), DCM("dcm"), EXPIRES("expires"), SID("sid"), MEMBER_ID(
-			"member_id"), MEMBER_NAME("member_name"), UCHOME_LOGINUSER(
-			"uchome_loginuser"), PASS_HASH("pass_hash"), REMEMBERME(
-			"rememberme"), UCHOME_REWARD_LOG("uchome_reward_log"), UCHOME_AUTH(
-			"uchome_auth"), DEFAULT(""), ZHINEI_AUTH("zhinei_auth"), ZHINEI_LOGINUSER(
-			"zhinei_loginuser");
+	ZHINEI_AUTH("zhinei_auth"), ZHINEI_LOGINUSER("zhinei_loginuser");
 
 	private String value;
 
@@ -27,10 +22,6 @@ public enum EmCookieKeys {
 
 	public static boolean contains(String key) {
 		return MAP.containsKey(key);
-	}
-
-	public static EmCookieKeys convert(String key) {
-		return MAP.containsKey(key) ? MAP.get(key) : DEFAULT;
 	}
 
 	public String getValue() {

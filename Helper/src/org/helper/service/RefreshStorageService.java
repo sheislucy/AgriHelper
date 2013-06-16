@@ -12,8 +12,10 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
+import org.helper.domain.StoreUnitDomain;
 import org.helper.util.FarmKeyGenerator;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -24,7 +26,7 @@ public class RefreshStorageService extends BaseService {
 		return null;
 	}
 
-	public JSONArray refreshStorage() throws ClientProtocolException,
+	public JSONArray getStorageInfo() throws ClientProtocolException,
 			IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
@@ -55,5 +57,20 @@ public class RefreshStorageService extends BaseService {
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);
 		return cookieStore;
+	}
+
+	public void refreshStorage() throws ClientProtocolException, IOException,
+			ParseException {
+		JSONArray storeArray = getStorageInfo();
+		FarmDomain.getInstance().removeAllStorage();
+		for (Object jsonUnit : storeArray) {
+			StoreUnitDomain unit = new StoreUnitDomain();
+			unit.setcId(String.valueOf(((JSONObject) jsonUnit).get("cId")));
+			unit.setcName(String.valueOf(((JSONObject) jsonUnit).get("cName")));
+			unit.setcType(String.valueOf(((JSONObject) jsonUnit).get("cType")));
+			unit.setAmount(String.valueOf(((JSONObject) jsonUnit).get("amount")));
+			unit.setPrice(String.valueOf(((JSONObject) jsonUnit).get("price")));
+			FarmDomain.getInstance().addStore(unit);
+		}
 	}
 }

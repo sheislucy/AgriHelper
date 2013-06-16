@@ -7,6 +7,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
+import org.helper.domain.login.UserDomain;
+import org.helper.util.HelperConstants;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
@@ -25,8 +27,10 @@ public class RefreshFarmStep2Service extends BaseService {
 			IOException, ParserException {
 		setUrl(url);
 		HttpResponse response = doGet();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				"utf-8");
+		String responseBody = EntityUtils
+				.toString(response.getEntity(), (UserDomain.getInstance()
+						.isVeryCD() ? HelperConstants.ENCODING_UTF8
+						: HelperConstants.ENCODING_GBK));
 		Parser parser = new Parser(responseBody);
 		NodeFilter filter = new TagNameFilter("iframe");
 		NodeList nodes = parser.extractAllNodesThatMatch(filter);

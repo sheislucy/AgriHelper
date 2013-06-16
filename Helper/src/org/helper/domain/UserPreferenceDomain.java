@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 
+import org.helper.util.HelperLoggerAppender;
+
 public class UserPreferenceDomain implements Serializable {
 	private static final long serialVersionUID = 8300668837232655639L;
 	private static boolean isWater;
@@ -28,6 +30,7 @@ public class UserPreferenceDomain implements Serializable {
 						false, false, false, "0");
 			} catch (IOException e) {
 				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		} else {
 			try {
@@ -61,6 +64,7 @@ public class UserPreferenceDomain implements Serializable {
 				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 
 		}
@@ -102,6 +106,7 @@ public class UserPreferenceDomain implements Serializable {
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			HelperLoggerAppender.writeLog(e.getMessage());
 		}
 	}
 

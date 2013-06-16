@@ -1,4 +1,4 @@
-package org.helper.domain;
+package org.helper.domain.login;
 
 import java.io.Serializable;
 

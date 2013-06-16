@@ -3,7 +3,6 @@ package org.helper.service;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.http.ParseException;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.ShopDomain;
@@ -74,17 +73,16 @@ public class ExecuteService {
 						logText.append("成功");
 						field.setF(String.valueOf(responseJson.get("weed")));
 						field.setG(String.valueOf(responseJson.get("pest")));
+					} else {
+						logText.append("失败，原因" + responseJson.get("direction"));
 					}
 				} else {
 					logText.append("失败");
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
-			} catch (ParseException e) {
+			} catch (IOException | org.json.simple.parser.ParseException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		}
 	}
@@ -106,17 +104,16 @@ public class ExecuteService {
 						logText.append("成功");
 						field.setF(String.valueOf(responseJson.get("weed")));
 						field.setG(String.valueOf(responseJson.get("pest")));
+					} else {
+						logText.append("失败，原因" + responseJson.get("direction"));
 					}
 				} else {
 					logText.append("失败");
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
-			} catch (ParseException e) {
+			} catch (IOException | org.json.simple.parser.ParseException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		}
 	}
@@ -138,17 +135,16 @@ public class ExecuteService {
 						logText.append("成功");
 						field.setF(String.valueOf(responseJson.get("weed")));
 						field.setG(String.valueOf(responseJson.get("pest")));
+					} else {
+						logText.append("失败，原因" + responseJson.get("direction"));
 					}
 				} else {
 					logText.append("失败");
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
-			} catch (ParseException e) {
+			} catch (IOException | org.json.simple.parser.ParseException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		}
 	}
@@ -169,17 +165,16 @@ public class ExecuteService {
 						logText.append("成功，获得经验").append(
 								String.valueOf(responseJson.get("exp")));
 						field.setB("0");
+					} else {
+						logText.append("失败，原因" + responseJson.get("direction"));
 					}
 				} else {
 					logText.append("失败");
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
-			} catch (ParseException e) {
+			} catch (IOException | org.json.simple.parser.ParseException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		}
 	}
@@ -206,17 +201,16 @@ public class ExecuteService {
 								.get("status");
 						field.setB(String.valueOf(cropResponse
 								.get("cropStatus")));
+					} else {
+						logText.append("失败，原因" + responseJson.get("direction"));
 					}
 				} else {
 					logText.append("失败");
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
-			} catch (ParseException e) {
+			} catch (IOException | org.json.simple.parser.ParseException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		}
 	}
@@ -239,17 +233,16 @@ public class ExecuteService {
 								.append("，金钱")
 								.append(String.valueOf(responseJson
 										.get("money")));
+					} else {
+						logText.append("失败，原因" + responseJson.get("direction"));
 					}
 				} else {
 					logText.append("失败");
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
-			} catch (ParseException e) {
+			} catch (IOException | org.json.simple.parser.ParseException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		}
 	}
@@ -271,17 +264,16 @@ public class ExecuteService {
 						logText.append("成功，获得经验").append(
 								String.valueOf(responseJson.get("exp")));
 						field.setB("1");
+					} else {
+						logText.append("失败");
 					}
 				} else {
-					logText.append("失败");
+
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
-			} catch (ParseException e) {
+			} catch (IOException | org.json.simple.parser.ParseException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (org.json.simple.parser.ParseException e) {
-				e.printStackTrace();
+				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		}
 	}

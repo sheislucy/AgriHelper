@@ -48,6 +48,17 @@ public class FarmDomain implements Serializable {
 		return null;
 	}
 
+	public StoreUnitDomain getStoreUnitDomainByIndex(int index) {
+		if (index <= storeList.size()) {
+			return storeList.get(index);
+		}
+		return null;
+	}
+
+	public void removeAllStorage() {
+		storeList.clear();
+	}
+
 	public void removeAllFields() {
 		fieldList.clear();
 	}
@@ -55,7 +66,7 @@ public class FarmDomain implements Serializable {
 	public void addField(FieldUnitDomain unit) {
 		fieldList.add(unit);
 	}
-	
+
 	public void addStore(StoreUnitDomain unit) {
 		storeList.add(unit);
 	}

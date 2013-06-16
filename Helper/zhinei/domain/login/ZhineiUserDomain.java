@@ -1,35 +1,33 @@
-package org.helper.domain;
+package org.helper.domain.login;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.helper.util.EmCookieKeys;
-
-public class VeryCDUserDomain implements Serializable {
+public class ZhineiUserDomain implements Serializable {
 	private static final long serialVersionUID = -8608225081404150735L;
 
 	private Map<String, Object> cookieMap = new HashMap<String, Object>();
 
-	private static ThreadLocal<VeryCDUserDomain> userDomain;
+	private static ThreadLocal<ZhineiUserDomain> userDomain;
 
-	private VeryCDUserDomain() {
+	private ZhineiUserDomain() {
 	}
 
-	public static VeryCDUserDomain getInstance() {
+	public static ZhineiUserDomain getInstance() {
 		if (null == userDomain || null == userDomain.get()) {
-			userDomain = new ThreadLocal<VeryCDUserDomain>();
-			userDomain.set(new VeryCDUserDomain());
+			userDomain = new ThreadLocal<ZhineiUserDomain>();
+			userDomain.set(new ZhineiUserDomain());
 		}
 		return userDomain.get();
 	}
 	
 	public static void reNew() {
-		userDomain = new ThreadLocal<VeryCDUserDomain>();
-		userDomain.set(new VeryCDUserDomain());
+		userDomain = new ThreadLocal<ZhineiUserDomain>();
+		userDomain.set(new ZhineiUserDomain());
 	}
 
-	public static void setInstance(VeryCDUserDomain domain) {
+	public static void setInstance(ZhineiUserDomain domain) {
 		userDomain.set(domain);
 	}
 
@@ -49,8 +47,4 @@ public class VeryCDUserDomain implements Serializable {
 		return cookieMap.get(cookieName);
 	}
 
-	public boolean isLoggedIn(String name) {
-		return ((String) cookieMap.get(EmCookieKeys.MEMBER_NAME.getValue()
-				.toUpperCase())).equalsIgnoreCase(name);
-	}
 }

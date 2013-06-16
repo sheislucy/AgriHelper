@@ -6,11 +6,8 @@ public abstract class ServiceFactory {
 		S service = null;
 		try {
 			service = (S) Class.forName(c.getName()).newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException | IllegalAccessException
+				| ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return service;

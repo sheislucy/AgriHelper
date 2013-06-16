@@ -15,6 +15,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
 import org.helper.util.FarmKeyGenerator;
+import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,8 +27,8 @@ public class SellAllService extends BaseService {
 		return null;
 	}
 
-	public JSONObject sellAll()
-			throws ClientProtocolException, IOException, ParseException {
+	public JSONObject goSell() throws ClientProtocolException, IOException,
+			ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
 				"http://kxnc.manyou.yeswan.com/api.php?mod=repertory&act=saleAll&farmKey=");
@@ -41,6 +42,18 @@ public class SellAllService extends BaseService {
 		HttpResponse response = doPost();
 		String responseBody = EntityUtils.toString(response.getEntity());
 		return (JSONObject) new JSONParser().parse(responseBody);
+	}
+
+	public void sellAll() throws ClientProtocolException, IOException,
+			ParseException {
+		JSONObject responseJson = goSell();
+		StringBuilder logText = new StringBuilder("卖出");
+		if (1L == (long) responseJson.get("code")) {
+			logText.append("成功，获得金币").append(responseJson.get("money"));
+		} else {
+			logText.append("失败");
+		}
+		HelperLoggerAppender.writeLog(logText.toString());
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package org.helper.domain;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -15,6 +14,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -69,7 +69,7 @@ public class ShopDomain implements Serializable {
 						.get("cropChr")));
 
 				int season = Integer.parseInt(crop.getMaturingTime());
-				if ( season > 1) {
+				if (season > 1) {
 					for (Iterator it = crops.iterator(); it.hasNext();) {
 						Element cropEl = (Element) it.next();
 						int cropELId = Integer.parseInt(cropEl
@@ -90,14 +90,9 @@ public class ShopDomain implements Serializable {
 				cropList.add(crop);
 			}
 
-		} catch (FileNotFoundException e) {
+		} catch (IOException | ParseException | DocumentException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
+			HelperLoggerAppender.writeLog(e.getMessage());
 		}
 	}
 
@@ -122,7 +117,7 @@ public class ShopDomain implements Serializable {
 				return cd.getMaturingTime();
 			}
 		}
-		return "";
+		return "0";
 	}
 
 	public static String getReMaturingTime(String cId) {

@@ -19,11 +19,11 @@ public class TableHeaderCheckboxRender implements TableCellRenderer {
 	private JTableHeader tableHeader;
 	final JCheckBox selectBox;
 
-	public TableHeaderCheckboxRender(JTable table) {
+	public TableHeaderCheckboxRender(JTable table, boolean defaultSelect) {
 		this.tableModel = (CheckTableModel) table.getModel();
 		this.tableHeader = table.getTableHeader();
 		this.selectBox = new JCheckBox(tableModel.getColumnName(0));
-		this.selectBox.setSelected(true);
+		this.selectBox.setSelected(defaultSelect);
 
 		tableHeader.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -41,21 +41,21 @@ public class TableHeaderCheckboxRender implements TableCellRenderer {
 	}
 
 	@Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-        String valueStr = (String) value;
-        JLabel label = new JLabel(valueStr);
-        label.setHorizontalAlignment(SwingConstants.CENTER); 
-        selectBox.setHorizontalAlignment(SwingConstants.CENTER);
-        selectBox.setBorderPainted(true);
-        JComponent component = (column == 0) ? selectBox : label;
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		String valueStr = (String) value;
+		JLabel label = new JLabel(valueStr);
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		selectBox.setHorizontalAlignment(SwingConstants.CENTER);
+		selectBox.setBorderPainted(true);
+		JComponent component = (column == 0) ? selectBox : label;
 
-        component.setForeground(tableHeader.getForeground());
-        component.setBackground(tableHeader.getBackground());
-        component.setFont(tableHeader.getFont());
-        component.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+		component.setForeground(tableHeader.getForeground());
+		component.setBackground(tableHeader.getBackground());
+		component.setFont(tableHeader.getFont());
+		component.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
 
-        return component;
-    }
+		return component;
+	}
 
 }

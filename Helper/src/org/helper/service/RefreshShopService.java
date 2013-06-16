@@ -17,6 +17,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
 import org.helper.util.FarmKeyGenerator;
+import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -50,10 +51,9 @@ public class RefreshShopService extends BaseService {
 			output.write(responseBody);
 			output.flush();
 			output.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+			HelperLoggerAppender.writeLog(e.getMessage());
 		}
 	}
 

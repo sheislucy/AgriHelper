@@ -14,7 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
-import org.helper.domain.VeryCDResponse;
+import org.helper.domain.login.VeryCDResponse;
 import org.helper.service.BaseService;
 import org.helper.util.CookieSplitter;
 import org.helper.util.HttpResponseStatus;
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * @author Administrator
  * 
  */
-public class LoginService extends BaseService {
+public class VeryCDLoginService extends BaseService {
 	Logger log = LoggerFactory.getLogger(getClass());
 
 	public VeryCDResponse login(String userId, String password)
@@ -46,7 +46,7 @@ public class LoginService extends BaseService {
 		if (json.get("status") instanceof java.lang.String) {
 			if (statusCode == HttpStatus.SC_OK
 					&& ((String) json.get("status")).equalsIgnoreCase("ok")) {
-				CookieSplitter.splitLogin(response.getHeaders("Set-Cookie"));
+				CookieSplitter.splitLoginForVC(response.getHeaders("Set-Cookie"));
 				return new VeryCDResponse(HttpResponseStatus.SUCCESS.getValue());
 			}
 		} else if (json.get("status") instanceof java.lang.Boolean

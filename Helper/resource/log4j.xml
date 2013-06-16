@@ -10,8 +10,9 @@
 		</layout>
 	</appender>
 	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="Append" value="false" />
-		<param name="File" value="..\\logs\\helper.log" />
+		<param name="Append" value="true" />
+		<param name="File" value=".\\logs\\helper.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %m%n" />
 		</layout>
@@ -24,9 +25,9 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="debug" />
-		<appender-ref ref="console" />
-		<!--appender-ref ref="file" / -->
+		<!-- <priority value="debug" /> <appender-ref ref="console" /> -->
+		<priority value="info" />
+		<appender-ref ref="file" />
 	</root>
 
 </log4j:configuration>

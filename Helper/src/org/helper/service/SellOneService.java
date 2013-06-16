@@ -14,7 +14,9 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
+import org.helper.domain.ShopDomain;
 import org.helper.util.FarmKeyGenerator;
+import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,11 +28,11 @@ public class SellOneService extends BaseService {
 		return null;
 	}
 
-	public JSONObject sellOne(String number, String seedId)
+	public JSONObject goSell(String number, String seedId)
 			throws ClientProtocolException, IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
-				"URL:http://kxnc.manyou.yeswan.com/api.php?mod=repertory&act=sale&farmKey=");
+				"http://kxnc.manyou.yeswan.com/api.php?mod=repertory&act=sale&farmKey=");
 		url.append(FarmKeyGenerator.generatorFarmKey(time))
 				.append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
@@ -42,6 +44,19 @@ public class SellOneService extends BaseService {
 		HttpResponse response = doPost();
 		String responseBody = EntityUtils.toString(response.getEntity());
 		return (JSONObject) new JSONParser().parse(responseBody);
+	}
+
+	public void sellOne(String number, String seedId)
+			throws ClientProtocolException, IOException, ParseException {
+		JSONObject responseJson = goSell(number, seedId);
+		StringBuilder logText = new StringBuilder("卖出");
+		logText.append(ShopDomain.getCropName(seedId));
+		if (1L == (long) responseJson.get("code")) {
+			logText.append("成功，获得金币").append(responseJson.get("money"));
+		} else {
+			logText.append("失败");
+		}
+		HelperLoggerAppender.writeLog(logText.toString());
 	}
 
 	@Override

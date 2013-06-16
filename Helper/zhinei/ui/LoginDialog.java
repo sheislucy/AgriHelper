@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,15 +18,11 @@ import javax.swing.JTextField;
 import org.apache.http.HttpException;
 import org.apache.http.client.ClientProtocolException;
 import org.helper.domain.FarmDomain;
-import org.helper.domain.UserPreferenceDomain;
-import org.helper.domain.login.UserDomain;
-import org.helper.domain.login.VeryCDResponse;
 import org.helper.domain.login.ZhineiResponseDomain;
+import org.helper.domain.login.ZhineiUserDomain;
 import org.helper.service.RefreshFarmService;
 import org.helper.service.ServiceFactory;
-import org.helper.service.login.VeryCDLoginService;
-import org.helper.service.login.ZhineiLoginService;
-import org.helper.util.EmUrlDomain;
+import org.helper.service.login.LoginService;
 import org.helper.util.HelperLoggerAppender;
 import org.helper.util.HttpResponseStatus;
 import org.helper.util.StringUtils;
@@ -43,15 +38,14 @@ public class LoginDialog extends JDialog {
 	private HelperFrame parentFrame;
 	private JButton okButton;
 	private JButton cancelButton;
-	private JComboBox<EmUrlDomain> urlComboBox;
 
 	public LoginDialog(HelperFrame parentFrame) {
 		super(parentFrame, "登录帐户", true);
 		this.parentFrame = parentFrame;
 		String nameLabel = "用户名";
 		String pswLabel = "密    码";
-		userNameTf = new JTextField(20);
-		passwordTf = new JTextField(20);
+		userNameTf = new JTextField(12);
+		passwordTf = new JTextField(12);
 		passwordTf.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -69,7 +63,6 @@ public class LoginDialog extends JDialog {
 		contentPanel.add(userNameTf);
 		contentPanel.add(new JLabel(pswLabel));
 		contentPanel.add(passwordTf);
-		contentPanel.add(constructUrlCombo());
 		contentPanel.add(okButton);
 		contentPanel.add(cancelButton);
 
@@ -77,22 +70,13 @@ public class LoginDialog extends JDialog {
 
 		setContentPane(contentPanel);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setSize(320, 150);
+		setSize(220, 120);
 		setResizable(false);
 		addComponentListener(new ComponentAdapter() {
 			public void componentShown(ComponentEvent ce) {
 				userNameTf.requestFocusInWindow();
 			}
 		});
-	}
-
-	@SuppressWarnings("unchecked")
-	private JComboBox<EmUrlDomain> constructUrlCombo() {
-		urlComboBox = new JComboBox<EmUrlDomain>(EmUrlDomain.getDomains());
-		urlComboBox.setRenderer(new UrlComboBoxRenderer());
-		urlComboBox.setSelectedIndex(Integer.parseInt(UserPreferenceDomain
-				.getSeedComboIndex()));
-		return urlComboBox;
 	}
 
 	public void showIt() {
@@ -133,27 +117,14 @@ public class LoginDialog extends JDialog {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					UserDomain.getInstance().setUrlDomain(
-							(EmUrlDomain) urlComboBox.getSelectedItem());
-					if (UserDomain.getInstance().isVeryCD()) {
-						VeryCDLoginService loginService = ServiceFactory
-								.getService(VeryCDLoginService.class);
-						try {
-							checkSuccessForVC(loginService.login(user, psw));
-						} catch (HttpException | IOException | ParseException e) {
-							e.printStackTrace();
-							HelperLoggerAppender.writeLog(e.getMessage());
-						}
-					} else {
-						ZhineiLoginService loginService = ServiceFactory
-								.getService(ZhineiLoginService.class);
-						try {
-							checkSuccessForZN(loginService.loginPhase1(user, psw));
-						} catch (ParserException | HttpException | IOException
-								| ParseException e) {
-							e.printStackTrace();
-							HelperLoggerAppender.writeLog(e.getMessage());
-						}
+					LoginService loginService = ServiceFactory
+							.getService(LoginService.class);
+					try {
+						checkSuccess(loginService.loginPhase1(user, psw));
+					} catch (ParserException | HttpException | IOException
+							| ParseException e) {
+						e.printStackTrace();
+						HelperLoggerAppender.writeLog(e.getMessage());
 					}
 				}
 			}).start();
@@ -163,32 +134,17 @@ public class LoginDialog extends JDialog {
 		}
 	}
 
-	private void checkSuccessForVC(VeryCDResponse response) {
-		if (HttpResponseStatus.ERROR.getValue().equalsIgnoreCase(
-				response.getStatus())) {
-			JOptionPane.showMessageDialog(this.parentFrame, response.getInfo());
-		} else {
-			parentFrame.changeLoginToLogout();
-			RefreshFarmService farmService = ServiceFactory
-					.getService(RefreshFarmService.class);
-			farmService.refresh();
-			parentFrame.enableAutoCare();
-		}
-		parentFrame.refreshAccount(UserDomain.getInstance(),
-				FarmDomain.getInstance());
-	}
-
-	private void checkSuccessForZN(ZhineiResponseDomain response) {
+	private void checkSuccess(ZhineiResponseDomain response) {
 		if (HttpResponseStatus.ERROR == response.getStatus()) {
 			JOptionPane.showMessageDialog(this.parentFrame,
 					response.getInfoText());
 		} else {
 			parentFrame.changeLoginToLogout();
-			ZhineiLoginService loginService = ServiceFactory
-					.getService(ZhineiLoginService.class);
+			LoginService loginService = ServiceFactory
+					.getService(LoginService.class);
 			try {
 				loginService.loginPhase2(response.getLogin3Url());
-			} catch (IOException e) {
+			} catch (ClientProtocolException | IOException e) {
 				e.printStackTrace();
 				HelperLoggerAppender.writeLog(e.getMessage());
 			}
@@ -197,7 +153,7 @@ public class LoginDialog extends JDialog {
 			farmService.refresh();
 			parentFrame.enableAutoCare();
 		}
-		parentFrame.refreshAccount(UserDomain.getInstance(),
+		parentFrame.refreshAccount(ZhineiUserDomain.getInstance(),
 				FarmDomain.getInstance());
 	}
 

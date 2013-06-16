@@ -28,6 +28,8 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
+import org.helper.domain.login.UserDomain;
+import org.helper.util.HelperConstants;
 
 public abstract class BaseService {
 
@@ -45,7 +47,7 @@ public abstract class BaseService {
 
 	private void init() {
 		schemeRegistry = new org.apache.http.conn.scheme.SchemeRegistry();
-//		proxy = new HttpHost("127.0.0.1", 8888);
+		// proxy = new HttpHost("127.0.0.1", 8888);
 	}
 
 	protected HttpResponse doPost() throws ClientProtocolException, IOException {
@@ -66,8 +68,10 @@ public abstract class BaseService {
 		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
 				proxy);
 
-		HttpEntity entity = new UrlEncodedFormEntity(buildFormParameters(),
-				"UTF-8");
+		HttpEntity entity = new UrlEncodedFormEntity(
+				buildFormParameters(),
+				(UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8
+						: HelperConstants.ENCODING_GBK));
 		postRequest.setEntity(entity);
 
 		httpClient.setCookieStore(buildCookieStore());
@@ -123,8 +127,11 @@ public abstract class BaseService {
 
 	protected List<BasicHeader> buildCommonHeaders() {
 		List<BasicHeader> headers = new ArrayList<BasicHeader>();
-		headers.add(new BasicHeader("Content-Type",
-				"application/x-www-form-urlencoded; charset=UTF-8"));
+		headers.add(new BasicHeader(
+				"Content-Type",
+				"application/x-www-form-urlencoded; charset="
+						+ (UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8
+								: HelperConstants.ENCODING_GBK)));
 		return headers;
 	}
 
