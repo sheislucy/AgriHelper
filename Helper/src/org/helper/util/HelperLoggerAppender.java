@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.swing.JTextArea;
 
+import org.helper.domain.FarmDomain;
 import org.helper.ui.HelperFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,15 @@ public class HelperLoggerAppender {
 		if (loggerArea.getRows() > 200) {
 			loggerArea.setText("");
 		}
-		loggerArea.append(logger.sdf.format(new Date()) + " " + logText + "\n");
+		StringBuilder text = new StringBuilder(logger.sdf.format(new Date()));
+		if (FarmDomain.getInstance().getUserName() != null) {
+			text.append(" [").append(FarmDomain.getInstance().getUserName())
+					.append("] ");
+		} else {
+			text.append(" ");
+		}
+		text.append(logText).append("\n");
+		loggerArea.append(text.toString());
 		loggerArea.paintImmediately(loggerArea.getBounds());
 		loggerArea.setCaretPosition(loggerArea.getDocument().getLength());
 		fileLogger.info(logText);

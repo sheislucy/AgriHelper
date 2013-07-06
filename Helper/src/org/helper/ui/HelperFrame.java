@@ -11,7 +11,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,14 +30,17 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import org.helper.domain.AccountDomain;
 import org.helper.domain.CropDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
@@ -82,27 +87,34 @@ public class HelperFrame extends JFrame {
 	private JCheckBox harvest;
 	private JCheckBox buy;
 	private JCheckBox plant;
-	private JButton execute;
+	private JButton executeBtn;
 	private JComboBox<CropDomain> seedCombo;
 	private JButton sellSelectedBtn;
 	private MouseAdapter loginEvent;
 	private MouseAdapter logoutEvent;
-	private Timer scheduleTimer;
+	private Map<String, Timer> scheduleTimerList = new HashMap<String, Timer>();;
 	private JButton autoCareBtn;
 	private JTable storageTable;
 	private DefaultTableModel storageTableModel;
+	private JTable accountTable;
+	private DefaultTableModel accountTableModel;
 
 	private UserDomain userDomain;
 	private FarmDomain farmDomain;
+
+	private Map<String, AccountDomain> accountList = new HashMap<String, AccountDomain>();
+
 	private List<EmOperations> operationList;
 	private List<String> checkedFieldIdList;
 	private List<Integer> checkedStoreCropList;
-	private boolean auto = true;
+
+	private boolean auto = false;
+	private int accountRowId;
 
 	public HelperFrame() {
 		this.refreshBtn = new JButton("刷新");
-		this.execute = new JButton("执行护理");
-		this.execute.setToolTipText("会根据土地状态，判断执行复选框内选中的操作");
+		this.executeBtn = new JButton("执行护理");
+		this.executeBtn.setToolTipText("会根据土地状态，判断执行复选框内选中的操作");
 		this.autoCareBtn = new JButton("开启自动护理");
 		this.autoCareBtn.setEnabled(false);
 		this.autoCareBtn.setToolTipText("自动护理将除三害，并自动收/铲/种");
@@ -115,35 +127,31 @@ public class HelperFrame extends JFrame {
 		this.checkedFieldIdList = new ArrayList<String>();
 		this.checkedStoreCropList = new ArrayList<Integer>();
 
-		this.setTitle("Helper for VeryCD - Version 0.0.3");
-		this.setSize(800, 700);
+		this.setTitle("Dual Helper - Version 0.0.4");
+		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(true);
 		this.loginEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				loginDialog.showIt();
-				// startSchedule();
 			}
 		};
 		this.logoutEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				stopSchedule();
-				autoCareBtn.setText("开启自动护理");
-				autoCareBtn.setEnabled(false);
-				auto = true;
-				farmTableModel.setRowCount(0);
-				HelperLoggerAppender.clear();
-				((JScrollPane) infoPane.getComponentAt(0))
-						.setViewportView(new JPanel());
-				infoPane.repaint();
-				FarmDomain.reNew();
-				UserDomain.reNew();
-				changeLogoutToLogin();
+				stopSchedule(FarmDomain.getInstance().getUserId());
+				accountList.remove(FarmDomain.getInstance().getUserId());
+				accountTableModel.removeRow(accountRowId);
+				accountTable.setRowSelectionInterval(
+						accountTableModel.getRowCount() - 1,
+						accountTableModel.getRowCount() - 1);
+				HelperLoggerAppender.writeLog("登出成功");
+				// TODO
 			}
 		};
 		HelperLoggerAppender.setInstance(this);
 
 		this.setJMenuBar(constructMenuBar(this));
+		this.getContentPane().add(constructAccountsPane(), BorderLayout.WEST);
 		this.getContentPane().add(constructMainPanel(), BorderLayout.CENTER);
 	}
 
@@ -151,9 +159,97 @@ public class HelperFrame extends JFrame {
 		this.autoCareBtn.setEnabled(true);
 	}
 
+	private JScrollPane constructAccountsPane() {
+		JScrollPane accoutsPane = new JScrollPane(constructAccountsTable());
+		accoutsPane.setPreferredSize(new Dimension(300, 650));
+		return accoutsPane;
+	}
+
+	private JTable constructAccountsTable() {
+		accountTableModel = new CheckTableModel(new Object[] { "Id", "用户名",
+				"域", "状态" }, 0);
+
+		accountTable = new JTable();
+		accountTable.setModel(accountTableModel);
+		accountTable.setSize(400, 650);
+
+		TableColumnModel tcm = accountTable.getColumnModel();
+		tcm.getColumn(0).setWidth(50);// id
+		tcm.getColumn(1).setMaxWidth(150);// name
+		tcm.getColumn(1).setMaxWidth(100);// domain
+		tcm.getColumn(2).setMaxWidth(100);// status
+
+		accountTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e)) {
+					// 右键事件
+					JPopupMenu popMenu = null;
+					JTable table = (JTable) e.getComponent();
+					// 获取鼠标右键选中的行
+					int row = table.rowAtPoint(e.getPoint());
+					if (row == -1) {
+						return;
+					}
+					// 获取已选中的行
+					int[] rows = table.getSelectedRows();
+					boolean inSelected = false;
+					// 判断当前右键所在行是否已选中
+					for (int r : rows) {
+						if (row == r) {
+							inSelected = true;
+							break;
+						}
+					}
+					accountRowId = row;
+					// 当前鼠标右键点击所在行不被选中则高亮显示选中行
+					if (!inSelected) {
+						table.setRowSelectionInterval(accountRowId,
+								accountRowId);
+					}
+					// 生成右键菜单
+					String userId = (String) accountTableModel.getValueAt(
+							accountRowId, 0);
+					userDomain = accountList.get(userId).getUserDomain();
+					farmDomain = accountList.get(userId).getFarmDomain();
+					UserDomain.setInstance(userDomain);
+					FarmDomain.setInstance(farmDomain);
+					popMenu = makePopup();
+					popMenu.show(e.getComponent(), e.getX(), e.getY());
+				} else if (SwingUtilities.isLeftMouseButton(e)) {
+					// 左键事件
+					JTable table = (JTable) e.getComponent();
+					accountRowId = table.rowAtPoint(e.getPoint());
+					String userId = (String) accountTableModel.getValueAt(
+							accountRowId, 0);
+					userDomain = accountList.get(userId).getUserDomain();
+					farmDomain = accountList.get(userId).getFarmDomain();
+					UserDomain.setInstance(userDomain);
+					FarmDomain.setInstance(farmDomain);
+					auto = accountList.get(userId).isAutoCareEnable();
+					if (auto) {
+						autoCareBtn.setText("停止自动护理");
+					} else {
+						autoCareBtn.setText("开启自动护理");
+					}
+					refreshAccount();
+				}
+			}
+		});
+		return this.accountTable;
+	}
+
+	private JPopupMenu makePopup() {
+		JPopupMenu rightClickPop = new JPopupMenu();
+		JButton logoutBtn = new JButton("登出");
+		logoutBtn.addMouseListener(logoutEvent);
+		rightClickPop.add(logoutBtn);
+		return rightClickPop;
+	}
+
 	private JPanel constructMainPanel() {
 		mainBar = new JPanel();
-		mainBar.setPreferredSize(new Dimension(780, 650));
+		mainBar.setPreferredSize(new Dimension(680, 650));
 
 		tab = new JTabbedPane();
 		tab.addTab("手动操作", constructManuallyPanel());
@@ -166,7 +262,7 @@ public class HelperFrame extends JFrame {
 
 	private JScrollPane constructManuallyPanel2() {
 		manuallyPanel = new JScrollPane();
-		manuallyPanel.setPreferredSize(new Dimension(780, 600));
+		manuallyPanel.setPreferredSize(new Dimension(680, 600));
 		return manuallyPanel;
 	}
 
@@ -177,14 +273,14 @@ public class HelperFrame extends JFrame {
 
 		// 表格区域
 		scrollTablePanel = new JScrollPane(constructFarmFieldTable());
-		scrollTablePanel.setPreferredSize(new Dimension(780, 325));
+		scrollTablePanel.setPreferredSize(new Dimension(680, 325));
 
 		// 控制面板
 		controlPanel = new JPanel();
-		controlPanel.setPreferredSize(new Dimension(780, 90));
+		controlPanel.setPreferredSize(new Dimension(680, 90));
 
 		JPanel ctrlWrapper1 = new JPanel();// control 面板第一行，checkbox和dropdown
-		ctrlWrapper1.setPreferredSize(new Dimension(780, 30));
+		ctrlWrapper1.setPreferredSize(new Dimension(680, 30));
 		List<JCheckBox> controlCheckboxes = constructControlCheckbox();
 		for (JCheckBox cb : controlCheckboxes) {
 			ctrlWrapper1.add(cb);
@@ -194,8 +290,8 @@ public class HelperFrame extends JFrame {
 		controlPanel.add(ctrlWrapper1);
 
 		JPanel ctrlWrapper2 = new JPanel();// control 面板第二行，按钮
-		ctrlWrapper2.setPreferredSize(new Dimension(780, 35));
-		ctrlWrapper2.add(execute);
+		ctrlWrapper2.setPreferredSize(new Dimension(680, 35));
+		ctrlWrapper2.add(executeBtn);
 		ctrlWrapper2.add(refreshBtn);
 		ctrlWrapper2.add(autoCareBtn);
 		ctrlWrapper2.add(sellSelectedBtn);
@@ -209,7 +305,7 @@ public class HelperFrame extends JFrame {
 		// 日志和仓库
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
-		consoleTab.setPreferredSize(new Dimension(580, 190));
+		consoleTab.setPreferredSize(new Dimension(490, 190));
 		JScrollPane loggerScroll = new JScrollPane(loggerArea);
 		loggerScroll
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -265,8 +361,11 @@ public class HelperFrame extends JFrame {
 	}
 
 	private void bindSellEvent() {
-		this.sellSelectedBtn.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
+		this.sellSelectedBtn.addActionListener(new AbstractAction() {
+			private static final long serialVersionUID = -5343809425474458881L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				UserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				collectStorage();
@@ -295,7 +394,6 @@ public class HelperFrame extends JFrame {
 						}
 					}
 				}
-				this.mouseReleased(e);
 				refreshBtn.doClick();
 			}
 		});
@@ -304,23 +402,27 @@ public class HelperFrame extends JFrame {
 	private void bindAutoEvent() {
 		this.autoCareBtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+				auto = !auto;
 				if (auto) {
 					autoCareBtn.setText("停止自动护理");
+					accountTableModel.setValueAt("已开启自动护理", accountRowId, 3);
 					startSchedule();
 				} else {
 					autoCareBtn.setText("开启自动护理");
-					stopSchedule();
+					accountTableModel.setValueAt("未开启自动护理", accountRowId, 3);
+					stopSchedule(FarmDomain.getInstance().getUserId());
 				}
-				auto = !auto;
-				autoCareBtn.repaint();
 				this.mouseReleased(e);
 			}
 		});
 	}
 
 	private void bindExecuteEvent() {
-		this.execute.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
+		this.executeBtn.addActionListener(new AbstractAction() {
+			private static final long serialVersionUID = 1619866963615403453L;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
 				UserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				collectOperations();
@@ -329,7 +431,6 @@ public class HelperFrame extends JFrame {
 						.getService(ExecuteService.class);
 				executeService.execute(operationList, checkedFieldIdList,
 						((CropDomain) seedCombo.getSelectedItem()).getcId());
-				this.mouseReleased(e);
 				UserPreferenceDomain.saveToFile(water.isSelected(),
 						worm.isSelected(), weed.isSelected(),
 						harvest.isSelected(), plow.isSelected(),
@@ -410,7 +511,6 @@ public class HelperFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				refreshBtn.setEnabled(false);
 				RefreshFarmStep4Service farmService = ServiceFactory
 						.getService(RefreshFarmStep4Service.class);
 				RefreshStorageService storeService = ServiceFactory
@@ -426,7 +526,6 @@ public class HelperFrame extends JFrame {
 				}
 				refreshAccount(UserDomain.getInstance(),
 						FarmDomain.getInstance());
-				refreshBtn.setEnabled(true);
 			}
 		});
 
@@ -451,17 +550,20 @@ public class HelperFrame extends JFrame {
 			}
 		};
 
-		scheduleTimer = new Timer(true);
+		Timer scheduleTimer = new Timer(true);
 		long random = 120000L + (long) (10000 * (new Random()).nextFloat());
 		scheduleTimer.schedule(refreshTask, random, random);
+		scheduleTimerList.put(farmDomain.getUserId(), scheduleTimer);
+		accountList.get(farmDomain.getUserId()).setAutoCareEnable(true);
 		HelperLoggerAppender.writeLog("自动护理开启，间隔时间" + random + "毫秒");
 	}
 
-	private void stopSchedule() {
-		if (null != scheduleTimer) {
-			scheduleTimer.cancel();
+	private void stopSchedule(String userId) {
+		if (null != userId && null != scheduleTimerList.get(userId)) {
+			scheduleTimerList.get(userId).cancel();
+			scheduleTimerList.remove(userId);
+			HelperLoggerAppender.writeLog("自动护理关闭");
 		}
-		HelperLoggerAppender.writeLog("自动护理关闭");
 	}
 
 	private JTable constructFarmFieldTable() {
@@ -502,30 +604,10 @@ public class HelperFrame extends JFrame {
 		JMenu menuShop = new JMenu("商店S");
 		menuShop.setMnemonic(KeyEvent.VK_S);
 
-		JMenu menuStore = new JMenu("仓库T");
-		menuStore.setMnemonic(KeyEvent.VK_T);
-
 		menuBar.add(menuLogin);
 		menuBar.add(menuShop);
-		menuBar.add(menuStore);
 
 		return menuBar;
-	}
-
-	public void changeLoginToLogout() {
-		menuLogin.setText("登出O");
-		menuLogin.removeMouseListener(loginEvent);
-		menuLogin.setMnemonic(KeyEvent.VK_O);
-		menuLogin.addMouseListener(logoutEvent);
-		menuLogin.repaint();
-	}
-
-	private void changeLogoutToLogin() {
-		menuLogin.setText("登录L");
-		menuLogin.removeMouseListener(logoutEvent);
-		menuLogin.setMnemonic(KeyEvent.VK_L);
-		menuLogin.addMouseListener(loginEvent);
-		menuLogin.repaint();
 	}
 
 	private void refreshInfoPane() {
@@ -624,11 +706,33 @@ public class HelperFrame extends JFrame {
 		HelperLoggerAppender.writeLog("刷新状态成功");
 	}
 
-	public void refreshAccount(UserDomain userDomain,
-			FarmDomain farmDomain) {
+	public void refreshAccount(UserDomain userDomain, FarmDomain farmDomain) {
 		this.userDomain = userDomain;
 		this.farmDomain = farmDomain;
 		refreshAccount();
+	}
+
+	public void addAccountToAccountList(UserDomain userDomain,
+			FarmDomain farmDomain) {
+		AccountDomain account = new AccountDomain();
+		account.setFarmDomain(farmDomain);
+		account.setUserDomain(userDomain);
+		account.setAutoCareEnable(false);
+		this.accountList.put(FarmDomain.getInstance().getUserId(), account);
+		Vector<Object> accountRow = new Vector<Object>(); // "Id", "用户名", "域",
+															// "状态"
+		accountRow.add(FarmDomain.getInstance().getUserId());
+		accountRow.add(FarmDomain.getInstance().getUserName());
+		if (UserDomain.getInstance().isVeryCD()) {
+			accountRow.add("通过VeryCD网关登录");
+		} else {
+			accountRow.add("通过职内网关登录");
+		}
+		accountRow.add("未开启自动护理");
+		this.accountTableModel.addRow(accountRow);
+		this.accountTable.setRowSelectionInterval(
+				accountTableModel.getRowCount() - 1,
+				accountTableModel.getRowCount() - 1);
 	}
 
 	private String formatCycle(long cycle) {
@@ -650,5 +754,9 @@ public class HelperFrame extends JFrame {
 
 	public void setLoggerArea(JTextArea loggerArea) {
 		this.loggerArea = loggerArea;
+	}
+
+	public Map<String, AccountDomain> getAccountList() {
+		return accountList;
 	}
 }

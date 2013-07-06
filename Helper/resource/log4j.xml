@@ -25,9 +25,9 @@
 
 	<!-- Root Logger -->
 	<root>
-		<!-- <priority value="debug" /> <appender-ref ref="console" /> -->
-		<priority value="info" />
-		<appender-ref ref="file" />
+		<priority value="debug" />
+		<appender-ref ref="console" />
+		<!-- <priority value="debug" /> <appender-ref ref="file" /> -->
 	</root>
 
 </log4j:configuration>

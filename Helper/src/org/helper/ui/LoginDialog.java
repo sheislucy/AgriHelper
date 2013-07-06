@@ -6,6 +6,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -17,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.apache.http.HttpException;
-import org.apache.http.client.ClientProtocolException;
+import org.helper.domain.AccountDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.UserPreferenceDomain;
 import org.helper.domain.login.UserDomain;
@@ -129,6 +130,16 @@ public class LoginDialog extends JDialog {
 		final String psw = passwordTf.getText();
 
 		if (!StringUtils.isEmpty(user) && !StringUtils.isEmpty(psw)) {
+			for (Map.Entry<String, AccountDomain> account : parentFrame
+					.getAccountList().entrySet()) {
+				if (account.getValue().getFarmDomain().getUserName()
+						.equals(user)
+						&& account.getValue().getUserDomain().getUrlDomain() == (EmUrlDomain) urlComboBox
+								.getSelectedItem()) {
+					JOptionPane.showMessageDialog(this.parentFrame, "请不要重复登录");
+					return;
+				}
+			}
 
 			new Thread(new Runnable() {
 				@Override
@@ -148,7 +159,8 @@ public class LoginDialog extends JDialog {
 						ZhineiLoginService loginService = ServiceFactory
 								.getService(ZhineiLoginService.class);
 						try {
-							checkSuccessForZN(loginService.loginPhase1(user, psw));
+							checkSuccessForZN(loginService.loginPhase1(user,
+									psw));
 						} catch (ParserException | HttpException | IOException
 								| ParseException e) {
 							e.printStackTrace();
@@ -168,14 +180,15 @@ public class LoginDialog extends JDialog {
 				response.getStatus())) {
 			JOptionPane.showMessageDialog(this.parentFrame, response.getInfo());
 		} else {
-			parentFrame.changeLoginToLogout();
 			RefreshFarmService farmService = ServiceFactory
 					.getService(RefreshFarmService.class);
 			farmService.refresh();
 			parentFrame.enableAutoCare();
+			parentFrame.refreshAccount(UserDomain.getInstance(),
+					FarmDomain.getInstance());
+			parentFrame.addAccountToAccountList(UserDomain.getInstance(),
+					FarmDomain.getInstance());
 		}
-		parentFrame.refreshAccount(UserDomain.getInstance(),
-				FarmDomain.getInstance());
 	}
 
 	private void checkSuccessForZN(ZhineiResponseDomain response) {
@@ -183,7 +196,7 @@ public class LoginDialog extends JDialog {
 			JOptionPane.showMessageDialog(this.parentFrame,
 					response.getInfoText());
 		} else {
-			parentFrame.changeLoginToLogout();
+			// parentFrame.changeLoginToLogout();
 			ZhineiLoginService loginService = ServiceFactory
 					.getService(ZhineiLoginService.class);
 			try {
@@ -196,9 +209,11 @@ public class LoginDialog extends JDialog {
 					.getService(RefreshFarmService.class);
 			farmService.refresh();
 			parentFrame.enableAutoCare();
+			parentFrame.refreshAccount(UserDomain.getInstance(),
+					FarmDomain.getInstance());
+			parentFrame.addAccountToAccountList(UserDomain.getInstance(),
+					FarmDomain.getInstance());
 		}
-		parentFrame.refreshAccount(UserDomain.getInstance(),
-				FarmDomain.getInstance());
 	}
 
 }
