@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -35,18 +35,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import org.helper.domain.AccountDomain;
+import org.helper.domain.AutoExecutionTask;
 import org.helper.domain.CropDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.ShopDomain;
 import org.helper.domain.StoreUnitDomain;
 import org.helper.domain.UserPreferenceDomain;
+import org.helper.domain.UserPreferenceUnit;
 import org.helper.domain.login.UserDomain;
 import org.helper.service.ExecuteService;
 import org.helper.service.RefreshFarmStep4Service;
@@ -69,7 +72,6 @@ public class HelperFrame extends JFrame {
 	private JMenu menuLogin;
 	private JPanel mainBar;
 	private JTabbedPane tab;
-	private JScrollPane manuallyPanel;
 	private JPanel manuallyWrapper;
 	private JScrollPane scrollTablePanel;
 	private JPanel controlPanel;
@@ -130,10 +132,18 @@ public class HelperFrame extends JFrame {
 		this.setTitle("Dual Helper - Version 0.0.4");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent winEvt) {
+				UserPreferenceDomain.saveToFile();
+				System.exit(0);
+			}
+		});
 		this.setResizable(true);
 		this.loginEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				loginDialog.showIt();
+				fillExecutionsWithConfig();
 			}
 		};
 		this.logoutEvent = new MouseAdapter() {
@@ -141,11 +151,16 @@ public class HelperFrame extends JFrame {
 				stopSchedule(FarmDomain.getInstance().getUserId());
 				accountList.remove(FarmDomain.getInstance().getUserId());
 				accountTableModel.removeRow(accountRowId);
-				accountTable.setRowSelectionInterval(
-						accountTableModel.getRowCount() - 1,
-						accountTableModel.getRowCount() - 1);
+				if (accountTableModel.getRowCount() > 0) {
+					accountTable.setRowSelectionInterval(
+							accountTableModel.getRowCount() - 1,
+							accountTableModel.getRowCount() - 1);
+				} else {
+					farmTableModel.setRowCount(0);
+					((JScrollPane) infoPane.getComponentAt(0))
+							.setViewportView(new JPanel());
+				}
 				HelperLoggerAppender.writeLog("登出成功");
-				// TODO
 			}
 		};
 		HelperLoggerAppender.setInstance(this);
@@ -159,10 +174,26 @@ public class HelperFrame extends JFrame {
 		this.autoCareBtn.setEnabled(true);
 	}
 
-	private JScrollPane constructAccountsPane() {
-		JScrollPane accoutsPane = new JScrollPane(constructAccountsTable());
-		accoutsPane.setPreferredSize(new Dimension(300, 650));
-		return accoutsPane;
+	private JPanel constructAccountsPane() {
+		JPanel westPanel = new JPanel();
+		westPanel.setPreferredSize(new Dimension(300, 650));
+		BoxLayout lo = new BoxLayout(westPanel, BoxLayout.Y_AXIS);
+		westPanel.setLayout(lo);
+		JScrollPane accoutsScrollPane = new JScrollPane(
+				constructAccountsTable());
+		accoutsScrollPane.setPreferredSize(new Dimension(295, 300));
+		accoutsScrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		accoutsScrollPane
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+		JScrollPane friendsScrollPane = new JScrollPane();
+		accoutsScrollPane.setPreferredSize(new Dimension(295, 300));
+		westPanel.add(new JLabel("已登录帐号"));
+		westPanel.add(accoutsScrollPane);
+		westPanel.add(new JLabel("好友帐号"));
+		westPanel.add(friendsScrollPane);
+		return westPanel;
 	}
 
 	private JTable constructAccountsTable() {
@@ -171,13 +202,14 @@ public class HelperFrame extends JFrame {
 
 		accountTable = new JTable();
 		accountTable.setModel(accountTableModel);
-		accountTable.setSize(400, 650);
+		accountTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		accountTable.setSize(new Dimension(400, 350));
 
 		TableColumnModel tcm = accountTable.getColumnModel();
-		tcm.getColumn(0).setWidth(50);// id
-		tcm.getColumn(1).setMaxWidth(150);// name
-		tcm.getColumn(1).setMaxWidth(100);// domain
-		tcm.getColumn(2).setMaxWidth(100);// status
+		tcm.getColumn(0).setWidth(150);// id
+		tcm.getColumn(1).setWidth(150);// name
+		tcm.getColumn(1).setWidth(150);// domain
+		tcm.getColumn(2).setWidth(150);// status
 
 		accountTable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -252,18 +284,10 @@ public class HelperFrame extends JFrame {
 		mainBar.setPreferredSize(new Dimension(680, 650));
 
 		tab = new JTabbedPane();
-		tab.addTab("手动操作", constructManuallyPanel());
-		tab.addTab("好友列表", constructManuallyPanel2());
-		tab.addTab("自动操作", constructManuallyPanel2());
+		tab.addTab("土地信息", constructManuallyPanel());
 		mainBar.add(tab);
 		return mainBar;
 
-	}
-
-	private JScrollPane constructManuallyPanel2() {
-		manuallyPanel = new JScrollPane();
-		manuallyPanel.setPreferredSize(new Dimension(680, 600));
-		return manuallyPanel;
 	}
 
 	private JPanel constructManuallyPanel() {
@@ -355,8 +379,6 @@ public class HelperFrame extends JFrame {
 	private JComboBox<CropDomain> constructSeedCombo() {
 		seedCombo = new JComboBox<CropDomain>(ShopDomain.getCropList());
 		seedCombo.setRenderer(new SeedComboBoxRenderer());
-		seedCombo.setSelectedIndex(Integer.parseInt(UserPreferenceDomain
-				.getSeedComboIndex()));
 		return seedCombo;
 	}
 
@@ -431,14 +453,38 @@ public class HelperFrame extends JFrame {
 						.getService(ExecuteService.class);
 				executeService.execute(operationList, checkedFieldIdList,
 						((CropDomain) seedCombo.getSelectedItem()).getcId());
-				UserPreferenceDomain.saveToFile(water.isSelected(),
-						worm.isSelected(), weed.isSelected(),
-						harvest.isSelected(), plow.isSelected(),
-						buy.isSelected(), plant.isSelected(),
-						String.valueOf(seedCombo.getSelectedIndex()));
+				saveExecutionsToConfig();
 				refreshBtn.doClick();
 			}
 		});
+	}
+
+	private void saveExecutionsToConfig() {
+		UserPreferenceUnit userConfig = UserPreferenceDomain.USERS
+				.get(FarmDomain.getInstance().getUserId());
+		userConfig.setWater(this.water.isSelected());
+		userConfig.setWorm(this.worm.isSelected());
+		userConfig.setWeed(this.weed.isSelected());
+		userConfig.setPlow(this.plow.isSelected());
+		userConfig.setHarvest(this.harvest.isSelected());
+		userConfig.setBuy(this.buy.isSelected());
+		userConfig.setPlant(this.plant.isSelected());
+		userConfig.setSeedComboIndex(this.seedCombo.getSelectedIndex());
+	}
+
+	private void fillExecutionsWithConfig() {
+		UserPreferenceUnit userConfig = UserPreferenceDomain.USERS
+				.get(FarmDomain.getInstance().getUserId());
+		if (null != userConfig) {
+			this.water.setSelected(userConfig.isWater());
+			this.worm.setSelected(userConfig.isWorm());
+			this.weed.setSelected(userConfig.isWeed());
+			this.plow.setSelected(userConfig.isPlow());
+			this.harvest.setSelected(userConfig.isHarvest());
+			this.buy.setSelected(userConfig.isBuy());
+			this.plant.setSelected(userConfig.isPlant());
+			this.seedCombo.setSelectedIndex(userConfig.getSeedComboIndex());
+		}
 	}
 
 	private void collectStorage() {
@@ -487,13 +533,13 @@ public class HelperFrame extends JFrame {
 
 	private List<JCheckBox> constructControlCheckbox() {
 		List<JCheckBox> checkboxSet = new ArrayList<JCheckBox>();
-		water = new JCheckBox("浇水", null, UserPreferenceDomain.isWater());
-		worm = new JCheckBox("杀虫", null, UserPreferenceDomain.isWorm());
-		weed = new JCheckBox("除草", null, UserPreferenceDomain.isWeed());
-		harvest = new JCheckBox("收获", null, UserPreferenceDomain.isHarvest());
-		plow = new JCheckBox("翻地", null, UserPreferenceDomain.isPlow());
-		buy = new JCheckBox("自动买种", null, UserPreferenceDomain.isBuy());
-		plant = new JCheckBox("播种", null, UserPreferenceDomain.isPlant());
+		water = new JCheckBox("浇水", null, false);
+		worm = new JCheckBox("杀虫", null, false);
+		weed = new JCheckBox("除草", null, false);
+		harvest = new JCheckBox("收获", null, false);
+		plow = new JCheckBox("翻地", null, false);
+		buy = new JCheckBox("自动买种", null, false);
+		plant = new JCheckBox("播种", null, false);
 		checkboxSet.add(water);
 		checkboxSet.add(worm);
 		checkboxSet.add(weed);
@@ -532,30 +578,22 @@ public class HelperFrame extends JFrame {
 	}
 
 	private void startSchedule() {
-		TimerTask refreshTask = new TimerTask() {
-			public void run() {
-				ExecuteService executeService = ServiceFactory
-						.getService(ExecuteService.class);
-				refreshBtn.doClick();
-				UserDomain.setInstance(userDomain);
-				FarmDomain.setInstance(farmDomain);
-				executeService.executeAll(((CropDomain) seedCombo
-						.getSelectedItem()).getcId());
-			}
-		};
-
-		TimerTask operationTask = new TimerTask() {
-			public void run() {
-				// TODO
-			}
-		};
+		// TODO
+		UserDomain.setInstance(userDomain);
+		FarmDomain.setInstance(farmDomain);
+		AutoExecutionTask autoTask = new AutoExecutionTask(userDomain,
+				farmDomain);
 
 		Timer scheduleTimer = new Timer(true);
 		long random = 120000L + (long) (10000 * (new Random()).nextFloat());
-		scheduleTimer.schedule(refreshTask, random, random);
+		scheduleTimer.schedule(autoTask, random, random);
 		scheduleTimerList.put(farmDomain.getUserId(), scheduleTimer);
 		accountList.get(farmDomain.getUserId()).setAutoCareEnable(true);
-		HelperLoggerAppender.writeLog("自动护理开启，间隔时间" + random + "毫秒");
+		HelperLoggerAppender.writeLog("自动护理开启，间隔时间"
+				+ random
+				+ "毫秒，将种植 "
+				+ ((CropDomain) this.seedCombo.getItemAt(UserPreferenceDomain
+						.getSeedIndexById(farmDomain.getUserId()))).getcName());
 	}
 
 	private void stopSchedule(String userId) {
@@ -700,6 +738,7 @@ public class HelperFrame extends JFrame {
 	}
 
 	private void refreshAccount() {
+		fillExecutionsWithConfig();
 		refreshInfoPane();
 		refreshFarmTable();
 		refreshStorage();

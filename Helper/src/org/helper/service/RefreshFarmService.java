@@ -54,8 +54,8 @@ public class RefreshFarmService {
 		JSONObject user = (JSONObject) farmJson.get("user");
 		FarmDomain.getInstance().setCharm(String.valueOf(user.get("charm")));
 		FarmDomain.getInstance().setExp(String.valueOf(user.get("exp")));
-		FarmDomain.getInstance().setUserName(
-				String.valueOf(user.get("userName")));
+//		FarmDomain.getInstance().setUserName(
+//				String.valueOf(user.get("userName")));
 		FarmDomain.getInstance().setUserId(String.valueOf(user.get("uId")));
 		FarmDomain.getInstance().setMoney(String.valueOf(user.get("money")));
 		JSONArray farmlandStatus = (JSONArray) farmJson.get("farmlandStatus");

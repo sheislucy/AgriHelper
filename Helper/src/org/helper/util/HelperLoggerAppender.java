@@ -44,7 +44,8 @@ public class HelperLoggerAppender {
 		loggerArea.append(text.toString());
 		loggerArea.paintImmediately(loggerArea.getBounds());
 		loggerArea.setCaretPosition(loggerArea.getDocument().getLength());
-		fileLogger.info(logText);
+		fileLogger.info("[" + FarmDomain.getInstance().getUserId() + "] "
+				+ logText);
 	}
 
 	public static void clear() {
