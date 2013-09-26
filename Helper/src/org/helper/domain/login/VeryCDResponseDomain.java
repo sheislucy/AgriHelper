@@ -2,30 +2,33 @@ package org.helper.domain.login;
 
 import java.io.Serializable;
 
-public class VeryCDResponse implements Serializable {
+import org.helper.util.HttpResponseStatus;
+
+public class VeryCDResponseDomain implements Serializable {
 	private static final long serialVersionUID = -2273786623710283172L;
-	private String status;
+	private HttpResponseStatus status;
 	private String msg;
 	private String info;
 
-	public VeryCDResponse() {
+	public VeryCDResponseDomain() {
 	}
 
-	public VeryCDResponse(String status) {
+	public VeryCDResponseDomain(HttpResponseStatus status) {
 		this.status = status;
 	}
 
-	public VeryCDResponse(String status, String msg, String info) {
+	public VeryCDResponseDomain(HttpResponseStatus status, String msg,
+			String info) {
 		this.status = status;
 		this.msg = msg;
 		this.info = info;
 	}
 
-	public String getStatus() {
+	public HttpResponseStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(HttpResponseStatus status) {
 		this.status = status;
 	}
 

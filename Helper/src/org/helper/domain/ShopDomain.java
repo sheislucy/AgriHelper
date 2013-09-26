@@ -36,7 +36,7 @@ public class ShopDomain implements Serializable {
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(new File("crop.xml"));
 			Element cropsElm = document.getRootElement().element("crops");
-			List crops = cropsElm.elements("crop");
+			List<?> crops = cropsElm.elements("crop");
 
 			cropList.clear();
 			for (Object jsonUnit : cropsArray) {
@@ -70,7 +70,7 @@ public class ShopDomain implements Serializable {
 
 				int season = Integer.parseInt(crop.getMaturingTime());
 				if (season > 1) {
-					for (Iterator it = crops.iterator(); it.hasNext();) {
+					for (Iterator<?> it = crops.iterator(); it.hasNext();) {
 						Element cropEl = (Element) it.next();
 						int cropELId = Integer.parseInt(cropEl
 								.attributeValue("id"));

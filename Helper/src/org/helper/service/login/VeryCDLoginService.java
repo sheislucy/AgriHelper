@@ -14,7 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
-import org.helper.domain.login.VeryCDResponse;
+import org.helper.domain.login.VeryCDResponseDomain;
 import org.helper.service.BaseService;
 import org.helper.util.CookieSplitter;
 import org.helper.util.HttpResponseStatus;
@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
 public class VeryCDLoginService extends BaseService {
 	Logger log = LoggerFactory.getLogger(getClass());
 
-	public VeryCDResponse login(String userId, String password)
+	public VeryCDResponseDomain login(String userId, String password)
 			throws HttpException, IOException, ParseException {
-//		setUrl("http://www.verycd.com/signin");
+		// setUrl("http://www.verycd.com/signin");
 		setUrl("http://secure.verycd.com/signin");
 		Map<String, String> loginParam = new HashMap<String, String>();
 		loginParam.put("username", userId);
@@ -46,15 +46,16 @@ public class VeryCDLoginService extends BaseService {
 		if (json.get("status") instanceof java.lang.String) {
 			if (statusCode == HttpStatus.SC_OK
 					&& ((String) json.get("status")).equalsIgnoreCase("ok")) {
-				CookieSplitter.splitLoginForVC(response.getHeaders("Set-Cookie"));
-				return new VeryCDResponse(HttpResponseStatus.SUCCESS.getValue());
+				CookieSplitter.splitLoginForVC(response
+						.getHeaders("Set-Cookie"));
+				return new VeryCDResponseDomain(HttpResponseStatus.SUCCESS);
 			}
 		} else if (json.get("status") instanceof java.lang.Boolean
 				&& !(Boolean) json.get("status")) {
-			return new VeryCDResponse(HttpResponseStatus.ERROR.getValue(),
+			return new VeryCDResponseDomain(HttpResponseStatus.ERROR,
 					(String) json.get("msg"), (String) json.get("info"));
 		}
-		return new VeryCDResponse();
+		return new VeryCDResponseDomain();
 	}
 
 	@Override

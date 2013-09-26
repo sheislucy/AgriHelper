@@ -24,11 +24,13 @@ import org.helper.domain.AccountDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.UserPreferenceDomain;
 import org.helper.domain.UserPreferenceUnit;
+import org.helper.domain.login.LianpuResponseDomain;
 import org.helper.domain.login.UserDomain;
-import org.helper.domain.login.VeryCDResponse;
+import org.helper.domain.login.VeryCDResponseDomain;
 import org.helper.domain.login.ZhineiResponseDomain;
 import org.helper.service.RefreshFarmService;
 import org.helper.service.ServiceFactory;
+import org.helper.service.login.LianpuLoginService;
 import org.helper.service.login.VeryCDLoginService;
 import org.helper.service.login.ZhineiLoginService;
 import org.helper.util.EmUrlDomain;
@@ -176,7 +178,7 @@ public class LoginDialog extends JDialog {
 							e.printStackTrace();
 							HelperLoggerAppender.writeLog(e.getMessage());
 						}
-					} else {
+					} else if (UserDomain.getInstance().isZhinei()) {
 						ZhineiLoginService loginService = ServiceFactory
 								.getService(ZhineiLoginService.class);
 						try {
@@ -184,6 +186,17 @@ public class LoginDialog extends JDialog {
 									userName, passWord));
 						} catch (ParserException | HttpException | IOException
 								| ParseException e) {
+							e.printStackTrace();
+							HelperLoggerAppender.writeLog(e.getMessage());
+						}
+					} else if (UserDomain.getInstance().isLianpu()) {
+						LianpuLoginService loginService = ServiceFactory
+								.getService(LianpuLoginService.class);
+						try {
+							checkSuccessForLP(loginService.login(userName,
+									passWord));
+						} catch (org.apache.http.ParseException
+								| ParserException | IOException e) {
 							e.printStackTrace();
 							HelperLoggerAppender.writeLog(e.getMessage());
 						}
@@ -196,10 +209,18 @@ public class LoginDialog extends JDialog {
 		}
 	}
 
-	private void checkSuccessForVC(VeryCDResponse response) {
-		if (HttpResponseStatus.ERROR.getValue().equalsIgnoreCase(
-				response.getStatus())) {
+	private void checkSuccessForVC(VeryCDResponseDomain response) {
+		if (HttpResponseStatus.ERROR == response.getStatus()) {
 			JOptionPane.showMessageDialog(this.parentFrame, response.getInfo());
+		} else {
+			commonSuccessfulLogin();
+		}
+	}
+
+	private void checkSuccessForLP(LianpuResponseDomain response) {
+		if (HttpResponseStatus.ERROR == response.getStatus()) {
+			JOptionPane.showMessageDialog(this.parentFrame,
+					response.getInfoText());
 		} else {
 			commonSuccessfulLogin();
 		}

@@ -19,7 +19,7 @@ public class CookieSplitter {
 			}
 		}
 	}
-	
+
 	public static void splitLoginForZN(Header... headers) {
 		for (Header header : headers) {
 			for (String pair : cut(header.getValue())) {
@@ -28,9 +28,17 @@ public class CookieSplitter {
 		}
 	}
 
+	public static void splitLoginForLP(Header... headers) {
+		for (Header header : headers) {
+			for (String pair : cut(header.getValue())) {
+				saveUserInfoLP(pair);
+			}
+		}
+	}
+
 	private static void saveFarmInfo(String pairStr) {
 		String[] pair = pairStr.split("=");
-		if (pair != null && pair.length > 1 ) {
+		if (pair != null && pair.length > 1) {
 			FarmDomain.getInstance().addCookie(pair[0], pair[1]);
 		}
 	}
@@ -41,8 +49,17 @@ public class CookieSplitter {
 			UserDomain.getInstance().addCookie(pair[0], pair[1]);
 		}
 	}
-	
+
 	private static void saveUserInfoZN(String pairStr) {
+		String[] pair = pairStr.split("=");
+		if (pair != null && pair.length > 1 && EmCookieKeys.contains(pair[0])) {
+			if (!pair[1].equalsIgnoreCase("deleted")) {
+				UserDomain.getInstance().addCookie(pair[0], pair[1]);
+			}
+		}
+	}
+	
+	private static void saveUserInfoLP(String pairStr) {
 		String[] pair = pairStr.split("=");
 		if (pair != null && pair.length > 1 && EmCookieKeys.contains(pair[0])) {
 			if (!pair[1].equalsIgnoreCase("deleted")) {

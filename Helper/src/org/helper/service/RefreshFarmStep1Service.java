@@ -31,8 +31,10 @@ public class RefreshFarmStep1Service extends BaseService {
 			ParserException {
 		if (UserDomain.getInstance().isVeryCD()) {
 			setUrl("http://home.verycd.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D");
-		} else {
+		} else if (UserDomain.getInstance().isZhinei()) {
 			setUrl("http://my.zhinei.com/userapp.php?id=1021978&my_suffix=Lw==");
+		} else if (UserDomain.getInstance().isLianpu()) {
+			setUrl("http://www.lianpunet.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D");
 		}
 		HttpResponse response = doGet();
 		String responseBody = EntityUtils
@@ -86,7 +88,7 @@ public class RefreshFarmStep1Service extends BaseService {
 			cookie.setDomain("verycd.com");
 			cookie.setPath("/");
 			cookieStore.addCookie(cookie);
-		} else {
+		} else if (UserDomain.getInstance().isZhinei()) {
 			BasicClientCookie cookie = new BasicClientCookie(
 					EmCookieKeys.ZHINEI_LOGINUSER.getValue(),
 					(String) (UserDomain.getInstance()
@@ -99,6 +101,22 @@ public class RefreshFarmStep1Service extends BaseService {
 			cookie.setDomain(".zhinei.com");
 			cookie.setPath("/");
 			cookie2.setDomain(".zhinei.com");
+			cookie2.setPath("/");
+			cookieStore.addCookie(cookie);
+			cookieStore.addCookie(cookie2);
+		} else if (UserDomain.getInstance().isLianpu()) {
+			BasicClientCookie cookie = new BasicClientCookie(
+					EmCookieKeys.UCHOME_AUTH.getValue(),
+					(String) (UserDomain.getInstance()
+							.getCookieValue(EmCookieKeys.UCHOME_AUTH.getValue())));
+			BasicClientCookie cookie2 = new BasicClientCookie(
+					EmCookieKeys.UCHOME_LOGINUSER.getValue(),
+					(String) (UserDomain.getInstance()
+							.getCookieValue(EmCookieKeys.UCHOME_LOGINUSER
+									.getValue())));
+			cookie.setDomain(".lianpunet.com");
+			cookie.setPath("/");
+			cookie2.setDomain(".lianpunet.com");
 			cookie2.setPath("/");
 			cookieStore.addCookie(cookie);
 			cookieStore.addCookie(cookie2);

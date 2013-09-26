@@ -19,4 +19,12 @@ public class BaseStatefulDomain implements Serializable {
 	public boolean isVeryCD() {
 		return this.urlDomain == EmUrlDomain.VERYCD;
 	}
+
+	public boolean isZhinei() {
+		return this.urlDomain == EmUrlDomain.ZHINEI;
+	}
+
+	public boolean isLianpu() {
+		return this.urlDomain == EmUrlDomain.LIANPU;
+	}
 }
