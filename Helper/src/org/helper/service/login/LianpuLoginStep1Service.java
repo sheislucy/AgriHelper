@@ -11,7 +11,7 @@ import org.helper.util.HelperConstants;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
-import org.htmlparser.nodes.TagNode;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.slf4j.Logger;
@@ -36,8 +36,8 @@ public class LianpuLoginStep1Service extends BaseService {
 		NodeList linkNodes = parser.extractAllNodesThatMatch(filter);
 		if (null != linkNodes) {
 			for (int i = 0; i < linkNodes.size(); i++) {
-				TagNode aTag = (TagNode) linkNodes.elementAt(i);
-				if ("开心农场".equals(aTag.getText())) {
+				LinkTag aTag = (LinkTag) linkNodes.elementAt(i);
+				if ("开心农场".equals(aTag.getLinkText())) {
 					return aTag.getAttribute("href");
 				}
 			}

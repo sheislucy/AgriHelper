@@ -764,8 +764,10 @@ public class HelperFrame extends JFrame {
 		accountRow.add(FarmDomain.getInstance().getUserName());
 		if (UserDomain.getInstance().isVeryCD()) {
 			accountRow.add("通过VeryCD网关登录");
-		} else {
+		} else if (UserDomain.getInstance().isZhinei()) {
 			accountRow.add("通过职内网关登录");
+		} else if (UserDomain.getInstance().isLianpen()) {
+			accountRow.add("通过脸盆网关登录");
 		}
 		accountRow.add("未开启自动护理");
 		this.accountTableModel.addRow(accountRow);

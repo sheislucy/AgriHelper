@@ -33,7 +33,7 @@ public class RefreshFarmStep1Service extends BaseService {
 			setUrl("http://home.verycd.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D");
 		} else if (UserDomain.getInstance().isZhinei()) {
 			setUrl("http://my.zhinei.com/userapp.php?id=1021978&my_suffix=Lw==");
-		} else if (UserDomain.getInstance().isLianpu()) {
+		} else if (UserDomain.getInstance().isLianpen()) {
 			setUrl("http://www.lianpunet.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D");
 		}
 		HttpResponse response = doGet();
@@ -104,7 +104,7 @@ public class RefreshFarmStep1Service extends BaseService {
 			cookie2.setPath("/");
 			cookieStore.addCookie(cookie);
 			cookieStore.addCookie(cookie2);
-		} else if (UserDomain.getInstance().isLianpu()) {
+		} else if (UserDomain.getInstance().isLianpen()) {
 			BasicClientCookie cookie = new BasicClientCookie(
 					EmCookieKeys.UCHOME_AUTH.getValue(),
 					(String) (UserDomain.getInstance()

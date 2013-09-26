@@ -24,7 +24,7 @@ public class BaseStatefulDomain implements Serializable {
 		return this.urlDomain == EmUrlDomain.ZHINEI;
 	}
 
-	public boolean isLianpu() {
-		return this.urlDomain == EmUrlDomain.LIANPU;
+	public boolean isLianpen() {
+		return this.urlDomain == EmUrlDomain.LIANPEN;
 	}
 }

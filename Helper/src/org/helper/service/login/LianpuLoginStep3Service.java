@@ -23,8 +23,18 @@ public class LianpuLoginStep3Service extends BaseService {
 		return null;
 	}
 
-	public LianpuLoginDomain step3GetLianpuLoginDomain(String fastLoginUrl)
-			throws org.apache.http.ParseException, IOException, ParserException {
+	/**
+	 * http://www.lianpunet.com/do.php?ac=2362c6386a4eee615ac142c2013a9fbd
+	 * 
+	 * @param fastLoginUrl
+	 * @return
+	 * @throws org.apache.http.ParseException
+	 * @throws IOException
+	 * @throws ParserException
+	 */
+	public LianpuLoginDomain step3GetLianpuLoginDomain(String fastLoginUrl,
+			String refer) throws org.apache.http.ParseException, IOException,
+			ParserException {
 		setUrl("http://www.lianpunet.com/" + fastLoginUrl);
 		HttpResponse response = doGet();
 		String responseBody = EntityUtils.toString(response.getEntity(),
@@ -56,12 +66,14 @@ public class LianpuLoginStep3Service extends BaseService {
 								.getAttribute("name"))) {
 							loginDomain.setCookieTime(inputTag
 									.getAttribute("value"));
-						} else if (("refer").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain
-									.setRefer(inputTag.getAttribute("value"));
 						}
+						// else if (("refer").equalsIgnoreCase(inputTag
+						// .getAttribute("name"))) {
+						// loginDomain
+						// .setRefer(inputTag.getAttribute("value"));
+						// }
 					}
+					loginDomain.setRefer(refer);
 					return loginDomain;
 				}
 			}

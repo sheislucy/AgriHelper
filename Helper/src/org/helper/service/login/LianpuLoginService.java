@@ -19,8 +19,9 @@ public class LianpuLoginService {
 				.getService(LianpuLoginStep3Service.class);
 		LianpuLoginStep4Service step4 = ServiceFactory
 				.getService(LianpuLoginStep4Service.class);
-		LianpuLoginDomain domain = step3.step3GetLianpuLoginDomain(step2
-				.step2GetFastLoginUrl(step1.step1GetFarmAppUrl()));
+		String farmUrl = step1.step1GetFarmAppUrl();
+		LianpuLoginDomain domain = step3.step3GetLianpuLoginDomain(
+				step2.step2GetFastLoginUrl(farmUrl), farmUrl);
 		return step4.storeCookieForLianpu(domain, username, password);
 	}
 }

@@ -11,7 +11,7 @@ import org.helper.util.HelperConstants;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
-import org.htmlparser.nodes.TagNode;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
@@ -22,6 +22,15 @@ public class LianpuLoginStep2Service extends BaseService {
 		return null;
 	}
 
+	/**
+	 * http://www.lianpunet.com/userapp.php?id=1021978
+	 * 
+	 * @param farmAppUrl
+	 * @return
+	 * @throws org.apache.http.ParseException
+	 * @throws IOException
+	 * @throws ParserException
+	 */
 	public String step2GetFastLoginUrl(String farmAppUrl)
 			throws org.apache.http.ParseException, IOException, ParserException {
 		setUrl("http://www.lianpunet.com/" + farmAppUrl);
@@ -33,8 +42,8 @@ public class LianpuLoginStep2Service extends BaseService {
 		NodeList linkNodes = parser.extractAllNodesThatMatch(filter);
 		if (null != linkNodes) {
 			for (int i = 0; i < linkNodes.size(); i++) {
-				TagNode aTag = (TagNode) linkNodes.elementAt(i);
-				if ("登录".equals(aTag.getText())) {
+				LinkTag aTag = (LinkTag) linkNodes.elementAt(i);
+				if ("登录".equals(aTag.getLinkText())) {
 					return aTag.getAttribute("href");
 				}
 			}

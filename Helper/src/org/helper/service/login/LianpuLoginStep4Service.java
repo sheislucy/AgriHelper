@@ -20,6 +20,7 @@ import org.helper.util.HttpResponseStatus;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
+import org.htmlparser.tags.LinkTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
@@ -36,7 +37,8 @@ public class LianpuLoginStep4Service extends BaseService {
 	}
 
 	/**
-	 * POST http://www.lianpunet.com/do.php?ac=2362c6386a4eee615ac142c2013a9fbd&&ref 
+	 * POST
+	 * http://www.lianpunet.com/do.php?ac=2362c6386a4eee615ac142c2013a9fbd&&ref
 	 * 
 	 * @param loginDomain
 	 * @param userName
@@ -76,15 +78,17 @@ public class LianpuLoginStep4Service extends BaseService {
 					NodeList aTag = divChildren.extractAllNodesThatMatch(
 							new TagNameFilter("a"), true);
 					if (aTag.size() > 0) {
-						TagNode firstA = (TagNode) aTag.elementAt(0);
+						LinkTag firstA = (LinkTag) aTag.elementAt(0);
 						if (firstA.getAttribute("href").contains("userapp")) {
-							reponse.setInfoText(aTag.elementAt(0).getText());
+							reponse.setInfoText(((LinkTag) aTag.elementAt(0))
+									.getLinkText());
 							reponse.setStatus(HttpResponseStatus.SUCCESS);
 							CookieSplitter.splitLoginForLP(response
 									.getHeaders("Set-Cookie"));
 							return reponse;
 						} else {
-							reponse.setInfoText(aTag.elementAt(0).getText());
+							reponse.setInfoText(((LinkTag) aTag.elementAt(0))
+									.getLinkText());
 							reponse.setStatus(HttpResponseStatus.ERROR);
 							return reponse;
 						}

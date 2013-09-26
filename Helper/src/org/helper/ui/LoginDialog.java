@@ -189,7 +189,7 @@ public class LoginDialog extends JDialog {
 							e.printStackTrace();
 							HelperLoggerAppender.writeLog(e.getMessage());
 						}
-					} else if (UserDomain.getInstance().isLianpu()) {
+					} else if (UserDomain.getInstance().isLianpen()) {
 						LianpuLoginService loginService = ServiceFactory
 								.getService(LianpuLoginService.class);
 						try {
