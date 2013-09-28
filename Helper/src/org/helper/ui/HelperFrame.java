@@ -80,6 +80,7 @@ public class HelperFrame extends JFrame {
 	private JTabbedPane infoPane;
 	private CheckTableModel farmTableModel;
 	private LoginDialog loginDialog;
+	private JPopupMenu logoutPopMenu;
 	private JButton refreshBtn;
 	private JTextArea loggerArea;
 	private JCheckBox water;
@@ -148,6 +149,10 @@ public class HelperFrame extends JFrame {
 		};
 		this.logoutEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				if (null != logoutPopMenu) {
+					logoutPopMenu.setVisible(false);
+					logoutPopMenu = null;
+				}
 				stopSchedule(FarmDomain.getInstance().getUserId());
 				accountList.remove(FarmDomain.getInstance().getUserId());
 				accountTableModel.removeRow(accountRowId);
@@ -216,7 +221,6 @@ public class HelperFrame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e)) {
 					// 右键事件
-					JPopupMenu popMenu = null;
 					JTable table = (JTable) e.getComponent();
 					// 获取鼠标右键选中的行
 					int row = table.rowAtPoint(e.getPoint());
@@ -246,8 +250,8 @@ public class HelperFrame extends JFrame {
 					farmDomain = accountList.get(userId).getFarmDomain();
 					UserDomain.setInstance(userDomain);
 					FarmDomain.setInstance(farmDomain);
-					popMenu = makePopup();
-					popMenu.show(e.getComponent(), e.getX(), e.getY());
+					logoutPopMenu = makePopup();
+					logoutPopMenu.show(e.getComponent(), e.getX(), e.getY());
 				} else if (SwingUtilities.isLeftMouseButton(e)) {
 					// 左键事件
 					JTable table = (JTable) e.getComponent();
@@ -484,6 +488,7 @@ public class HelperFrame extends JFrame {
 			this.buy.setSelected(userConfig.isBuy());
 			this.plant.setSelected(userConfig.isPlant());
 			this.seedCombo.setSelectedIndex(userConfig.getSeedComboIndex());
+			this.seedCombo.repaint();
 		}
 	}
 
