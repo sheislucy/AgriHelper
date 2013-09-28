@@ -130,7 +130,7 @@ public class HelperFrame extends JFrame {
 		this.checkedFieldIdList = new ArrayList<String>();
 		this.checkedStoreCropList = new ArrayList<Integer>();
 
-		this.setTitle("Dual Helper - Version 0.0.5");
+		this.setTitle("Dual Helper - Version 0.0.6 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
