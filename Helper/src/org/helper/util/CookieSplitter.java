@@ -3,6 +3,7 @@ package org.helper.util;
 import org.apache.http.Header;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.login.UserDomain;
+import org.helper.enums.EmCookieKeys;
 
 public class CookieSplitter {
 

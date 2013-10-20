@@ -10,9 +10,9 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.helper.domain.login.UserDomain;
+import org.helper.enums.EmCookieKeys;
 import org.helper.service.BaseService;
 import org.helper.util.CookieSplitter;
-import org.helper.util.EmCookieKeys;
 
 public class ZhineiLoginStep3Service extends BaseService {
 

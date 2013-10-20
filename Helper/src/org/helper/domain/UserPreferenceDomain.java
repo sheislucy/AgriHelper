@@ -40,9 +40,8 @@ public class UserPreferenceDomain implements Serializable {
 				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		} else {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(
-						userPreference));
+			try (BufferedReader br = new BufferedReader(new FileReader(
+					userPreference));) {
 				String line;
 				while ((line = br.readLine()) != null) {
 					String[] config = line.split("=");
@@ -58,7 +57,6 @@ public class UserPreferenceDomain implements Serializable {
 
 					}
 				}
-				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				HelperLoggerAppender.writeLog(e.getMessage());

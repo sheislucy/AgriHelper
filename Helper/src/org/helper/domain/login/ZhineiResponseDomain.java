@@ -2,7 +2,7 @@ package org.helper.domain.login;
 
 import java.io.Serializable;
 
-import org.helper.util.HttpResponseStatus;
+import org.helper.enums.HttpResponseStatus;
 
 public class ZhineiResponseDomain implements Serializable {
 	private static final long serialVersionUID = 2325704733252060821L;

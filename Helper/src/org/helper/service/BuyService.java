@@ -38,7 +38,8 @@ public class BuyService extends BaseService {
 		Map<String, String> loginParam = new HashMap<String, String>();
 		loginParam.put("number", number);
 		loginParam.put("id", seedId);
-		loginParam.put("type", ShopDomain.getCropType(seedId));// dont know what type is, seems always be 1
+		loginParam.put("type", "1"); // ShopDomain.getCropType(seedId));// dont
+										// know what type is, seems always be 1
 		setFormParamMap(loginParam);
 
 		HttpResponse response = doPost();

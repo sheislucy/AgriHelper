@@ -24,14 +24,15 @@ public class RefreshFarmService {
 				.getService(RefreshFarmStep4Service.class);
 		RefreshStorageService storeService = ServiceFactory
 				.getService(RefreshStorageService.class);
+		PackageService packageService = ServiceFactory
+				.getService(PackageService.class);
 		try {
 			String url2 = step1.step1GetMethod();
 			String url3 = step2.step2GetMethod(url2);
 			step3.step3GetMethod(url3);
-			JSONObject fieldJson = step4.getFarmAndPlayerInfo();
-			buildFarm(fieldJson);
-			JSONArray storeArray = storeService.getStorageInfo();
-			buildStore(storeArray);
+			buildFarm(step4.getFarmAndPlayerInfo());
+			buildStore(storeService.getStorageInfo());
+			packageService.refreshPackageInfo();
 		} catch (ParserException | IOException | ParseException e) {
 			e.printStackTrace();
 			HelperLoggerAppender.writeLog(e.getMessage());
@@ -54,8 +55,8 @@ public class RefreshFarmService {
 		JSONObject user = (JSONObject) farmJson.get("user");
 		FarmDomain.getInstance().setCharm(String.valueOf(user.get("charm")));
 		FarmDomain.getInstance().setExp(String.valueOf(user.get("exp")));
-//		FarmDomain.getInstance().setUserName(
-//				String.valueOf(user.get("userName")));
+		// FarmDomain.getInstance().setUserName(
+		// String.valueOf(user.get("userName")));
 		FarmDomain.getInstance().setUserId(String.valueOf(user.get("uId")));
 		FarmDomain.getInstance().setMoney(String.valueOf(user.get("money")));
 		JSONArray farmlandStatus = (JSONArray) farmJson.get("farmlandStatus");

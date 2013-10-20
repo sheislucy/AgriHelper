@@ -6,8 +6,8 @@ import java.util.List;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.ShopDomain;
-import org.helper.util.EmCropStatus;
-import org.helper.util.EmOperations;
+import org.helper.enums.EmCropStatus;
+import org.helper.enums.EmOperations;
 import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONObject;
 

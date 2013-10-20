@@ -1,4 +1,4 @@
-package org.helper.util;
+package org.helper.enums;
 
 import java.util.HashMap;
 import java.util.Map;

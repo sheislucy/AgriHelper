@@ -11,7 +11,7 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.login.UserDomain;
-import org.helper.util.EmCookieKeys;
+import org.helper.enums.EmCookieKeys;
 import org.helper.util.HelperConstants;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;

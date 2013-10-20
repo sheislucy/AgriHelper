@@ -3,7 +3,7 @@ package org.helper.ui;
 import javax.swing.table.DefaultTableModel;
 
 public class CheckTableModel extends DefaultTableModel {
-	private static final long serialVersionUID = 1254459422316048470L;
+	private static final long serialVersionUID = 1L;
 
 	public CheckTableModel(Object[] os, int rows) {
 		super(os, rows);

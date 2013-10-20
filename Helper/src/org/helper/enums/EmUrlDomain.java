@@ -1,4 +1,4 @@
-package org.helper.util;
+package org.helper.enums;
 
 public enum EmUrlDomain {
 	ZHINEI("职内网登录网关(my.zhinei.com/index.php)"), VERYCD(

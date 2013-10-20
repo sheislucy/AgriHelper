@@ -5,7 +5,7 @@ import java.awt.Component;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import org.helper.util.EmUrlDomain;
+import org.helper.enums.EmUrlDomain;
 
 public class UrlComboBoxRenderer extends BasicComboBoxRenderer {
 	private static final long serialVersionUID = -5776263185614313566L;

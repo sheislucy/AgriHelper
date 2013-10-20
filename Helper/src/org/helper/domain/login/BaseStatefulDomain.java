@@ -2,7 +2,7 @@ package org.helper.domain.login;
 
 import java.io.Serializable;
 
-import org.helper.util.EmUrlDomain;
+import org.helper.enums.EmUrlDomain;
 
 public class BaseStatefulDomain implements Serializable {
 	private static final long serialVersionUID = -3457043423619390415L;

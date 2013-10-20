@@ -46,19 +46,22 @@ import org.helper.domain.AutoExecutionTask;
 import org.helper.domain.CropDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
+import org.helper.domain.PackageUnitDomain;
 import org.helper.domain.ShopDomain;
 import org.helper.domain.StoreUnitDomain;
 import org.helper.domain.UserPreferenceDomain;
 import org.helper.domain.UserPreferenceUnit;
 import org.helper.domain.login.UserDomain;
+import org.helper.enums.EmCropStatus;
+import org.helper.enums.EmOperations;
+import org.helper.enums.EmPackageType;
 import org.helper.service.ExecuteService;
+import org.helper.service.PackageService;
 import org.helper.service.RefreshFarmStep4Service;
 import org.helper.service.RefreshStorageService;
 import org.helper.service.SellAllService;
 import org.helper.service.SellOneService;
 import org.helper.service.ServiceFactory;
-import org.helper.util.EmCropStatus;
-import org.helper.util.EmOperations;
 import org.helper.util.HelperLoggerAppender;
 import org.json.simple.parser.ParseException;
 
@@ -99,6 +102,8 @@ public class HelperFrame extends JFrame {
 	private JButton autoCareBtn;
 	private JTable storageTable;
 	private DefaultTableModel storageTableModel;
+	private JTable packageTable;
+	private DefaultTableModel packageTableModel;
 	private JTable accountTable;
 	private DefaultTableModel accountTableModel;
 
@@ -130,7 +135,7 @@ public class HelperFrame extends JFrame {
 		this.checkedFieldIdList = new ArrayList<String>();
 		this.checkedStoreCropList = new ArrayList<Integer>();
 
-		this.setTitle("Dual Helper - Version 0.0.6 :: designed by Chloe's studio");
+		this.setTitle("Dual Helper - Version 0.0.7 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -160,8 +165,12 @@ public class HelperFrame extends JFrame {
 					accountTable.setRowSelectionInterval(
 							accountTableModel.getRowCount() - 1,
 							accountTableModel.getRowCount() - 1);
+					refreshSelectedAccount((String) accountTableModel
+							.getValueAt(accountTableModel.getRowCount() - 1, 0));
 				} else {
 					farmTableModel.setRowCount(0);
+					storageTableModel.setRowCount(0);
+					packageTableModel.setRowCount(0);
 					((JScrollPane) infoPane.getComponentAt(0))
 							.setViewportView(new JPanel());
 				}
@@ -256,23 +265,26 @@ public class HelperFrame extends JFrame {
 					// 左键事件
 					JTable table = (JTable) e.getComponent();
 					accountRowId = table.rowAtPoint(e.getPoint());
-					String userId = (String) accountTableModel.getValueAt(
-							accountRowId, 0);
-					userDomain = accountList.get(userId).getUserDomain();
-					farmDomain = accountList.get(userId).getFarmDomain();
-					UserDomain.setInstance(userDomain);
-					FarmDomain.setInstance(farmDomain);
-					auto = accountList.get(userId).isAutoCareEnable();
-					if (auto) {
-						autoCareBtn.setText("停止自动护理");
-					} else {
-						autoCareBtn.setText("开启自动护理");
-					}
-					refreshAccount();
+					refreshSelectedAccount((String) accountTableModel
+							.getValueAt(accountRowId, 0));
 				}
 			}
 		});
 		return this.accountTable;
+	}
+
+	private void refreshSelectedAccount(String userId) {
+		userDomain = accountList.get(userId).getUserDomain();
+		farmDomain = accountList.get(userId).getFarmDomain();
+		UserDomain.setInstance(userDomain);
+		FarmDomain.setInstance(farmDomain);
+		auto = accountList.get(userId).isAutoCareEnable();
+		if (auto) {
+			autoCareBtn.setText("停止自动护理");
+		} else {
+			autoCareBtn.setText("开启自动护理");
+		}
+		refreshAccount();
 	}
 
 	private JPopupMenu makePopup() {
@@ -330,7 +342,7 @@ public class HelperFrame extends JFrame {
 		bindAutoEvent();
 		bindSellEvent();
 
-		// 日志和仓库
+		// 日志
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
 		consoleTab.setPreferredSize(new Dimension(490, 190));
@@ -339,10 +351,17 @@ public class HelperFrame extends JFrame {
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		consoleTab.addTab("操作日志", loggerScroll);
 
+		// 仓库
 		JScrollPane storageScroll = new JScrollPane(constructStorageTable());
 		storageScroll
 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		consoleTab.addTab("仓库", storageScroll);
+
+		// 背包
+		JScrollPane packageScroll = new JScrollPane(constructPackageTable());
+		packageScroll
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		consoleTab.addTab("背包", packageScroll);
 
 		// 个人信息
 		infoPane = new JTabbedPane();
@@ -355,6 +374,43 @@ public class HelperFrame extends JFrame {
 		manuallyWrapper.add(controlPanel);
 		manuallyWrapper.add(footerWrapper);
 		return manuallyWrapper;
+	}
+
+	private JTable constructPackageTable() {
+		packageTableModel = new CheckTableModel(new Object[] { "名称", "数量" }, 0);
+
+		packageTable = new JTable();
+		packageTable.setModel(packageTableModel);
+		packageTable.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int row = packageTable.rowAtPoint(e.getPoint());
+				if (SwingUtilities.isLeftMouseButton(e)
+						&& e.getClickCount() == 2) {
+					@SuppressWarnings("unchecked")
+					PackageUnitDomain unit = (PackageUnitDomain) ((Vector<PackageUnitDomain>) packageTableModel
+							.getDataVector().elementAt(row)).elementAt(0);
+					if (unit.getType() == EmPackageType.SEED) {
+						for (int i = 0; i < seedCombo.getItemCount(); i++) {
+							if (seedCombo.getItemAt(i).getcId()
+									.equals(unit.getcId())) {
+								seedCombo.setSelectedIndex(i);
+								break;
+							}
+						}
+					}
+				}
+				this.mouseReleased(e);
+			}
+		});
+
+		TableColumnModel tcm = packageTable.getColumnModel();
+		PackageTableRenderer renderer = new PackageTableRenderer();
+		tcm.getColumn(0).setCellRenderer(renderer);
+		tcm.getColumn(0).setMaxWidth(100);// NAME
+		tcm.getColumn(1).setCellRenderer(renderer);
+		tcm.getColumn(1).setMaxWidth(100);
+
+		return packageTable;
 	}
 
 	private JTable constructStorageTable() {
@@ -566,11 +622,14 @@ public class HelperFrame extends JFrame {
 						.getService(RefreshFarmStep4Service.class);
 				RefreshStorageService storeService = ServiceFactory
 						.getService(RefreshStorageService.class);
+				PackageService packageService = ServiceFactory
+						.getService(PackageService.class);
 				UserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				try {
 					farmService.refreshFarm();
 					storeService.refreshStorage();
+					packageService.refreshPackageInfo();
 				} catch (IOException | ParseException e1) {
 					e1.printStackTrace();
 					HelperLoggerAppender.writeLog(e1.getMessage());
@@ -723,6 +782,17 @@ public class HelperFrame extends JFrame {
 		farmTable.repaint();
 	}
 
+	private void refreshPackage() {
+		packageTableModel.setRowCount(0);
+		List<PackageUnitDomain> packageList = FarmDomain.getInstance()
+				.getPackageList();
+		for (PackageUnitDomain unit : packageList) {
+			packageTableModel.addRow(new Object[] { unit, unit });
+		}
+		packageTable.setModel(packageTableModel);
+		packageTable.repaint();
+	}
+
 	private void refreshStorage() {
 		storageTableModel.setRowCount(0);
 		List<StoreUnitDomain> storeList = FarmDomain.getInstance()
@@ -747,6 +817,7 @@ public class HelperFrame extends JFrame {
 		refreshInfoPane();
 		refreshFarmTable();
 		refreshStorage();
+		refreshPackage();
 		HelperLoggerAppender.writeLog("刷新状态成功");
 	}
 
