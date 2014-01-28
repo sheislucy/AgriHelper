@@ -30,7 +30,7 @@ public class RefreshFarmStep4Service extends BaseService {
 			IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
-				"http://kxnc.manyou.yeswan.com/api.php?mod=user&act=run&farmKey=");
+				"http://happyfarm.manyou-apps.com/api.php?mod=user&act=run&farmKey=");
 		url.append(FarmKeyGenerator.generatorFarmKey(time))
 				.append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
@@ -52,7 +52,7 @@ public class RefreshFarmStep4Service extends BaseService {
 		}
 		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
 				(String) uidEntry.getValue());
-		cookie.setDomain("yeswan.com");
+		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);
 		return cookieStore;

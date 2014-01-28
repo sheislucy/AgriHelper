@@ -278,5 +278,6 @@ public class LoginDialog extends JDialog {
 			UserPreferenceDomain.USERS.put(
 					FarmDomain.getInstance().getUserId(), user);
 		}
+		parentFrame.createAutoTask(FarmDomain.getInstance().getUserId());
 	}
 }

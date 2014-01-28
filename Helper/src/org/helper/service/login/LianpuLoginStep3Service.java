@@ -66,14 +66,13 @@ public class LianpuLoginStep3Service extends BaseService {
 								.getAttribute("name"))) {
 							loginDomain.setCookieTime(inputTag
 									.getAttribute("value"));
+						} else if (("refer").equalsIgnoreCase(inputTag
+								.getAttribute("name"))) {
+							loginDomain
+									.setRefer(inputTag.getAttribute("value"));
 						}
-						// else if (("refer").equalsIgnoreCase(inputTag
-						// .getAttribute("name"))) {
-						// loginDomain
-						// .setRefer(inputTag.getAttribute("value"));
-						// }
 					}
-					loginDomain.setRefer(refer);
+//					loginDomain.setRefer(refer);
 					return loginDomain;
 				}
 			}

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
@@ -30,8 +31,6 @@ public class LianpuLoginStep4Service extends BaseService {
 	protected List<BasicHeader> extendRequestHeader() {
 		List<BasicHeader> headers = new ArrayList<BasicHeader>();
 		headers.add(new BasicHeader("Host", "www.lianpunet.com"));
-		headers.add(new BasicHeader("Content-Type",
-				"application/x-www-form-urlencoded"));
 		headers.add(new BasicHeader("Referer", getUrl()));
 		return headers;
 	}
@@ -58,43 +57,53 @@ public class LianpuLoginStep4Service extends BaseService {
 		loginParam.put("password", password);
 		loginParam.put("formhash", loginDomain.getFormHash());
 		loginParam.put("refer", loginDomain.getRefer());
-		loginParam.put("loginsubmit", URLEncoder.encode(
-				loginDomain.getLoginSubmit(), HelperConstants.ENCODING_GBK));
+		loginParam.put(
+				"loginsubmit",
+				URLEncoder.encode(loginDomain.getLoginSubmit(),
+						HelperConstants.ENCODING_GBK).replace("%25", "%"));
 		setFormParamMap(loginParam);
 
 		HttpResponse response = doPost();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				HelperConstants.ENCODING_GBK);
-		Parser parser = new Parser(responseBody);
-		NodeList nodes = parser.extractAllNodesThatMatch(new TagNameFilter(
-				"div"));
-		if (null != nodes) {
-			for (int i = 0; i < nodes.size(); i++) {
-				TagNode divTag = (TagNode) nodes.elementAt(i);
-				if ("showmessage"
-						.equalsIgnoreCase(divTag.getAttribute("class"))) {
-					LianpuResponseDomain reponse = new LianpuResponseDomain();
-					NodeList divChildren = divTag.getChildren();
-					NodeList aTag = divChildren.extractAllNodesThatMatch(
-							new TagNameFilter("a"), true);
-					if (aTag.size() > 0) {
-						LinkTag firstA = (LinkTag) aTag.elementAt(0);
-						if (firstA.getAttribute("href").contains("userapp")) {
-							reponse.setInfoText(((LinkTag) aTag.elementAt(0))
-									.getLinkText());
-							reponse.setStatus(HttpResponseStatus.SUCCESS);
-							CookieSplitter.splitLoginForLP(response
-									.getHeaders("Set-Cookie"));
-							return reponse;
-						} else {
-							reponse.setInfoText(((LinkTag) aTag.elementAt(0))
-									.getLinkText());
-							reponse.setStatus(HttpResponseStatus.ERROR);
-							return reponse;
+		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
+			String responseBody = EntityUtils.toString(response.getEntity(),
+					HelperConstants.ENCODING_GBK);
+			Parser parser = new Parser(responseBody);
+			NodeList nodes = parser.extractAllNodesThatMatch(new TagNameFilter(
+					"div"));
+			if (null != nodes) {
+				for (int i = 0; i < nodes.size(); i++) {
+					TagNode divTag = (TagNode) nodes.elementAt(i);
+					if ("showmessage".equalsIgnoreCase(divTag
+							.getAttribute("class"))) {
+						LianpuResponseDomain reponse = new LianpuResponseDomain();
+						NodeList divChildren = divTag.getChildren();
+						NodeList aTag = divChildren.extractAllNodesThatMatch(
+								new TagNameFilter("a"), true);
+						if (aTag.size() > 0) {
+							LinkTag firstA = (LinkTag) aTag.elementAt(0);
+							if (firstA.getAttribute("href").contains("space.php")) {
+								reponse.setInfoText(((LinkTag) aTag
+										.elementAt(0)).getLinkText());
+								reponse.setStatus(HttpResponseStatus.SUCCESS);
+								CookieSplitter.splitLoginForLP(response
+										.getHeaders("Set-Cookie"));
+								return reponse;
+							} else {
+								reponse.setInfoText(((LinkTag) aTag
+										.elementAt(0)).getLinkText());
+								reponse.setStatus(HttpResponseStatus.ERROR);
+								return reponse;
+							}
 						}
 					}
 				}
 			}
+		} else {
+			LianpuResponseDomain reponse = new LianpuResponseDomain();
+			reponse.setInfoText("Server Error.");
+			reponse.setStatus(HttpResponseStatus.ERROR);
+			return reponse;
 		}
 
 		return new LianpuResponseDomain();

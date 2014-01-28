@@ -14,7 +14,6 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
-import org.helper.domain.ShopDomain;
 import org.helper.util.FarmKeyGenerator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -31,7 +30,7 @@ public class BuyService extends BaseService {
 			throws ClientProtocolException, IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
-				"http://kxnc.manyou.yeswan.com/api.php?mod=shop&act=buy&farmKey=");
+				"http://happyfarm.manyou-apps.com/api.php?mod=shop&act=buy&farmKey=");
 		url.append(FarmKeyGenerator.generatorFarmKey(time))
 				.append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
@@ -60,7 +59,7 @@ public class BuyService extends BaseService {
 		}
 		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
 				(String) uidEntry.getValue());
-		cookie.setDomain("yeswan.com");
+		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);
 		return cookieStore;

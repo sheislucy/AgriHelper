@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Timer;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -42,7 +41,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import org.helper.domain.AccountDomain;
-import org.helper.domain.AutoExecutionTask;
 import org.helper.domain.CropDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
@@ -98,7 +96,8 @@ public class HelperFrame extends JFrame {
 	private JButton sellSelectedBtn;
 	private MouseAdapter loginEvent;
 	private MouseAdapter logoutEvent;
-	private Map<String, Timer> scheduleTimerList = new HashMap<String, Timer>();;
+	// private Map<String, Timer> scheduleTimerList = new HashMap<String,
+	// Timer>();;
 	private JButton autoCareBtn;
 	private JTable storageTable;
 	private DefaultTableModel storageTableModel;
@@ -125,7 +124,7 @@ public class HelperFrame extends JFrame {
 		this.executeBtn.setToolTipText("会根据土地状态，判断执行复选框内选中的操作");
 		this.autoCareBtn = new JButton("开启自动护理");
 		this.autoCareBtn.setEnabled(false);
-		this.autoCareBtn.setToolTipText("自动护理将除三害，并自动收/铲/种");
+		this.autoCareBtn.setToolTipText("智能自动护理将除三害，并自动收/铲/种");
 		this.sellSelectedBtn = new JButton("一键卖出选中");
 		this.sellSelectedBtn.setToolTipText("卖出仓库内选中的果实，默认全选");
 
@@ -135,7 +134,7 @@ public class HelperFrame extends JFrame {
 		this.checkedFieldIdList = new ArrayList<String>();
 		this.checkedStoreCropList = new ArrayList<Integer>();
 
-		this.setTitle("Dual Helper - Version 0.0.7 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.0.8 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -158,7 +157,9 @@ public class HelperFrame extends JFrame {
 					logoutPopMenu.setVisible(false);
 					logoutPopMenu = null;
 				}
-				stopSchedule(FarmDomain.getInstance().getUserId());
+				// stopSchedule(FarmDomain.getInstance().getUserId());
+				stopSchedule2();
+				HelperLoggerAppender.writeLog("登出成功");
 				accountList.remove(FarmDomain.getInstance().getUserId());
 				accountTableModel.removeRow(accountRowId);
 				if (accountTableModel.getRowCount() > 0) {
@@ -174,7 +175,6 @@ public class HelperFrame extends JFrame {
 					((JScrollPane) infoPane.getComponentAt(0))
 							.setViewportView(new JPanel());
 				}
-				HelperLoggerAppender.writeLog("登出成功");
 			}
 		};
 		HelperLoggerAppender.setInstance(this);
@@ -186,6 +186,7 @@ public class HelperFrame extends JFrame {
 
 	public void enableAutoCare() {
 		this.autoCareBtn.setEnabled(true);
+		this.autoCareBtn.setText("开启自动护理");
 	}
 
 	private JPanel constructAccountsPane() {
@@ -488,11 +489,12 @@ public class HelperFrame extends JFrame {
 				if (auto) {
 					autoCareBtn.setText("停止自动护理");
 					accountTableModel.setValueAt("已开启自动护理", accountRowId, 3);
-					startSchedule();
+					startSchedule2();
 				} else {
 					autoCareBtn.setText("开启自动护理");
 					accountTableModel.setValueAt("未开启自动护理", accountRowId, 3);
-					stopSchedule(FarmDomain.getInstance().getUserId());
+					// stopSchedule(FarmDomain.getInstance().getUserId());
+					stopSchedule2();
 				}
 				this.mouseReleased(e);
 			}
@@ -641,32 +643,111 @@ public class HelperFrame extends JFrame {
 
 	}
 
-	private void startSchedule() {
-		// TODO
+	/*
+	 * private void startSchedule() { UserDomain.setInstance(userDomain);
+	 * FarmDomain.setInstance(farmDomain); AutoExecutionTask autoTask = new
+	 * AutoExecutionTask(userDomain, farmDomain);
+	 * 
+	 * Timer scheduleTimer = new Timer(true); long random = 120000L + (long)
+	 * (10000 * (new Random()).nextFloat()); scheduleTimer.schedule(autoTask,
+	 * random, random); scheduleTimerList.put(farmDomain.getUserId(),
+	 * scheduleTimer);
+	 * accountList.get(farmDomain.getUserId()).setAutoCareEnable(true);
+	 * HelperLoggerAppender.writeLog("自动护理开启，间隔时间" + random + "毫秒，将种植 " +
+	 * ((CropDomain) this.seedCombo.getItemAt(UserPreferenceDomain
+	 * .getSeedIndexById(farmDomain.getUserId()))).getcName()); }
+	 */
+
+	private void startSchedule2() {
 		UserDomain.setInstance(userDomain);
 		FarmDomain.setInstance(farmDomain);
-		AutoExecutionTask autoTask = new AutoExecutionTask(userDomain,
-				farmDomain);
-
-		Timer scheduleTimer = new Timer(true);
-		long random = 120000L + (long) (10000 * (new Random()).nextFloat());
-		scheduleTimer.schedule(autoTask, random, random);
-		scheduleTimerList.put(farmDomain.getUserId(), scheduleTimer);
 		accountList.get(farmDomain.getUserId()).setAutoCareEnable(true);
-		HelperLoggerAppender.writeLog("自动护理开启，间隔时间"
-				+ random
-				+ "毫秒，将种植 "
+		HelperLoggerAppender.writeLog("自动护理开启，随机刷新间隔"
+				+ "5分钟，将种植 "
 				+ ((CropDomain) this.seedCombo.getItemAt(UserPreferenceDomain
 						.getSeedIndexById(farmDomain.getUserId()))).getcName());
 	}
 
-	private void stopSchedule(String userId) {
-		if (null != userId && null != scheduleTimerList.get(userId)) {
-			scheduleTimerList.get(userId).cancel();
-			scheduleTimerList.remove(userId);
-			HelperLoggerAppender.writeLog("自动护理关闭");
+	private void stopSchedule2() {
+		UserDomain.setInstance(userDomain);
+		FarmDomain.setInstance(farmDomain);
+		accountList.get(farmDomain.getUserId()).setAutoCareEnable(false);
+		HelperLoggerAppender.writeLog("自动护理关闭");
+	}
+
+	public void createAutoTask(final String userId) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						AccountDomain autoOnAccount = accountList.get(userId);
+						if (autoOnAccount == null) {
+							// 帐号已被登出
+							break;
+						}
+						long nearestHarvest = countSleepTime(autoOnAccount);
+						if (nearestHarvest > 300000L) {
+							// 距离下一次执行时间超过5分钟，沉默1秒，为了查看帐号是否被登出
+							Thread.sleep(1000L);
+							continue;
+						}
+						Thread.sleep(nearestHarvest);
+						if (autoOnAccount.isAutoCareEnable()) {
+							UserDomain.setInstance(autoOnAccount
+									.getUserDomain());
+							FarmDomain.setInstance(autoOnAccount
+									.getFarmDomain());
+							RefreshFarmStep4Service farmService = ServiceFactory
+									.getService(RefreshFarmStep4Service.class);
+							try {
+								farmService.refreshFarm();
+								HelperLoggerAppender.writeLog("自动护理: 刷新状态成功");
+							} catch (IOException | ParseException e) {
+								e.printStackTrace();
+								HelperLoggerAppender.writeLog(e.getMessage());
+							}
+							ExecuteService executeService = ServiceFactory
+									.getService(ExecuteService.class);
+							executeService.executeAll(UserPreferenceDomain
+									.getSeedIndexById(farmDomain.getUserId()));
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						HelperLoggerAppender.writeLog(e.getMessage());
+					}
+				}
+			}
+		}).start();
+	}
+
+	private static long countSleepTime(AccountDomain autoOnAccount) {
+		List<FieldUnitDomain> fieldList = autoOnAccount.getFarmDomain()
+				.getFieldList();
+		long nearestHarvest = 300000L;
+		for (FieldUnitDomain unit : fieldList) {
+			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
+			long harvest = (Long.parseLong(unit.getQ()) + cycle) * 1000
+					- System.currentTimeMillis();
+			if (harvest < nearestHarvest) {
+				nearestHarvest = harvest;
+			}
+		}
+		if (nearestHarvest >= 300000L) {
+			return 300000L + (long) (1000 * (new Random()).nextFloat());
+		} else if (nearestHarvest <= 1000L) {
+			return 1000L + (long) (1000 * (new Random()).nextFloat());
+		} else {
+			return nearestHarvest;
 		}
 	}
+
+	/*
+	 * private void stopSchedule(String userId) { if (null != userId && null !=
+	 * scheduleTimerList.get(userId)) { scheduleTimerList.get(userId).cancel();
+	 * scheduleTimerList.remove(userId);
+	 * HelperLoggerAppender.writeLog("自动护理关闭"); } }
+	 */
 
 	private JTable constructFarmFieldTable() {
 		farmTableModel = new CheckTableModel(new Object[] { "", "土地", "名称",
@@ -770,8 +851,7 @@ public class HelperFrame extends JFrame {
 			entry.add(Integer.parseInt(unit.getH()) == 0 ? "旱" : "-");// "干旱"
 			long harvest = Long.parseLong(unit.getQ());
 			if (harvest > 0L) {
-				Date harvestDate = new Date(
-						(Long.parseLong(unit.getQ()) + cycle) * 1000);
+				Date harvestDate = new Date((harvest + cycle) * 1000);
 				entry.add(sdf.format(harvestDate));
 			} else {
 				entry.add("-");

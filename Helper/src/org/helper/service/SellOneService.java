@@ -32,7 +32,7 @@ public class SellOneService extends BaseService {
 			throws ClientProtocolException, IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
-				"http://kxnc.manyou.yeswan.com/api.php?mod=repertory&act=sale&farmKey=");
+				"http://happyfarm.manyou-apps.com/api.php?mod=repertory&act=sale&farmKey=");
 		url.append(FarmKeyGenerator.generatorFarmKey(time))
 				.append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
@@ -72,7 +72,7 @@ public class SellOneService extends BaseService {
 		}
 		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
 				(String) uidEntry.getValue());
-		cookie.setDomain("yeswan.com");
+		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);
 		return cookieStore;

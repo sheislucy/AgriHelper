@@ -31,7 +31,7 @@ public class SellAllService extends BaseService {
 			ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
 		StringBuilder url = new StringBuilder(
-				"http://kxnc.manyou.yeswan.com/api.php?mod=repertory&act=saleAll&farmKey=");
+				"http://happyfarm.manyou-apps.com/api.php?mod=repertory&act=saleAll&farmKey=");
 		url.append(FarmKeyGenerator.generatorFarmKey(time))
 				.append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
@@ -69,7 +69,7 @@ public class SellAllService extends BaseService {
 		}
 		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
 				(String) uidEntry.getValue());
-		cookie.setDomain("yeswan.com");
+		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);
 		return cookieStore;

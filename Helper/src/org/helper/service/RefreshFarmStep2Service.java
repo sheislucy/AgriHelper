@@ -42,8 +42,8 @@ public class RefreshFarmStep2Service extends BaseService {
 					return frameTag
 							.getAttribute("src")
 							.replaceAll("&amp;", "&")
-							.replace("kxnc.manyou.yeswan.com?",
-									"kxnc.manyou.yeswan.com/?");
+							.replace("happyfarm.manyou-apps.com?",
+									"happyfarm.manyou-apps.com/?");
 				}
 			}
 		}
