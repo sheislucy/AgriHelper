@@ -59,8 +59,7 @@ public class LoginDialog extends JDialog {
 		this.parentFrame = parentFrame;
 		String nameLabel = "用户名";
 		String pswLabel = "密    码";
-		userNameTf = new Java2sAutoTextField(
-				UserPreferenceDomain.getUserNameList());
+		userNameTf = new Java2sAutoTextField(UserPreferenceDomain.getUserNameList());
 		userNameTf.setStrict(false);
 		userNameTf.setColumns(20);
 		passwordTf = new JTextField(20);
@@ -71,10 +70,8 @@ public class LoginDialog extends JDialog {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				passwordTf.setText(UserPreferenceDomain
-						.getPasswordByName(userNameTf.getText()));
-				urlComboBox.setSelectedIndex(UserPreferenceDomain
-						.getDomainIndexByName(userNameTf.getText()));
+				passwordTf.setText(UserPreferenceDomain.getPasswordByName(userNameTf.getText()));
+				urlComboBox.setSelectedIndex(UserPreferenceDomain.getDomainIndexByName(userNameTf.getText()));
 			}
 		});
 		passwordTf.addKeyListener(new KeyAdapter() {
@@ -119,11 +116,8 @@ public class LoginDialog extends JDialog {
 	}
 
 	public void showIt() {
-		setLocation(
-				parentFrame.getLocationOnScreen().x + parentFrame.getWidth()
-						/ 3,
-				parentFrame.getLocationOnScreen().y + parentFrame.getHeight()
-						/ 4);
+		setLocation(parentFrame.getLocationOnScreen().x + parentFrame.getWidth() / 3, parentFrame.getLocationOnScreen().y + parentFrame.getHeight()
+				/ 4);
 		setVisible(true);
 	}
 
@@ -152,12 +146,9 @@ public class LoginDialog extends JDialog {
 		passWord = passwordTf.getText();
 
 		if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)) {
-			for (Map.Entry<String, AccountDomain> account : parentFrame
-					.getAccountList().entrySet()) {
-				if (account.getValue().getFarmDomain().getUserName()
-						.equals(userName)
-						&& account.getValue().getUserDomain().getUrlDomain() == (EmUrlDomain) urlComboBox
-								.getSelectedItem()) {
+			for (Map.Entry<String, AccountDomain> account : parentFrame.getAccountList().entrySet()) {
+				if (account.getValue().getFarmDomain().getUserName().equals(userName)
+						&& account.getValue().getUserDomain().getUrlDomain() == (EmUrlDomain) urlComboBox.getSelectedItem()) {
 					JOptionPane.showMessageDialog(this.parentFrame, "请不要重复登录");
 					return;
 				}
@@ -166,37 +157,28 @@ public class LoginDialog extends JDialog {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					UserDomain.getInstance().setUrlDomain(
-							(EmUrlDomain) urlComboBox.getSelectedItem());
+					UserDomain.getInstance().setUrlDomain((EmUrlDomain) urlComboBox.getSelectedItem());
 					if (UserDomain.getInstance().isVeryCD()) {
-						VeryCDLoginService loginService = ServiceFactory
-								.getService(VeryCDLoginService.class);
+						VeryCDLoginService loginService = ServiceFactory.getService(VeryCDLoginService.class);
 						try {
-							checkSuccessForVC(loginService.login(userName,
-									passWord));
+							checkSuccessForVC(loginService.login(userName, passWord));
 						} catch (HttpException | IOException | ParseException e) {
 							e.printStackTrace();
 							HelperLoggerAppender.writeLog(e.getMessage());
 						}
 					} else if (UserDomain.getInstance().isZhinei()) {
-						ZhineiLoginService loginService = ServiceFactory
-								.getService(ZhineiLoginService.class);
+						ZhineiLoginService loginService = ServiceFactory.getService(ZhineiLoginService.class);
 						try {
-							checkSuccessForZN(loginService.loginPhase1(
-									userName, passWord));
-						} catch (ParserException | HttpException | IOException
-								| ParseException e) {
+							checkSuccessForZN(loginService.loginPhase1(userName, passWord));
+						} catch (ParserException | HttpException | IOException | ParseException e) {
 							e.printStackTrace();
 							HelperLoggerAppender.writeLog(e.getMessage());
 						}
 					} else if (UserDomain.getInstance().isLianpen()) {
-						LianpuLoginService loginService = ServiceFactory
-								.getService(LianpuLoginService.class);
+						LianpuLoginService loginService = ServiceFactory.getService(LianpuLoginService.class);
 						try {
-							checkSuccessForLP(loginService.login(userName,
-									passWord));
-						} catch (org.apache.http.ParseException
-								| ParserException | IOException e) {
+							checkSuccessForLP(loginService.login(userName, passWord));
+						} catch (org.apache.http.ParseException | ParserException | IOException e) {
 							e.printStackTrace();
 							HelperLoggerAppender.writeLog(e.getMessage());
 						}
@@ -219,8 +201,7 @@ public class LoginDialog extends JDialog {
 
 	private void checkSuccessForLP(LianpuResponseDomain response) {
 		if (HttpResponseStatus.ERROR == response.getStatus()) {
-			JOptionPane.showMessageDialog(this.parentFrame,
-					response.getInfoText());
+			JOptionPane.showMessageDialog(this.parentFrame, response.getInfoText());
 		} else {
 			commonSuccessfulLogin();
 		}
@@ -228,11 +209,9 @@ public class LoginDialog extends JDialog {
 
 	private void checkSuccessForZN(ZhineiResponseDomain response) {
 		if (HttpResponseStatus.ERROR == response.getStatus()) {
-			JOptionPane.showMessageDialog(this.parentFrame,
-					response.getInfoText());
+			JOptionPane.showMessageDialog(this.parentFrame, response.getInfoText());
 		} else {
-			ZhineiLoginService loginService = ServiceFactory
-					.getService(ZhineiLoginService.class);
+			ZhineiLoginService loginService = ServiceFactory.getService(ZhineiLoginService.class);
 			try {
 				loginService.loginPhase2(response.getLogin3Url());
 			} catch (IOException e) {
@@ -250,33 +229,22 @@ public class LoginDialog extends JDialog {
 		// login account while
 		// the server return is
 		// user nick name
-		RefreshFarmService farmService = ServiceFactory
-				.getService(RefreshFarmService.class);
+		RefreshFarmService farmService = ServiceFactory.getService(RefreshFarmService.class);
 		farmService.refresh();
 		parentFrame.enableAutoCare();
-		parentFrame.refreshAccount(UserDomain.getInstance(),
-				FarmDomain.getInstance());
-		parentFrame.addAccountToAccountList(UserDomain.getInstance(),
-				FarmDomain.getInstance());
-		if (UserPreferenceDomain.USERS.containsKey(FarmDomain.getInstance()
-				.getUserId())) {
-			UserPreferenceDomain.USERS
-					.get(FarmDomain.getInstance().getUserId()).setPassword(
-							passWord);
-			UserPreferenceDomain.USERS
-					.get(FarmDomain.getInstance().getUserId()).setUserName(
-							userName);
-			UserPreferenceDomain.USERS
-					.get(FarmDomain.getInstance().getUserId()).setDomainIndex(
-							urlComboBox.getSelectedIndex());
+		parentFrame.refreshAccount(UserDomain.getInstance(), FarmDomain.getInstance());
+		parentFrame.addAccountToAccountList(UserDomain.getInstance(), FarmDomain.getInstance());
+		if (UserPreferenceDomain.USERS.containsKey(FarmDomain.getInstance().getUserId())) {
+			UserPreferenceDomain.USERS.get(FarmDomain.getInstance().getUserId()).setPassword(passWord);
+			UserPreferenceDomain.USERS.get(FarmDomain.getInstance().getUserId()).setUserName(userName);
+			UserPreferenceDomain.USERS.get(FarmDomain.getInstance().getUserId()).setDomainIndex(urlComboBox.getSelectedIndex());
 		} else {
 			UserPreferenceUnit user = new UserPreferenceUnit();
 			user.setUserName(userName);
 			user.setPassword(passWord);
 			user.setUserId(FarmDomain.getInstance().getUserId());
 			user.setDomainIndex(urlComboBox.getSelectedIndex());
-			UserPreferenceDomain.USERS.put(
-					FarmDomain.getInstance().getUserId(), user);
+			UserPreferenceDomain.USERS.put(FarmDomain.getInstance().getUserId(), user);
 		}
 		parentFrame.createAutoTask(FarmDomain.getInstance().getUserId());
 	}

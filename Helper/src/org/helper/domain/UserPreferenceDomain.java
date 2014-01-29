@@ -40,8 +40,7 @@ public class UserPreferenceDomain implements Serializable {
 				HelperLoggerAppender.writeLog(e.getMessage());
 			}
 		} else {
-			try (BufferedReader br = new BufferedReader(new FileReader(
-					userPreference));) {
+			try (BufferedReader br = new BufferedReader(new FileReader(userPreference));) {
 				String line;
 				while ((line = br.readLine()) != null) {
 					String[] config = line.split("=");
@@ -64,16 +63,14 @@ public class UserPreferenceDomain implements Serializable {
 		}
 	}
 
-	private static void getUsersFromConfigFile(String[] idAndTitle,
-			String[] config) {
+	private static void getUsersFromConfigFile(String[] idAndTitle, String[] config) {
 		USERS.get(idAndTitle[0]).setUserId(idAndTitle[0]);
 		if (idAndTitle[1].equalsIgnoreCase("userName")) {
 			USERS.get(idAndTitle[0]).setUserName(config[1]);
 		} else if (idAndTitle[1].equalsIgnoreCase("password")) {
 			USERS.get(idAndTitle[0]).setPassword(config[1]);
 		} else if (idAndTitle[1].equalsIgnoreCase("domainIndex")) {
-			USERS.get(idAndTitle[0])
-					.setDomainIndex(Integer.parseInt(config[1]));
+			USERS.get(idAndTitle[0]).setDomainIndex(Integer.parseInt(config[1]));
 		} else if (idAndTitle[1].equalsIgnoreCase("isWater")) {
 			USERS.get(idAndTitle[0]).setWater(new Boolean(config[1]));
 		} else if (idAndTitle[1].equalsIgnoreCase("isWorm")) {
@@ -89,8 +86,7 @@ public class UserPreferenceDomain implements Serializable {
 		} else if (idAndTitle[1].equalsIgnoreCase("isPlant")) {
 			USERS.get(idAndTitle[0]).setPlant(new Boolean(config[1]));
 		} else if (idAndTitle[1].equalsIgnoreCase("seedComboIndex")) {
-			USERS.get(idAndTitle[0]).setSeedComboIndex(
-					Integer.parseInt(config[1]));
+			USERS.get(idAndTitle[0]).setSeedComboIndex(Integer.parseInt(config[1]));
 		}
 	}
 
@@ -132,46 +128,31 @@ public class UserPreferenceDomain implements Serializable {
 	public static void saveToFile() {
 
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File(
-					"user.ini"), false));
-			for (Map.Entry<String, UserPreferenceUnit> userEntry : USERS
-					.entrySet()) {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(new File("user.ini"), false));
+			for (Map.Entry<String, UserPreferenceUnit> userEntry : USERS.entrySet()) {
 				UserPreferenceUnit userPreferenceUnit = userEntry.getValue();
 				if (null != userPreferenceUnit.getUserId()) {
-					writer.write(userPreferenceUnit.getUserId() + ".userName="
-							+ userPreferenceUnit.getUserName());
+					writer.write(userPreferenceUnit.getUserId() + ".userName=" + userPreferenceUnit.getUserName());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".password="
-							+ userPreferenceUnit.getPassword());
+					writer.write(userPreferenceUnit.getUserId() + ".password=" + userPreferenceUnit.getPassword());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId()
-							+ ".domainIndex="
-							+ userPreferenceUnit.getDomainIndex());
+					writer.write(userPreferenceUnit.getUserId() + ".domainIndex=" + userPreferenceUnit.getDomainIndex());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".isWater="
-							+ userPreferenceUnit.isWater());
+					writer.write(userPreferenceUnit.getUserId() + ".isWater=" + userPreferenceUnit.isWater());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".isWorm="
-							+ userPreferenceUnit.isWorm());
+					writer.write(userPreferenceUnit.getUserId() + ".isWorm=" + userPreferenceUnit.isWorm());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".isWeed="
-							+ userPreferenceUnit.isWeed());
+					writer.write(userPreferenceUnit.getUserId() + ".isWeed=" + userPreferenceUnit.isWeed());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".isHarvest="
-							+ userPreferenceUnit.isHarvest());
+					writer.write(userPreferenceUnit.getUserId() + ".isHarvest=" + userPreferenceUnit.isHarvest());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".isPlow="
-							+ userPreferenceUnit.isPlow());
+					writer.write(userPreferenceUnit.getUserId() + ".isPlow=" + userPreferenceUnit.isPlow());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".isBuy="
-							+ userPreferenceUnit.isBuy());
+					writer.write(userPreferenceUnit.getUserId() + ".isBuy=" + userPreferenceUnit.isBuy());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId() + ".isPlant="
-							+ userPreferenceUnit.isPlant());
+					writer.write(userPreferenceUnit.getUserId() + ".isPlant=" + userPreferenceUnit.isPlant());
 					writer.newLine();
-					writer.write(userPreferenceUnit.getUserId()
-							+ ".seedComboIndex="
-							+ userPreferenceUnit.getSeedComboIndex());
+					writer.write(userPreferenceUnit.getUserId() + ".seedComboIndex=" + userPreferenceUnit.getSeedComboIndex());
 					writer.newLine();
 				}
 			}

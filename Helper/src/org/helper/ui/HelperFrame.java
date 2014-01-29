@@ -97,8 +97,6 @@ public class HelperFrame extends JFrame {
 	private JButton sellSelectedBtn;
 	private MouseAdapter loginEvent;
 	private MouseAdapter logoutEvent;
-	// private Map<String, Timer> scheduleTimerList = new HashMap<String,
-	// Timer>();;
 	private JButton autoCareBtn;
 	private JTable storageTable;
 	private DefaultTableModel storageTableModel;
@@ -158,23 +156,18 @@ public class HelperFrame extends JFrame {
 					logoutPopMenu.setVisible(false);
 					logoutPopMenu = null;
 				}
-				// stopSchedule(FarmDomain.getInstance().getUserId());
-				stopSchedule2();
+				stopSchedule();
 				HelperLoggerAppender.writeLog("登出成功");
 				accountList.remove(FarmDomain.getInstance().getUserId());
 				accountTableModel.removeRow(accountRowId);
 				if (accountTableModel.getRowCount() > 0) {
-					accountTable.setRowSelectionInterval(
-							accountTableModel.getRowCount() - 1,
-							accountTableModel.getRowCount() - 1);
-					refreshSelectedAccount((String) accountTableModel
-							.getValueAt(accountTableModel.getRowCount() - 1, 0));
+					accountTable.setRowSelectionInterval(accountTableModel.getRowCount() - 1, accountTableModel.getRowCount() - 1);
+					refreshSelectedAccount((String) accountTableModel.getValueAt(accountTableModel.getRowCount() - 1, 0));
 				} else {
 					farmTableModel.setRowCount(0);
 					storageTableModel.setRowCount(0);
 					packageTableModel.setRowCount(0);
-					((JScrollPane) infoPane.getComponentAt(0))
-							.setViewportView(new JPanel());
+					((JScrollPane) infoPane.getComponentAt(0)).setViewportView(new JPanel());
 				}
 			}
 		};
@@ -196,13 +189,10 @@ public class HelperFrame extends JFrame {
 		westPanel.setPreferredSize(new Dimension(300, 650));
 		BoxLayout lo = new BoxLayout(westPanel, BoxLayout.Y_AXIS);
 		westPanel.setLayout(lo);
-		JScrollPane accoutsScrollPane = new JScrollPane(
-				constructAccountsTable());
+		JScrollPane accoutsScrollPane = new JScrollPane(constructAccountsTable());
 		accoutsScrollPane.setPreferredSize(new Dimension(295, 300));
-		accoutsScrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		accoutsScrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		accoutsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		accoutsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		JScrollPane friendsScrollPane = new JScrollPane();
 		accoutsScrollPane.setPreferredSize(new Dimension(295, 300));
@@ -214,8 +204,7 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JTable constructAccountsTable() {
-		accountTableModel = new CheckTableModel(new Object[] { "Id", "用户名",
-				"域", "状态" }, 0);
+		accountTableModel = new CheckTableModel(new Object[] { "Id", "用户名", "域", "状态" }, 0);
 
 		accountTable = new JTable();
 		accountTable.setModel(accountTableModel);
@@ -252,12 +241,10 @@ public class HelperFrame extends JFrame {
 					accountRowId = row;
 					// 当前鼠标右键点击所在行不被选中则高亮显示选中行
 					if (!inSelected) {
-						table.setRowSelectionInterval(accountRowId,
-								accountRowId);
+						table.setRowSelectionInterval(accountRowId, accountRowId);
 					}
 					// 生成右键菜单
-					String userId = (String) accountTableModel.getValueAt(
-							accountRowId, 0);
+					String userId = (String) accountTableModel.getValueAt(accountRowId, 0);
 					userDomain = accountList.get(userId).getUserDomain();
 					farmDomain = accountList.get(userId).getFarmDomain();
 					UserDomain.setInstance(userDomain);
@@ -268,8 +255,7 @@ public class HelperFrame extends JFrame {
 					// 左键事件
 					JTable table = (JTable) e.getComponent();
 					accountRowId = table.rowAtPoint(e.getPoint());
-					refreshSelectedAccount((String) accountTableModel
-							.getValueAt(accountRowId, 0));
+					refreshSelectedAccount((String) accountTableModel.getValueAt(accountRowId, 0));
 				}
 			}
 		});
@@ -351,20 +337,17 @@ public class HelperFrame extends JFrame {
 		consoleTab = new JTabbedPane();
 		consoleTab.setPreferredSize(new Dimension(490, 190));
 		JScrollPane loggerScroll = new JScrollPane(loggerArea);
-		loggerScroll
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		loggerScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		consoleTab.addTab("操作日志", loggerScroll);
 
 		// 仓库
 		JScrollPane storageScroll = new JScrollPane(constructStorageTable());
-		storageScroll
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		storageScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		consoleTab.addTab("仓库", storageScroll);
 
 		// 背包
 		JScrollPane packageScroll = new JScrollPane(constructPackageTable());
-		packageScroll
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		packageScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		consoleTab.addTab("背包", packageScroll);
 
 		// 个人信息
@@ -388,15 +371,13 @@ public class HelperFrame extends JFrame {
 		packageTable.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				int row = packageTable.rowAtPoint(e.getPoint());
-				if (SwingUtilities.isLeftMouseButton(e)
-						&& e.getClickCount() == 2) {
+				if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
 					@SuppressWarnings("unchecked")
-					PackageUnitDomain unit = (PackageUnitDomain) ((Vector<PackageUnitDomain>) packageTableModel
-							.getDataVector().elementAt(row)).elementAt(0);
+					PackageUnitDomain unit = (PackageUnitDomain) ((Vector<PackageUnitDomain>) packageTableModel.getDataVector().elementAt(row))
+							.elementAt(0);
 					if (unit.getType() == EmPackageType.SEED) {
 						for (int i = 0; i < seedCombo.getItemCount(); i++) {
-							if (seedCombo.getItemAt(i).getcId()
-									.equals(unit.getcId())) {
+							if (seedCombo.getItemAt(i).getcId().equals(unit.getcId())) {
 								seedCombo.setSelectedIndex(i);
 								break;
 							}
@@ -418,13 +399,11 @@ public class HelperFrame extends JFrame {
 	}
 
 	private JTable constructStorageTable() {
-		storageTableModel = new CheckTableModel(new Object[] { "", "名称", "数量",
-				"单价", "总价" }, 0);
+		storageTableModel = new CheckTableModel(new Object[] { "", "名称", "数量", "单价", "总价" }, 0);
 
 		storageTable = new JTable();
 		storageTable.setModel(storageTableModel);
-		storageTable.getTableHeader().setDefaultRenderer(
-				new TableHeaderCheckboxRender(storageTable, false));
+		storageTable.getTableHeader().setDefaultRenderer(new TableHeaderCheckboxRender(storageTable, false));
 
 		TableColumnModel tcm = storageTable.getColumnModel();
 		tcm.getColumn(0).setCellEditor(new DefaultCellEditor(new JCheckBox()));
@@ -455,10 +434,8 @@ public class HelperFrame extends JFrame {
 				UserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				collectStorage();
-				if (checkedStoreCropList.size() == storageTableModel
-						.getRowCount()) {
-					SellAllService sellAllService = ServiceFactory
-							.getService(SellAllService.class);
+				if (checkedStoreCropList.size() == storageTableModel.getRowCount()) {
+					SellAllService sellAllService = ServiceFactory.getService(SellAllService.class);
 					try {
 						sellAllService.sellAll();
 					} catch (IOException | ParseException e1) {
@@ -466,14 +443,11 @@ public class HelperFrame extends JFrame {
 						HelperLoggerAppender.writeLog(e1.getMessage());
 					}
 				} else {
-					SellOneService sellOneService = ServiceFactory
-							.getService(SellOneService.class);
+					SellOneService sellOneService = ServiceFactory.getService(SellOneService.class);
 					for (int index : checkedStoreCropList) {
-						StoreUnitDomain storeUnit = FarmDomain.getInstance()
-								.getStoreUnitDomainByIndex(index);
+						StoreUnitDomain storeUnit = FarmDomain.getInstance().getStoreUnitDomainByIndex(index);
 						try {
-							sellOneService.sellOne(storeUnit.getAmount(),
-									storeUnit.getcId());
+							sellOneService.sellOne(storeUnit.getAmount(), storeUnit.getcId());
 						} catch (IOException | ParseException e1) {
 							e1.printStackTrace();
 							HelperLoggerAppender.writeLog(e1.getMessage());
@@ -493,15 +467,13 @@ public class HelperFrame extends JFrame {
 					if (auto) {
 						autoCareBtn.setText("停止自动护理");
 						autoCareBtn.setBackground(new Color(240, 117, 82));
-						accountTableModel
-								.setValueAt("已开启自动护理", accountRowId, 3);
-						startSchedule2();
+						accountTableModel.setValueAt("已开启自动护理", accountRowId, 3);
+						startSchedule();
 					} else {
 						autoCareBtn.setText("开启自动护理");
 						autoCareBtn.setBackground(new Color(186, 209, 145));
-						accountTableModel
-								.setValueAt("未开启自动护理", accountRowId, 3);
-						stopSchedule2();
+						accountTableModel.setValueAt("未开启自动护理", accountRowId, 3);
+						stopSchedule();
 					}
 				}
 				this.mouseReleased(e);
@@ -519,10 +491,8 @@ public class HelperFrame extends JFrame {
 				FarmDomain.setInstance(farmDomain);
 				collectOperations();
 				collectFields();
-				ExecuteService executeService = ServiceFactory
-						.getService(ExecuteService.class);
-				executeService.execute(operationList, checkedFieldIdList,
-						((CropDomain) seedCombo.getSelectedItem()).getcId());
+				ExecuteService executeService = ServiceFactory.getService(ExecuteService.class);
+				executeService.execute(operationList, checkedFieldIdList, ((CropDomain) seedCombo.getSelectedItem()).getcId());
 				saveExecutionsToConfig();
 				refreshBtn.doClick();
 			}
@@ -530,8 +500,7 @@ public class HelperFrame extends JFrame {
 	}
 
 	private void saveExecutionsToConfig() {
-		UserPreferenceUnit userConfig = UserPreferenceDomain.USERS
-				.get(FarmDomain.getInstance().getUserId());
+		UserPreferenceUnit userConfig = UserPreferenceDomain.USERS.get(FarmDomain.getInstance().getUserId());
 		userConfig.setWater(this.water.isSelected());
 		userConfig.setWorm(this.worm.isSelected());
 		userConfig.setWeed(this.weed.isSelected());
@@ -543,8 +512,7 @@ public class HelperFrame extends JFrame {
 	}
 
 	private void fillExecutionsWithConfig() {
-		UserPreferenceUnit userConfig = UserPreferenceDomain.USERS
-				.get(FarmDomain.getInstance().getUserId());
+		UserPreferenceUnit userConfig = UserPreferenceDomain.USERS.get(FarmDomain.getInstance().getUserId());
 		if (null != userConfig) {
 			this.water.setSelected(userConfig.isWater());
 			this.worm.setSelected(userConfig.isWorm());
@@ -571,8 +539,7 @@ public class HelperFrame extends JFrame {
 		checkedFieldIdList.clear();
 		for (int i = 0; i < farmTableModel.getRowCount(); i++) {
 			if ((Boolean) farmTableModel.getValueAt(i, 0)) {
-				checkedFieldIdList.add(String.valueOf(farmTableModel
-						.getValueAt(i, 1)));
+				checkedFieldIdList.add(String.valueOf(farmTableModel.getValueAt(i, 1)));
 			}
 		}
 	}
@@ -628,12 +595,9 @@ public class HelperFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				RefreshFarmStep4Service farmService = ServiceFactory
-						.getService(RefreshFarmStep4Service.class);
-				RefreshStorageService storeService = ServiceFactory
-						.getService(RefreshStorageService.class);
-				PackageService packageService = ServiceFactory
-						.getService(PackageService.class);
+				RefreshFarmStep4Service farmService = ServiceFactory.getService(RefreshFarmStep4Service.class);
+				RefreshStorageService storeService = ServiceFactory.getService(RefreshStorageService.class);
+				PackageService packageService = ServiceFactory.getService(PackageService.class);
 				UserDomain.setInstance(userDomain);
 				FarmDomain.setInstance(farmDomain);
 				try {
@@ -644,39 +608,21 @@ public class HelperFrame extends JFrame {
 					e1.printStackTrace();
 					HelperLoggerAppender.writeLog(e1.getMessage());
 				}
-				refreshAccount(UserDomain.getInstance(),
-						FarmDomain.getInstance());
+				refreshAccount(UserDomain.getInstance(), FarmDomain.getInstance());
 			}
 		});
 
 	}
 
-	/*
-	 * private void startSchedule() { UserDomain.setInstance(userDomain);
-	 * FarmDomain.setInstance(farmDomain); AutoExecutionTask autoTask = new
-	 * AutoExecutionTask(userDomain, farmDomain);
-	 * 
-	 * Timer scheduleTimer = new Timer(true); long random = 120000L + (long)
-	 * (10000 * (new Random()).nextFloat()); scheduleTimer.schedule(autoTask,
-	 * random, random); scheduleTimerList.put(farmDomain.getUserId(),
-	 * scheduleTimer);
-	 * accountList.get(farmDomain.getUserId()).setAutoCareEnable(true);
-	 * HelperLoggerAppender.writeLog("自动护理开启，间隔时间" + random + "毫秒，将种植 " +
-	 * ((CropDomain) this.seedCombo.getItemAt(UserPreferenceDomain
-	 * .getSeedIndexById(farmDomain.getUserId()))).getcName()); }
-	 */
-
-	private void startSchedule2() {
+	private void startSchedule() {
 		UserDomain.setInstance(userDomain);
 		FarmDomain.setInstance(farmDomain);
 		accountList.get(farmDomain.getUserId()).setAutoCareEnable(true);
-		HelperLoggerAppender.writeLog("自动护理开启，随机刷新间隔"
-				+ "5分钟，将种植 "
-				+ ((CropDomain) this.seedCombo.getItemAt(UserPreferenceDomain
-						.getSeedIndexById(farmDomain.getUserId()))).getcName());
+		HelperLoggerAppender.writeLog("自动护理开启，随机刷新间隔" + "5分钟，将种植 "
+				+ ((CropDomain) this.seedCombo.getItemAt(UserPreferenceDomain.getSeedIndexById(farmDomain.getUserId()))).getcName());
 	}
 
-	private void stopSchedule2() {
+	private void stopSchedule() {
 		UserDomain.setInstance(userDomain);
 		FarmDomain.setInstance(farmDomain);
 		accountList.get(farmDomain.getUserId()).setAutoCareEnable(false);
@@ -701,61 +647,45 @@ public class HelperFrame extends JFrame {
 							// 距离下一次执行时间超过5分钟，沉默1秒
 							Thread.sleep(1000L);
 							count++;
-							continue;
 						} else if (count >= 300) {
 							count = 0;
 							autoOnAccount = accountList.get(userId);
-							if (autoOnAccount == null
-									|| oldHash != autoOnAccount.hashCode()) {
+							if (autoOnAccount == null || oldHash != autoOnAccount.hashCode()) {
 								// 原帐号已被登出
 								break;
 							}
 							if (autoOnAccount.isAutoCareEnable()) {
-								UserDomain.setInstance(autoOnAccount
-										.getUserDomain());
-								FarmDomain.setInstance(autoOnAccount
-										.getFarmDomain());
-								RefreshFarmStep4Service farmService = ServiceFactory
-										.getService(RefreshFarmStep4Service.class);
+								UserDomain.setInstance(autoOnAccount.getUserDomain());
+								FarmDomain.setInstance(autoOnAccount.getFarmDomain());
+								RefreshFarmStep4Service farmService = ServiceFactory.getService(RefreshFarmStep4Service.class);
 								try {
 									farmService.refreshFarm();
-									HelperLoggerAppender
-											.writeLog("自动护理: 刷新状态成功");
+									HelperLoggerAppender.writeLog("自动护理: 刷新状态成功");
 								} catch (IOException | ParseException e) {
 									e.printStackTrace();
-									HelperLoggerAppender.writeLog(e
-											.getMessage());
+									HelperLoggerAppender.writeLog(e.getMessage());
 								}
 							}
 						} else {
 							Thread.sleep(nearestHarvest);
 							autoOnAccount = accountList.get(userId);
-							if (autoOnAccount == null
-									|| oldHash != autoOnAccount.hashCode()) {
+							if (autoOnAccount == null || oldHash != autoOnAccount.hashCode()) {
 								// 原帐号已被登出
 								break;
 							}
 							if (autoOnAccount.isAutoCareEnable()) {
-								UserDomain.setInstance(autoOnAccount
-										.getUserDomain());
-								FarmDomain.setInstance(autoOnAccount
-										.getFarmDomain());
-								RefreshFarmStep4Service farmService = ServiceFactory
-										.getService(RefreshFarmStep4Service.class);
+								UserDomain.setInstance(autoOnAccount.getUserDomain());
+								FarmDomain.setInstance(autoOnAccount.getFarmDomain());
+								RefreshFarmStep4Service farmService = ServiceFactory.getService(RefreshFarmStep4Service.class);
 								try {
 									farmService.refreshFarm();
-									HelperLoggerAppender
-											.writeLog("自动护理: 刷新状态成功");
+									HelperLoggerAppender.writeLog("自动护理: 刷新状态成功");
 								} catch (IOException | ParseException e) {
 									e.printStackTrace();
-									HelperLoggerAppender.writeLog(e
-											.getMessage());
+									HelperLoggerAppender.writeLog(e.getMessage());
 								}
-								ExecuteService executeService = ServiceFactory
-										.getService(ExecuteService.class);
-								executeService.executeAll(UserPreferenceDomain
-										.getSeedIndexById(farmDomain
-												.getUserId()));
+								ExecuteService executeService = ServiceFactory.getService(ExecuteService.class);
+								executeService.executeAll(UserPreferenceDomain.getSeedIndexById(farmDomain.getUserId()));
 							}
 						}
 					} catch (InterruptedException e) {
@@ -768,13 +698,11 @@ public class HelperFrame extends JFrame {
 	}
 
 	private static long countSleepTime(AccountDomain autoOnAccount) {
-		List<FieldUnitDomain> fieldList = autoOnAccount.getFarmDomain()
-				.getFieldList();
+		List<FieldUnitDomain> fieldList = autoOnAccount.getFarmDomain().getFieldList();
 		long nearestHarvest = 300000L;
 		for (FieldUnitDomain unit : fieldList) {
 			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
-			long harvest = (Long.parseLong(unit.getQ()) + cycle) * 1000L
-					- System.currentTimeMillis();
+			long harvest = (Long.parseLong(unit.getQ()) + cycle) * 1000L - System.currentTimeMillis();
 			if (harvest < nearestHarvest) {
 				nearestHarvest = harvest;
 			}
@@ -800,21 +728,12 @@ public class HelperFrame extends JFrame {
 		}
 	}
 
-	/*
-	 * private void stopSchedule(String userId) { if (null != userId && null !=
-	 * scheduleTimerList.get(userId)) { scheduleTimerList.get(userId).cancel();
-	 * scheduleTimerList.remove(userId);
-	 * HelperLoggerAppender.writeLog("自动护理关闭"); } }
-	 */
-
 	private JTable constructFarmFieldTable() {
-		farmTableModel = new CheckTableModel(new Object[] { "", "土地", "名称",
-				"阶段  当前季/总季", "(花期)第一季/每季", "产量", "杂草", "虫害", "干旱", "收获时间" }, 0);
+		farmTableModel = new CheckTableModel(new Object[] { "", "土地", "名称", "阶段  当前季/总季", "(花期)第一季/每季", "产量", "杂草", "虫害", "干旱", "收获时间" }, 0);
 
 		farmTable = new JTable();
 		farmTable.setModel(farmTableModel);
-		farmTable.getTableHeader().setDefaultRenderer(
-				new TableHeaderCheckboxRender(farmTable, true));
+		farmTable.getTableHeader().setDefaultRenderer(new TableHeaderCheckboxRender(farmTable, true));
 
 		TableColumnModel tcm = farmTable.getColumnModel();
 		tcm.getColumn(0).setCellEditor(new DefaultCellEditor(new JCheckBox()));
@@ -856,24 +775,18 @@ public class HelperFrame extends JFrame {
 		JPanel tempPanel = new JPanel();
 		BoxLayout lo = new BoxLayout(tempPanel, BoxLayout.Y_AXIS);
 		tempPanel.setLayout(lo);
-		tempPanel.add(new JLabel("用户名： "
-				+ FarmDomain.getInstance().getUserName(), SwingConstants.LEFT));
-		tempPanel.add(new JLabel("ID： " + FarmDomain.getInstance().getUserId(),
-				SwingConstants.LEFT));
-		tempPanel.add(new JLabel("金币： " + FarmDomain.getInstance().getMoney(),
-				SwingConstants.LEFT));
-		tempPanel.add(new JLabel("经验： " + FarmDomain.getInstance().getExp(),
-				SwingConstants.LEFT));
-		tempPanel.add(new JLabel("魅力值： " + FarmDomain.getInstance().getCharm(),
-				SwingConstants.LEFT));
+		tempPanel.add(new JLabel("用户名： " + FarmDomain.getInstance().getUserName(), SwingConstants.LEFT));
+		tempPanel.add(new JLabel("ID： " + FarmDomain.getInstance().getUserId(), SwingConstants.LEFT));
+		tempPanel.add(new JLabel("金币： " + FarmDomain.getInstance().getMoney(), SwingConstants.LEFT));
+		tempPanel.add(new JLabel("经验： " + FarmDomain.getInstance().getExp(), SwingConstants.LEFT));
+		tempPanel.add(new JLabel("魅力值： " + FarmDomain.getInstance().getCharm(), SwingConstants.LEFT));
 		userInfoPane.setViewportView(tempPanel);
 		infoPane.repaint();
 	}
 
 	private void refreshFarmTable() {
 		farmTableModel.setRowCount(0);
-		List<FieldUnitDomain> fieldList = FarmDomain.getInstance()
-				.getFieldList();
+		List<FieldUnitDomain> fieldList = FarmDomain.getInstance().getFieldList();
 		int i = 0;
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		for (FieldUnitDomain unit : fieldList) {
@@ -881,31 +794,24 @@ public class HelperFrame extends JFrame {
 			entry.add(new Boolean(true));
 			entry.add(i++);
 			entry.add(ShopDomain.getCropName(unit.getA()).replace("种子", ""));
-			StringBuilder status = new StringBuilder(
-					EmCropStatus.getStatusName(unit.getB()));
-			status.append(" ").append(unit.getJ()).append("/")
-					.append(ShopDomain.getSeasonNuber(unit.getA()));
+			StringBuilder status = new StringBuilder(EmCropStatus.getStatusName(unit.getB()));
+			status.append(" ").append(unit.getJ()).append("/").append(ShopDomain.getSeasonNuber(unit.getA()));
 			entry.add(status);// 阶段 当前季/总季
-			int season = Integer
-					.parseInt(ShopDomain.getSeasonNuber(unit.getA()));
+			int season = Integer.parseInt(ShopDomain.getSeasonNuber(unit.getA()));
 			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
 			StringBuilder cycleTime = new StringBuilder();
 			if (season == 0) {
 				cycleTime.append("-");
 			} else if (season > 1) {
-				long reMaturingCycle = Long.parseLong(ShopDomain
-						.getReMaturingTime(unit.getA()));
-				cycleTime.append(formatCycle(cycle)).append(" / ")
-						.append(formatCycle(reMaturingCycle));
+				long reMaturingCycle = Long.parseLong(ShopDomain.getReMaturingTime(unit.getA()));
+				cycleTime.append(formatCycle(cycle)).append(" / ").append(formatCycle(reMaturingCycle));
 			} else {
 				cycleTime.append(formatCycle(cycle)).append(" / ").append("-");
 			}
 			entry.add(cycleTime);// 花期(第一季/每季)
 			entry.add(unit.getK());
-			entry.add(Integer.parseInt(unit.getF()) > 0 ? Integer.parseInt(unit
-					.getF()) : "-");// "杂草"
-			entry.add(Integer.parseInt(unit.getG()) > 0 ? Integer.parseInt(unit
-					.getG()) : "-");// "虫害"
+			entry.add(Integer.parseInt(unit.getF()) > 0 ? Integer.parseInt(unit.getF()) : "-");// "杂草"
+			entry.add(Integer.parseInt(unit.getG()) > 0 ? Integer.parseInt(unit.getG()) : "-");// "虫害"
 			entry.add(Integer.parseInt(unit.getH()) == 0 ? "旱" : "-");// "干旱"
 			long harvest = Long.parseLong(unit.getQ());
 			if (harvest > 0L) {
@@ -922,8 +828,7 @@ public class HelperFrame extends JFrame {
 
 	private void refreshPackage() {
 		packageTableModel.setRowCount(0);
-		List<PackageUnitDomain> packageList = FarmDomain.getInstance()
-				.getPackageList();
+		List<PackageUnitDomain> packageList = FarmDomain.getInstance().getPackageList();
 		for (PackageUnitDomain unit : packageList) {
 			packageTableModel.addRow(new Object[] { unit, unit });
 		}
@@ -933,16 +838,14 @@ public class HelperFrame extends JFrame {
 
 	private void refreshStorage() {
 		storageTableModel.setRowCount(0);
-		List<StoreUnitDomain> storeList = FarmDomain.getInstance()
-				.getStoreList();
+		List<StoreUnitDomain> storeList = FarmDomain.getInstance().getStoreList();
 		for (StoreUnitDomain unit : storeList) {
 			Vector<Object> entry = new Vector<Object>();
 			entry.add(new Boolean(false));
 			entry.add(unit.getcName());
 			entry.add(unit.getAmount());
 			entry.add(unit.getPrice());
-			int total = Integer.parseInt(unit.getAmount())
-					* Integer.parseInt(unit.getPrice());
+			int total = Integer.parseInt(unit.getAmount()) * Integer.parseInt(unit.getPrice());
 			entry.add(total);
 			storageTableModel.addRow(entry);
 		}
@@ -965,8 +868,7 @@ public class HelperFrame extends JFrame {
 		refreshAccount();
 	}
 
-	public void addAccountToAccountList(UserDomain userDomain,
-			FarmDomain farmDomain) {
+	public void addAccountToAccountList(UserDomain userDomain, FarmDomain farmDomain) {
 		AccountDomain account = new AccountDomain();
 		account.setFarmDomain(farmDomain);
 		account.setUserDomain(userDomain);
@@ -985,9 +887,7 @@ public class HelperFrame extends JFrame {
 		}
 		accountRow.add("未开启自动护理");
 		this.accountTableModel.addRow(accountRow);
-		this.accountTable.setRowSelectionInterval(
-				accountTableModel.getRowCount() - 1,
-				accountTableModel.getRowCount() - 1);
+		this.accountTable.setRowSelectionInterval(accountTableModel.getRowCount() - 1, accountTableModel.getRowCount() - 1);
 	}
 
 	private String formatCycle(long cycle) {
@@ -997,8 +897,7 @@ public class HelperFrame extends JFrame {
 		if (min > 60) {
 			hour = min / 60;
 			min = min % 60;
-			return sb.append(hour).append("小时").append(min).append("分")
-					.toString();
+			return sb.append(hour).append("小时").append(min).append("分").toString();
 		}
 		return sb.append(min).append("分").toString();
 	}

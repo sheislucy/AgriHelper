@@ -21,8 +21,7 @@ public class ZhineiLoginStep3Service extends BaseService {
 		return null;
 	}
 
-	public void step3GetMethod(String url) throws ClientProtocolException,
-			IOException {
+	public void step3GetMethod(String url) throws ClientProtocolException, IOException {
 		setUrl(url);
 		HttpResponse response = doGet();
 		CookieSplitter.splitLoginForZN(response.getHeaders("Set-Cookie"));
@@ -31,15 +30,10 @@ public class ZhineiLoginStep3Service extends BaseService {
 	@Override
 	protected CookieStore buildCookieStore() {
 		BasicCookieStore cookieStore = new BasicCookieStore();
-		BasicClientCookie cookie = new BasicClientCookie(
-				EmCookieKeys.ZHINEI_LOGINUSER.getValue(),
-				(String) (UserDomain.getInstance()
-						.getCookieValue(EmCookieKeys.ZHINEI_LOGINUSER
-								.getValue())));
-		BasicClientCookie cookie2 = new BasicClientCookie(
-				EmCookieKeys.ZHINEI_AUTH.getValue(),
-				(String) (UserDomain.getInstance()
-						.getCookieValue(EmCookieKeys.ZHINEI_AUTH.getValue())));
+		BasicClientCookie cookie = new BasicClientCookie(EmCookieKeys.ZHINEI_LOGINUSER.getValue(),
+				(String) (UserDomain.getInstance().getCookieValue(EmCookieKeys.ZHINEI_LOGINUSER.getValue())));
+		BasicClientCookie cookie2 = new BasicClientCookie(EmCookieKeys.ZHINEI_AUTH.getValue(),
+				(String) (UserDomain.getInstance().getCookieValue(EmCookieKeys.ZHINEI_AUTH.getValue())));
 		cookie.setDomain(".zhinei.com");
 		cookie.setPath("/");
 		cookie2.setDomain(".zhinei.com");

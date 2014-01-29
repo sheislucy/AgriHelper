@@ -14,8 +14,7 @@ public class PackageTableRenderer extends JLabel implements TableCellRenderer {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		setToolTipText("双击种子行来修改[作物]下拉框中的种子");
 		if (value != null) {
 			PackageUnitDomain packageUnit = (PackageUnitDomain) value;

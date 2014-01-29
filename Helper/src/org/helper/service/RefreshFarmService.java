@@ -14,18 +14,12 @@ import org.json.simple.parser.ParseException;
 public class RefreshFarmService {
 
 	public void refresh() {
-		RefreshFarmStep1Service step1 = ServiceFactory
-				.getService(RefreshFarmStep1Service.class);
-		RefreshFarmStep2Service step2 = ServiceFactory
-				.getService(RefreshFarmStep2Service.class);
-		RefreshFarmStep3Service step3 = ServiceFactory
-				.getService(RefreshFarmStep3Service.class);
-		RefreshFarmStep4Service step4 = ServiceFactory
-				.getService(RefreshFarmStep4Service.class);
-		RefreshStorageService storeService = ServiceFactory
-				.getService(RefreshStorageService.class);
-		PackageService packageService = ServiceFactory
-				.getService(PackageService.class);
+		RefreshFarmStep1Service step1 = ServiceFactory.getService(RefreshFarmStep1Service.class);
+		RefreshFarmStep2Service step2 = ServiceFactory.getService(RefreshFarmStep2Service.class);
+		RefreshFarmStep3Service step3 = ServiceFactory.getService(RefreshFarmStep3Service.class);
+		RefreshFarmStep4Service step4 = ServiceFactory.getService(RefreshFarmStep4Service.class);
+		RefreshStorageService storeService = ServiceFactory.getService(RefreshStorageService.class);
+		PackageService packageService = ServiceFactory.getService(PackageService.class);
 		try {
 			String url2 = step1.step1GetMethod();
 			String url3 = step2.step2GetMethod(url2);

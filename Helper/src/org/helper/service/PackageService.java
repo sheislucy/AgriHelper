@@ -28,18 +28,14 @@ public class PackageService extends BaseService {
 		return null;
 	}
 
-	public void refreshPackageInfo() throws ClientProtocolException,
-			IOException, ParseException {
+	public void refreshPackageInfo() throws ClientProtocolException, IOException, ParseException {
 		FarmDomain.getInstance().removeAllPackage();
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
-		StringBuilder url = new StringBuilder(
-				"http://happyfarm.manyou-apps.com/api.php?mod=Package&act=getPackageInfo&farmKey=");
-		url.append(FarmKeyGenerator.generatorFarmKey(time))
-				.append("&farmTime=").append(time).append("&inuId=");
+		StringBuilder url = new StringBuilder("http://happyfarm.manyou-apps.com/api.php?mod=Package&act=getPackageInfo&farmKey=");
+		url.append(FarmKeyGenerator.generatorFarmKey(time)).append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
 		HttpResponse response = doGet();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				HelperConstants.ENCODING_UTF8);
+		String responseBody = EntityUtils.toString(response.getEntity(), HelperConstants.ENCODING_UTF8);
 		buildPackage((JSONObject) new JSONParser().parse(responseBody));
 	}
 
@@ -49,12 +45,9 @@ public class PackageService extends BaseService {
 			for (Object seed : seedArray) {
 				PackageUnitDomain seedDomain = new PackageUnitDomain();
 				seedDomain.setType(EmPackageType.SEED);
-				seedDomain.setAmount(String.valueOf(((JSONObject) seed)
-						.get("amount")));
-				seedDomain
-						.setcId(String.valueOf(((JSONObject) seed).get("cId")));
-				seedDomain.setName(String.valueOf(((JSONObject) seed)
-						.get("cName")));
+				seedDomain.setAmount(String.valueOf(((JSONObject) seed).get("amount")));
+				seedDomain.setcId(String.valueOf(((JSONObject) seed).get("cId")));
+				seedDomain.setName(String.valueOf(((JSONObject) seed).get("cName")));
 				FarmDomain.getInstance().addPackage(seedDomain);
 			}
 		}
@@ -63,12 +56,9 @@ public class PackageService extends BaseService {
 			for (Object tool : toolArray) {
 				PackageUnitDomain toolDomain = new PackageUnitDomain();
 				toolDomain.setType(EmPackageType.TOOL);
-				toolDomain.setAmount(String.valueOf(((JSONObject) tool)
-						.get("amount")));
-				toolDomain
-						.settId(String.valueOf(((JSONObject) tool).get("tId")));
-				toolDomain.setName(String.valueOf(((JSONObject) tool)
-						.get("tName")));
+				toolDomain.setAmount(String.valueOf(((JSONObject) tool).get("amount")));
+				toolDomain.settId(String.valueOf(((JSONObject) tool).get("tId")));
+				toolDomain.setName(String.valueOf(((JSONObject) tool).get("tName")));
 				FarmDomain.getInstance().addPackage(toolDomain);
 			}
 		}
@@ -79,14 +69,11 @@ public class PackageService extends BaseService {
 		BasicCookieStore cookieStore = new BasicCookieStore();
 		StringBuilder cookieValue = new StringBuilder();
 
-		Entry<String, Object> uidEntry = FarmDomain.getInstance()
-				.getFirstCookieByReg(".*_uId");
+		Entry<String, Object> uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_uId");
 		if (null != uidEntry) {
-			cookieValue.append(uidEntry.getKey()).append("=")
-					.append(uidEntry.getValue());
+			cookieValue.append(uidEntry.getKey()).append("=").append(uidEntry.getValue());
 		}
-		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
-				(String) uidEntry.getValue());
+		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(), (String) uidEntry.getValue());
 		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);

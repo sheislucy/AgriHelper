@@ -15,8 +15,7 @@ public class RefreshFarmStep3Service extends BaseService {
 		return null;
 	}
 
-	public void step3GetMethod(String url) throws ClientProtocolException,
-			IOException {
+	public void step3GetMethod(String url) throws ClientProtocolException, IOException {
 		setUrl(url);
 		HttpResponse response = doGet();
 		CookieSplitter.splitFarm(response.getHeaders("Set-Cookie"));

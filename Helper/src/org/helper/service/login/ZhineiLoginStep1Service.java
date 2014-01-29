@@ -30,12 +30,10 @@ import org.slf4j.LoggerFactory;
 public class ZhineiLoginStep1Service extends BaseService {
 	Logger log = LoggerFactory.getLogger(getClass());
 
-	public ZhineiLoginDomain step1GetMethod() throws HttpException,
-			IOException, ParseException, ParserException {
+	public ZhineiLoginDomain step1GetMethod() throws HttpException, IOException, ParseException, ParserException {
 		setUrl("http://my.zhinei.com/index.php");
 		HttpResponse response = doGet();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				HelperConstants.ENCODING_GBK);
+		String responseBody = EntityUtils.toString(response.getEntity(), HelperConstants.ENCODING_GBK);
 		Parser parser = new Parser(responseBody);
 		NodeFilter filter = new TagNameFilter("form");
 		NodeList formNodes = parser.extractAllNodesThatMatch(filter);
@@ -46,23 +44,15 @@ public class ZhineiLoginStep1Service extends BaseService {
 					ZhineiLoginDomain loginDomain = new ZhineiLoginDomain();
 					loginDomain.setLoginUrl(formTag.getAttribute("action"));
 					NodeList formChildren = formTag.getChildren();
-					NodeList inputNodes = formChildren
-							.extractAllNodesThatMatch(
-									new TagNameFilter("input"), true);
+					NodeList inputNodes = formChildren.extractAllNodesThatMatch(new TagNameFilter("input"), true);
 					for (int j = 0; j < inputNodes.size(); j++) {
 						TagNode inputTag = (TagNode) inputNodes.elementAt(j);
-						if (("formhash").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain.setFormHash(inputTag
-									.getAttribute("value"));
-						} else if (("loginsubmit").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain.setLoginSubmit(inputTag
-									.getAttribute("value"));
-						} else if (("login_type").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain.setLoginType(inputTag
-									.getAttribute("value"));
+						if (("formhash").equalsIgnoreCase(inputTag.getAttribute("name"))) {
+							loginDomain.setFormHash(inputTag.getAttribute("value"));
+						} else if (("loginsubmit").equalsIgnoreCase(inputTag.getAttribute("name"))) {
+							loginDomain.setLoginSubmit(inputTag.getAttribute("value"));
+						} else if (("login_type").equalsIgnoreCase(inputTag.getAttribute("name"))) {
+							loginDomain.setLoginType(inputTag.getAttribute("value"));
 						}
 					}
 					return loginDomain;

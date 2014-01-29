@@ -63,7 +63,7 @@ public class FarmDomain implements Serializable {
 	public void removeAllFields() {
 		fieldList.clear();
 	}
-	
+
 	public void removeAllPackage() {
 		packageList.clear();
 	}

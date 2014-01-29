@@ -25,8 +25,7 @@ public class AutoExecutionTask extends TimerTask {
 	public void run() {
 		UserDomain.setInstance(autoOnAccount.getUserDomain());
 		FarmDomain.setInstance(autoOnAccount.getFarmDomain());
-		RefreshFarmStep4Service farmService = ServiceFactory
-				.getService(RefreshFarmStep4Service.class);
+		RefreshFarmStep4Service farmService = ServiceFactory.getService(RefreshFarmStep4Service.class);
 		try {
 			farmService.refreshFarm();
 			HelperLoggerAppender.writeLog("刷新状态成功");
@@ -34,10 +33,8 @@ public class AutoExecutionTask extends TimerTask {
 			e.printStackTrace();
 			HelperLoggerAppender.writeLog(e.getMessage());
 		}
-		ExecuteService executeService = ServiceFactory
-				.getService(ExecuteService.class);
-		executeService.executeAll(UserPreferenceDomain
-				.getSeedIndexById(autoOnAccount.getFarmDomain().getUserId()));
+		ExecuteService executeService = ServiceFactory.getService(ExecuteService.class);
+		executeService.executeAll(UserPreferenceDomain.getSeedIndexById(autoOnAccount.getFarmDomain().getUserId()));
 	}
 
 }

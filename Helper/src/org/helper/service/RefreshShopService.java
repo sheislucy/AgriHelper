@@ -28,13 +28,10 @@ public class RefreshShopService extends BaseService {
 		return null;
 	}
 
-	public JSONObject refreshShopInfo() throws ClientProtocolException,
-			IOException, ParseException {
+	public JSONObject refreshShopInfo() throws ClientProtocolException, IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
-		StringBuilder url = new StringBuilder(
-				"http://happyfarm.manyou-apps.com/api.php?mod=shop&act=getShopInfo&type=1&farmKey=");
-		url.append(FarmKeyGenerator.generatorFarmKey(time))
-				.append("&farmTime=").append(time).append("&inuId=");
+		StringBuilder url = new StringBuilder("http://happyfarm.manyou-apps.com/api.php?mod=shop&act=getShopInfo&type=1&farmKey=");
+		url.append(FarmKeyGenerator.generatorFarmKey(time)).append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
 		HttpResponse response = doGet();
 		String responseBody = EntityUtils.toString(response.getEntity());
@@ -43,12 +40,9 @@ public class RefreshShopService extends BaseService {
 	}
 
 	private void updateShopJsonFile(String responseBody) {
-		File shopFile = new File(RefreshShopService.class.getClassLoader()
-				.getResource("").getPath()
-				+ "shop.json");
+		File shopFile = new File(RefreshShopService.class.getClassLoader().getResource("").getPath() + "shop.json");
 		try {
-			OutputStreamWriter output = new OutputStreamWriter(
-					new FileOutputStream(shopFile));
+			OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(shopFile));
 			output.write(responseBody);
 			output.flush();
 			output.close();
@@ -63,14 +57,11 @@ public class RefreshShopService extends BaseService {
 		BasicCookieStore cookieStore = new BasicCookieStore();
 		StringBuilder cookieValue = new StringBuilder();
 
-		Entry<String, Object> uidEntry = FarmDomain.getInstance()
-				.getFirstCookieByReg(".*_uId");
+		Entry<String, Object> uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_uId");
 		if (null != uidEntry) {
-			cookieValue.append(uidEntry.getKey()).append("=")
-					.append(uidEntry.getValue());
+			cookieValue.append(uidEntry.getKey()).append("=").append(uidEntry.getValue());
 		}
-		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
-				(String) uidEntry.getValue());
+		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(), (String) uidEntry.getValue());
 		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);

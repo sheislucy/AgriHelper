@@ -41,8 +41,7 @@ public class TableHeaderCheckboxRender implements TableCellRenderer {
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		String valueStr = (String) value;
 		JLabel label = new JLabel(valueStr);
 		label.setHorizontalAlignment(SwingConstants.CENTER);

@@ -26,13 +26,10 @@ public class PlowService extends BaseService {
 		return null;
 	}
 
-	public JSONObject plow(String fieldId) throws ClientProtocolException,
-			IOException, ParseException {
+	public JSONObject plow(String fieldId) throws ClientProtocolException, IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
-		StringBuilder url = new StringBuilder(
-				"http://happyfarm.manyou-apps.com/api.php?mod=farmlandstatus&act=scarify&farmKey=");
-		url.append(FarmKeyGenerator.generatorFarmKey(time))
-				.append("&farmTime=").append(time).append("&inuId=");
+		StringBuilder url = new StringBuilder("http://happyfarm.manyou-apps.com/api.php?mod=farmlandstatus&act=scarify&farmKey=");
+		url.append(FarmKeyGenerator.generatorFarmKey(time)).append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
 		Map<String, String> loginParam = new HashMap<String, String>();
 		loginParam.put("place", fieldId);
@@ -49,14 +46,11 @@ public class PlowService extends BaseService {
 		BasicCookieStore cookieStore = new BasicCookieStore();
 		StringBuilder cookieValue = new StringBuilder();
 
-		Entry<String, Object> uidEntry = FarmDomain.getInstance()
-				.getFirstCookieByReg(".*_uId");
+		Entry<String, Object> uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_uId");
 		if (null != uidEntry) {
-			cookieValue.append(uidEntry.getKey()).append("=")
-					.append(uidEntry.getValue());
+			cookieValue.append(uidEntry.getKey()).append("=").append(uidEntry.getValue());
 		}
-		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
-				(String) uidEntry.getValue());
+		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(), (String) uidEntry.getValue());
 		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);

@@ -26,19 +26,15 @@ public class ShopDomain implements Serializable {
 
 	static {
 		try {
-			InputStreamReader inputStreamReader = new InputStreamReader(
-					new FileInputStream(new File(ShopDomain.class
-							.getClassLoader().getResource("").getPath()
-							+ "shop.json")));
-			JSONObject shopJson = (JSONObject) new JSONParser()
-					.parse(inputStreamReader);
+			InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(ShopDomain.class.getClassLoader()
+					.getResource("").getPath()
+					+ "shop.json")));
+			JSONObject shopJson = (JSONObject) new JSONParser().parse(inputStreamReader);
 			inputStreamReader.close();
 			JSONArray cropsArray = (JSONArray) shopJson.get("1");
 
 			SAXReader reader = new SAXReader();
-			Document document = reader.read(new File(ShopDomain.class
-					.getClassLoader().getResource("").getPath()
-					+ "crop.xml"));
+			Document document = reader.read(new File(ShopDomain.class.getClassLoader().getResource("").getPath() + "crop.xml"));
 			Element cropsElm = document.getRootElement().element("crops");
 			List<?> crops = cropsElm.elements("crop");
 
@@ -46,48 +42,31 @@ public class ShopDomain implements Serializable {
 			for (Object jsonUnit : cropsArray) {
 				CropDomain crop = new CropDomain();
 				crop.setcId(String.valueOf(((JSONObject) jsonUnit).get("cId")));
-				crop.setcName(String.valueOf(((JSONObject) jsonUnit)
-						.get("cName")));
-				crop.setcType(String.valueOf(((JSONObject) jsonUnit)
-						.get("cType")));
-				crop.setGrowthCycle(String.valueOf(((JSONObject) jsonUnit)
-						.get("growthCycle")));
-				crop.setMaturingTime(String.valueOf(((JSONObject) jsonUnit)
-						.get("maturingTime")));
-				crop.setExpect(String.valueOf(((JSONObject) jsonUnit)
-						.get("expect")));
-				crop.setOutput(String.valueOf(((JSONObject) jsonUnit)
-						.get("output")));
+				crop.setcName(String.valueOf(((JSONObject) jsonUnit).get("cName")));
+				crop.setcType(String.valueOf(((JSONObject) jsonUnit).get("cType")));
+				crop.setGrowthCycle(String.valueOf(((JSONObject) jsonUnit).get("growthCycle")));
+				crop.setMaturingTime(String.valueOf(((JSONObject) jsonUnit).get("maturingTime")));
+				crop.setExpect(String.valueOf(((JSONObject) jsonUnit).get("expect")));
+				crop.setOutput(String.valueOf(((JSONObject) jsonUnit).get("output")));
 				crop.setSale(String.valueOf(((JSONObject) jsonUnit).get("sale")));
-				crop.setPrice(String.valueOf(((JSONObject) jsonUnit)
-						.get("price")));
-				crop.setFBPrice(String.valueOf(((JSONObject) jsonUnit)
-						.get("FBPrice")));
-				crop.setcLevel(String.valueOf(((JSONObject) jsonUnit)
-						.get("cLevel")));
-				crop.setCropExp(String.valueOf(((JSONObject) jsonUnit)
-						.get("cropExp")));
-				crop.setcCharm(String.valueOf(((JSONObject) jsonUnit)
-						.get("cCharm")));
-				crop.setCropChr(String.valueOf(((JSONObject) jsonUnit)
-						.get("cropChr")));
+				crop.setPrice(String.valueOf(((JSONObject) jsonUnit).get("price")));
+				crop.setFBPrice(String.valueOf(((JSONObject) jsonUnit).get("FBPrice")));
+				crop.setcLevel(String.valueOf(((JSONObject) jsonUnit).get("cLevel")));
+				crop.setCropExp(String.valueOf(((JSONObject) jsonUnit).get("cropExp")));
+				crop.setcCharm(String.valueOf(((JSONObject) jsonUnit).get("cCharm")));
+				crop.setCropChr(String.valueOf(((JSONObject) jsonUnit).get("cropChr")));
 
 				int season = Integer.parseInt(crop.getMaturingTime());
 				if (season > 1) {
 					for (Iterator<?> it = crops.iterator(); it.hasNext();) {
 						Element cropEl = (Element) it.next();
-						int cropELId = Integer.parseInt(cropEl
-								.attributeValue("id"));
-						String timeArrayStr = cropEl.element("cropGrow")
-								.attributeValue("value");
+						int cropELId = Integer.parseInt(cropEl.attributeValue("id"));
+						String timeArrayStr = cropEl.element("cropGrow").attributeValue("value");
 						String[] timeArray = timeArrayStr.split(",");
-						if (cropELId == Integer.parseInt(crop.getcId())
-								&& null != timeArray && timeArray.length > 2) {
+						if (cropELId == Integer.parseInt(crop.getcId()) && null != timeArray && timeArray.length > 2) {
 							long halfTime = Long.parseLong(timeArray[2]);
-							long totalMaturingTime = Long.parseLong(crop
-									.getGrowthCycle());
-							crop.setReMaturingTime(String
-									.valueOf(totalMaturingTime - halfTime));
+							long totalMaturingTime = Long.parseLong(crop.getGrowthCycle());
+							crop.setReMaturingTime(String.valueOf(totalMaturingTime - halfTime));
 						}
 					}
 				}

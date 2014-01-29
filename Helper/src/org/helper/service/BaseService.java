@@ -47,7 +47,7 @@ public abstract class BaseService {
 
 	private void init() {
 		schemeRegistry = new org.apache.http.conn.scheme.SchemeRegistry();
-//		 proxy = new HttpHost("127.0.0.1", 8888);
+		// proxy = new HttpHost("127.0.0.1", 8888);
 	}
 
 	protected HttpResponse doPost() throws ClientProtocolException, IOException {
@@ -65,13 +65,10 @@ public abstract class BaseService {
 
 		clientManager = new PoolingClientConnectionManager(schemeRegistry);
 		httpClient = new DefaultHttpClient(clientManager, params);
-		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
-				proxy);
+		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 
-		HttpEntity entity = new UrlEncodedFormEntity(
-				buildFormParameters(),
-				(UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8
-						: HelperConstants.ENCODING_GBK));
+		HttpEntity entity = new UrlEncodedFormEntity(buildFormParameters(), (UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8
+				: HelperConstants.ENCODING_GBK));
 		postRequest.setEntity(entity);
 
 		httpClient.setCookieStore(buildCookieStore());
@@ -93,8 +90,7 @@ public abstract class BaseService {
 
 		clientManager = new PoolingClientConnectionManager(schemeRegistry);
 		httpClient = new DefaultHttpClient(clientManager, params);
-		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
-				proxy);
+		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 
 		httpClient.setCookieStore(buildCookieStore());
 		return httpClient.execute(getRequest);
@@ -108,30 +104,23 @@ public abstract class BaseService {
 
 	protected List<NameValuePair> buildFormParameters() {
 		List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-		Iterator<Entry<String, String>> it = getFormParamMap().entrySet()
-				.iterator();
+		Iterator<Entry<String, String>> it = getFormParamMap().entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, String> entry = (Entry<String, String>) it.next();
-			formParams.add(new BasicNameValuePair(entry.getKey(), entry
-					.getValue()));
+			formParams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 		}
 		return formParams;
 	}
 
 	protected void buildRegistry() {
-		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory
-				.getSocketFactory()));
-		schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory
-				.getSocketFactory()));
+		schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+		schemeRegistry.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory()));
 	}
 
 	protected List<BasicHeader> buildCommonHeaders() {
 		List<BasicHeader> headers = new ArrayList<BasicHeader>();
-		headers.add(new BasicHeader(
-				"Content-Type",
-				"application/x-www-form-urlencoded; charset="
-						+ (UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8
-								: HelperConstants.ENCODING_GBK)));
+		headers.add(new BasicHeader("Content-Type", "application/x-www-form-urlencoded; charset="
+				+ (UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8 : HelperConstants.ENCODING_GBK)));
 		return headers;
 	}
 

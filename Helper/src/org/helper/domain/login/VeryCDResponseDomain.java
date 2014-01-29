@@ -17,8 +17,7 @@ public class VeryCDResponseDomain implements Serializable {
 		this.status = status;
 	}
 
-	public VeryCDResponseDomain(HttpResponseStatus status, String msg,
-			String info) {
+	public VeryCDResponseDomain(HttpResponseStatus status, String msg, String info) {
 		this.status = status;
 		this.msg = msg;
 		this.info = info;

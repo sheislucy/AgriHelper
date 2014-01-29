@@ -11,12 +11,9 @@ import org.htmlparser.util.ParserException;
 import org.json.simple.parser.ParseException;
 
 public class ZhineiLoginService {
-	public ZhineiResponseDomain loginPhase1(String userName, String password)
-			throws ParserException, HttpException, IOException, ParseException {
-		ZhineiLoginStep1Service step1 = ServiceFactory
-				.getService(ZhineiLoginStep1Service.class);
-		ZhineiLoginStep2Service step2 = ServiceFactory
-				.getService(ZhineiLoginStep2Service.class);
+	public ZhineiResponseDomain loginPhase1(String userName, String password) throws ParserException, HttpException, IOException, ParseException {
+		ZhineiLoginStep1Service step1 = ServiceFactory.getService(ZhineiLoginStep1Service.class);
+		ZhineiLoginStep2Service step2 = ServiceFactory.getService(ZhineiLoginStep2Service.class);
 		ZhineiLoginDomain loginDomain = step1.step1GetMethod();
 		return step2.step2PostMethod(loginDomain, userName, password);
 	}

@@ -31,8 +31,7 @@ import org.slf4j.LoggerFactory;
 public class VeryCDLoginService extends BaseService {
 	Logger log = LoggerFactory.getLogger(getClass());
 
-	public VeryCDResponseDomain login(String userId, String password)
-			throws HttpException, IOException, ParseException {
+	public VeryCDResponseDomain login(String userId, String password) throws HttpException, IOException, ParseException {
 		// setUrl("http://www.verycd.com/signin");
 		setUrl("http://secure.verycd.com/signin");
 		Map<String, String> loginParam = new HashMap<String, String>();
@@ -44,16 +43,12 @@ public class VeryCDLoginService extends BaseService {
 		String responseBody = EntityUtils.toString(response.getEntity());
 		JSONObject json = (JSONObject) new JSONParser().parse(responseBody);
 		if (json.get("status") instanceof java.lang.String) {
-			if (statusCode == HttpStatus.SC_OK
-					&& ((String) json.get("status")).equalsIgnoreCase("ok")) {
-				CookieSplitter.splitLoginForVC(response
-						.getHeaders("Set-Cookie"));
+			if (statusCode == HttpStatus.SC_OK && ((String) json.get("status")).equalsIgnoreCase("ok")) {
+				CookieSplitter.splitLoginForVC(response.getHeaders("Set-Cookie"));
 				return new VeryCDResponseDomain(HttpResponseStatus.SUCCESS);
 			}
-		} else if (json.get("status") instanceof java.lang.Boolean
-				&& !(Boolean) json.get("status")) {
-			return new VeryCDResponseDomain(HttpResponseStatus.ERROR,
-					(String) json.get("msg"), (String) json.get("info"));
+		} else if (json.get("status") instanceof java.lang.Boolean && !(Boolean) json.get("status")) {
+			return new VeryCDResponseDomain(HttpResponseStatus.ERROR, (String) json.get("msg"), (String) json.get("info"));
 		}
 		return new VeryCDResponseDomain();
 	}

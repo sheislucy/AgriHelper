@@ -32,13 +32,11 @@ public class LianpuLoginStep3Service extends BaseService {
 	 * @throws IOException
 	 * @throws ParserException
 	 */
-	public LianpuLoginDomain step3GetLianpuLoginDomain(String fastLoginUrl,
-			String refer) throws org.apache.http.ParseException, IOException,
+	public LianpuLoginDomain step3GetLianpuLoginDomain(String fastLoginUrl, String refer) throws org.apache.http.ParseException, IOException,
 			ParserException {
 		setUrl("http://www.lianpunet.com/" + fastLoginUrl);
 		HttpResponse response = doGet();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				HelperConstants.ENCODING_GBK);
+		String responseBody = EntityUtils.toString(response.getEntity(), HelperConstants.ENCODING_GBK);
 		Parser parser = new Parser(responseBody);
 		NodeFilter filter = new TagNameFilter("form");
 		NodeList formNodes = parser.extractAllNodesThatMatch(filter);
@@ -49,30 +47,20 @@ public class LianpuLoginStep3Service extends BaseService {
 					LianpuLoginDomain loginDomain = new LianpuLoginDomain();
 					loginDomain.setLoginUrl(formTag.getAttribute("action"));
 					NodeList formChildren = formTag.getChildren();
-					NodeList inputNodes = formChildren
-							.extractAllNodesThatMatch(
-									new TagNameFilter("input"), true);
+					NodeList inputNodes = formChildren.extractAllNodesThatMatch(new TagNameFilter("input"), true);
 					for (int j = 0; j < inputNodes.size(); j++) {
 						TagNode inputTag = (TagNode) inputNodes.elementAt(j);
-						if (("formhash").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain.setFormHash(inputTag
-									.getAttribute("value"));
-						} else if (("loginsubmit").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain.setLoginSubmit(inputTag
-									.getAttribute("value"));
-						} else if (("cookietime").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain.setCookieTime(inputTag
-									.getAttribute("value"));
-						} else if (("refer").equalsIgnoreCase(inputTag
-								.getAttribute("name"))) {
-							loginDomain
-									.setRefer(inputTag.getAttribute("value"));
+						if (("formhash").equalsIgnoreCase(inputTag.getAttribute("name"))) {
+							loginDomain.setFormHash(inputTag.getAttribute("value"));
+						} else if (("loginsubmit").equalsIgnoreCase(inputTag.getAttribute("name"))) {
+							loginDomain.setLoginSubmit(inputTag.getAttribute("value"));
+						} else if (("cookietime").equalsIgnoreCase(inputTag.getAttribute("name"))) {
+							loginDomain.setCookieTime(inputTag.getAttribute("value"));
+						} else if (("refer").equalsIgnoreCase(inputTag.getAttribute("name"))) {
+							loginDomain.setRefer(inputTag.getAttribute("value"));
 						}
 					}
-//					loginDomain.setRefer(refer);
+					// loginDomain.setRefer(refer);
 					return loginDomain;
 				}
 			}

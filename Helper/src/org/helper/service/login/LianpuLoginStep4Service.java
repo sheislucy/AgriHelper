@@ -47,9 +47,8 @@ public class LianpuLoginStep4Service extends BaseService {
 	 * @throws IOException
 	 * @throws ParserException
 	 */
-	public LianpuResponseDomain storeCookieForLianpu(
-			LianpuLoginDomain loginDomain, String userName, String password)
-			throws ClientProtocolException, IOException, ParserException {
+	public LianpuResponseDomain storeCookieForLianpu(LianpuLoginDomain loginDomain, String userName, String password) throws ClientProtocolException,
+			IOException, ParserException {
 		setUrl("http://www.lianpunet.com/" + loginDomain.getLoginUrl());
 		Map<String, String> loginParam = new HashMap<String, String>();
 		loginParam.put("username", userName);
@@ -57,41 +56,31 @@ public class LianpuLoginStep4Service extends BaseService {
 		loginParam.put("password", password);
 		loginParam.put("formhash", loginDomain.getFormHash());
 		loginParam.put("refer", loginDomain.getRefer());
-		loginParam.put(
-				"loginsubmit",
-				URLEncoder.encode(loginDomain.getLoginSubmit(),
-						HelperConstants.ENCODING_GBK).replace("%25", "%"));
+		loginParam.put("loginsubmit", URLEncoder.encode(loginDomain.getLoginSubmit(), HelperConstants.ENCODING_GBK).replace("%25", "%"));
 		setFormParamMap(loginParam);
 
 		HttpResponse response = doPost();
 		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 
-			String responseBody = EntityUtils.toString(response.getEntity(),
-					HelperConstants.ENCODING_GBK);
+			String responseBody = EntityUtils.toString(response.getEntity(), HelperConstants.ENCODING_GBK);
 			Parser parser = new Parser(responseBody);
-			NodeList nodes = parser.extractAllNodesThatMatch(new TagNameFilter(
-					"div"));
+			NodeList nodes = parser.extractAllNodesThatMatch(new TagNameFilter("div"));
 			if (null != nodes) {
 				for (int i = 0; i < nodes.size(); i++) {
 					TagNode divTag = (TagNode) nodes.elementAt(i);
-					if ("showmessage".equalsIgnoreCase(divTag
-							.getAttribute("class"))) {
+					if ("showmessage".equalsIgnoreCase(divTag.getAttribute("class"))) {
 						LianpuResponseDomain reponse = new LianpuResponseDomain();
 						NodeList divChildren = divTag.getChildren();
-						NodeList aTag = divChildren.extractAllNodesThatMatch(
-								new TagNameFilter("a"), true);
+						NodeList aTag = divChildren.extractAllNodesThatMatch(new TagNameFilter("a"), true);
 						if (aTag.size() > 0) {
 							LinkTag firstA = (LinkTag) aTag.elementAt(0);
 							if (firstA.getAttribute("href").contains("space.php")) {
-								reponse.setInfoText(((LinkTag) aTag
-										.elementAt(0)).getLinkText());
+								reponse.setInfoText(((LinkTag) aTag.elementAt(0)).getLinkText());
 								reponse.setStatus(HttpResponseStatus.SUCCESS);
-								CookieSplitter.splitLoginForLP(response
-										.getHeaders("Set-Cookie"));
+								CookieSplitter.splitLoginForLP(response.getHeaders("Set-Cookie"));
 								return reponse;
 							} else {
-								reponse.setInfoText(((LinkTag) aTag
-										.elementAt(0)).getLinkText());
+								reponse.setInfoText(((LinkTag) aTag.elementAt(0)).getLinkText());
 								reponse.setStatus(HttpResponseStatus.ERROR);
 								return reponse;
 							}

@@ -31,14 +31,11 @@ public class ZhineiLoginStep2Service extends BaseService {
 	protected List<BasicHeader> extendRequestHeader() {
 		List<BasicHeader> headers = new ArrayList<BasicHeader>();
 		headers.add(new BasicHeader("Host", "my.zhinei.com"));
-		headers.add(new BasicHeader("Content-Type",
-				"application/x-www-form-urlencoded"));
 		headers.add(new BasicHeader("Referer", "http://my.zhinei.com/index.php"));
 		return headers;
 	}
 
-	public ZhineiResponseDomain step2PostMethod(ZhineiLoginDomain loginDomain,
-			String userName, String password) throws ClientProtocolException,
+	public ZhineiResponseDomain step2PostMethod(ZhineiLoginDomain loginDomain, String userName, String password) throws ClientProtocolException,
 			IOException, ParserException {
 		setUrl("http://my.zhinei.com/" + loginDomain.getLoginUrl());
 		Map<String, String> loginParam = new HashMap<String, String>();
@@ -46,16 +43,13 @@ public class ZhineiLoginStep2Service extends BaseService {
 		loginParam.put("login_type", loginDomain.getLoginType());
 		loginParam.put("password", password);
 		loginParam.put("formhash", loginDomain.getFormHash());
-		loginParam.put("loginsubmit", URLEncoder.encode(
-				loginDomain.getLoginSubmit(), HelperConstants.ENCODING_GBK));
+		loginParam.put("loginsubmit", URLEncoder.encode(loginDomain.getLoginSubmit(), HelperConstants.ENCODING_GBK));
 		setFormParamMap(loginParam);
 
 		HttpResponse response = doPost();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				HelperConstants.ENCODING_GBK);
+		String responseBody = EntityUtils.toString(response.getEntity(), HelperConstants.ENCODING_GBK);
 		Parser parser = new Parser(responseBody);
-		NodeList nodes = parser.extractAllNodesThatMatch(new TagNameFilter(
-				"div"));
+		NodeList nodes = parser.extractAllNodesThatMatch(new TagNameFilter("div"));
 		if (null != nodes) {
 			for (int i = 0; i < nodes.size(); i++) {
 				TagNode divTag = (TagNode) nodes.elementAt(i);
@@ -63,24 +57,16 @@ public class ZhineiLoginStep2Service extends BaseService {
 					ZhineiResponseDomain responseDomain = new ZhineiResponseDomain();
 					if (divTag.getFirstChild() instanceof TagNode) {
 						TagNode aNode = (TagNode) divTag.getFirstChild();
-						if ("space-home.html".equalsIgnoreCase(aNode
-								.getAttribute("href"))) {
+						if ("space-home.html".equalsIgnoreCase(aNode.getAttribute("href"))) {
 							NodeList scriptNodes = aNode.getChildren();
-							responseDomain
-									.setLogin3Url(((ScriptTag) scriptNodes
-											.elementAt(1)).getAttribute("src"));
-							responseDomain
-									.setStatus(HttpResponseStatus.SUCCESS);
-							responseDomain.setInfoText(aNode
-									.toPlainTextString());
-							CookieSplitter.splitLoginForZN(response
-									.getHeaders("Set-Cookie"));
-							HelperLoggerAppender.writeLog(aNode
-									.toPlainTextString());
+							responseDomain.setLogin3Url(((ScriptTag) scriptNodes.elementAt(1)).getAttribute("src"));
+							responseDomain.setStatus(HttpResponseStatus.SUCCESS);
+							responseDomain.setInfoText(aNode.toPlainTextString());
+							CookieSplitter.splitLoginForZN(response.getHeaders("Set-Cookie"));
+							HelperLoggerAppender.writeLog(aNode.toPlainTextString());
 						} else {
 							responseDomain.setStatus(HttpResponseStatus.ERROR);
-							responseDomain.setInfoText(aNode
-									.toPlainTextString());
+							responseDomain.setInfoText(aNode.toPlainTextString());
 						}
 					} else {
 

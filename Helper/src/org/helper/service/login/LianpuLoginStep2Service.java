@@ -31,12 +31,10 @@ public class LianpuLoginStep2Service extends BaseService {
 	 * @throws IOException
 	 * @throws ParserException
 	 */
-	public String step2GetFastLoginUrl(String farmAppUrl)
-			throws org.apache.http.ParseException, IOException, ParserException {
+	public String step2GetFastLoginUrl(String farmAppUrl) throws org.apache.http.ParseException, IOException, ParserException {
 		setUrl("http://www.lianpunet.com/" + farmAppUrl);
 		HttpResponse response = doGet();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				HelperConstants.ENCODING_GBK);
+		String responseBody = EntityUtils.toString(response.getEntity(), HelperConstants.ENCODING_GBK);
 		Parser parser = new Parser(responseBody);
 		NodeFilter filter = new TagNameFilter("a");
 		NodeList linkNodes = parser.extractAllNodesThatMatch(filter);

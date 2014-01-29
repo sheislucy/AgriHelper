@@ -70,8 +70,7 @@ public class Java2sAutoComboBox extends JComboBox {
 		} else {
 			isFired = true;
 			setSelectedItem(obj);
-			fireItemStateChanged(new ItemEvent(this, 701, selectedItemReminder,
-					1));
+			fireItemStateChanged(new ItemEvent(this, 701, selectedItemReminder, 1));
 			isFired = false;
 			return;
 		}

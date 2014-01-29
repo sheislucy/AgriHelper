@@ -25,12 +25,10 @@ public class LianpuLoginStep1Service extends BaseService {
 		return null;
 	}
 
-	public String step1GetFarmAppUrl() throws org.apache.http.ParseException,
-			IOException, ParserException {
+	public String step1GetFarmAppUrl() throws org.apache.http.ParseException, IOException, ParserException {
 		setUrl("http://www.lianpunet.com/niejuzi.php");
 		HttpResponse response = doGet();
-		String responseBody = EntityUtils.toString(response.getEntity(),
-				HelperConstants.ENCODING_GBK);
+		String responseBody = EntityUtils.toString(response.getEntity(), HelperConstants.ENCODING_GBK);
 		Parser parser = new Parser(responseBody);
 		NodeFilter filter = new TagNameFilter("a");
 		NodeList linkNodes = parser.extractAllNodesThatMatch(filter);

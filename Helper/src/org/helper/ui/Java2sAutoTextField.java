@@ -21,14 +21,12 @@ public class Java2sAutoTextField extends JTextField {
 	class AutoDocument extends PlainDocument {
 		private static final long serialVersionUID = 1L;
 
-		public void replace(int i, int j, String s, AttributeSet attributeset)
-				throws BadLocationException {
+		public void replace(int i, int j, String s, AttributeSet attributeset) throws BadLocationException {
 			super.remove(i, j);
 			insertString(i, s, attributeset);
 		}
 
-		public void insertString(int i, String s, AttributeSet attributeset)
-				throws BadLocationException {
+		public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
 			if (s == null || "".equals(s))
 				return;
 			String s1 = getText(0, i);
@@ -107,8 +105,7 @@ public class Java2sAutoTextField extends JTextField {
 		for (int i = 0; i < dataList.size(); i++) {
 			String s1 = dataList.get(i).toString();
 			if (s1 != null) {
-				if (!isCaseSensitive
-						&& s1.toLowerCase().startsWith(s.toLowerCase()))
+				if (!isCaseSensitive && s1.toLowerCase().startsWith(s.toLowerCase()))
 					return s1;
 				if (isCaseSensitive && s1.startsWith(s))
 					return s1;

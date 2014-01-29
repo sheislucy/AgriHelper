@@ -26,13 +26,10 @@ public class RefreshFarmStep4Service extends BaseService {
 		return null;
 	}
 
-	public JSONObject getFarmAndPlayerInfo() throws ClientProtocolException,
-			IOException, ParseException {
+	public JSONObject getFarmAndPlayerInfo() throws ClientProtocolException, IOException, ParseException {
 		String time = String.valueOf(System.currentTimeMillis() / 1000);
-		StringBuilder url = new StringBuilder(
-				"http://happyfarm.manyou-apps.com/api.php?mod=user&act=run&farmKey=");
-		url.append(FarmKeyGenerator.generatorFarmKey(time))
-				.append("&farmTime=").append(time).append("&inuId=");
+		StringBuilder url = new StringBuilder("http://happyfarm.manyou-apps.com/api.php?mod=user&act=run&farmKey=");
+		url.append(FarmKeyGenerator.generatorFarmKey(time)).append("&farmTime=").append(time).append("&inuId=");
 		setUrl(url.toString());
 		HttpResponse response = doGet();
 		String responseBody = EntityUtils.toString(response.getEntity());
@@ -44,28 +41,24 @@ public class RefreshFarmStep4Service extends BaseService {
 		BasicCookieStore cookieStore = new BasicCookieStore();
 		StringBuilder cookieValue = new StringBuilder();
 
-		Entry<String, Object> uidEntry = FarmDomain.getInstance()
-				.getFirstCookieByReg(".*_uId");
+		Entry<String, Object> uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_uId");
 		if (null != uidEntry) {
-			cookieValue.append(uidEntry.getKey()).append("=")
-					.append(uidEntry.getValue());
+			cookieValue.append(uidEntry.getKey()).append("=").append(uidEntry.getValue());
 		}
-		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(),
-				(String) uidEntry.getValue());
+		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(), (String) uidEntry.getValue());
 		cookie.setDomain("happyfarm.manyou-apps.com");
 		cookie.setPath("/");
 		cookieStore.addCookie(cookie);
 		return cookieStore;
 	}
 
-	public void refreshFarm()
-			throws ClientProtocolException, IOException, ParseException {
+	public void refreshFarm() throws ClientProtocolException, IOException, ParseException {
 		JSONObject farmJson = getFarmAndPlayerInfo();
 		JSONObject user = (JSONObject) farmJson.get("user");
 		FarmDomain.getInstance().setCharm(String.valueOf(user.get("charm")));
 		FarmDomain.getInstance().setExp(String.valueOf(user.get("exp")));
-//		FarmDomain.getInstance().setUserName(
-//				String.valueOf(user.get("userName")));
+		// FarmDomain.getInstance().setUserName(
+		// String.valueOf(user.get("userName")));
 		FarmDomain.getInstance().setUserId(String.valueOf(user.get("uId")));
 		FarmDomain.getInstance().setMoney(String.valueOf(user.get("money")));
 		JSONArray farmlandStatus = (JSONArray) farmJson.get("farmlandStatus");

@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserDomain extends BaseStatefulDomain implements
-		Serializable {
+public class UserDomain extends BaseStatefulDomain implements Serializable {
 	private static final long serialVersionUID = -8608225081404150735L;
 
 	private Map<String, Object> cookieMap = new HashMap<String, Object>();

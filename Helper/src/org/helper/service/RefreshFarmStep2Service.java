@@ -23,27 +23,19 @@ public class RefreshFarmStep2Service extends BaseService {
 		return null;
 	}
 
-	public String step2GetMethod(String url) throws ClientProtocolException,
-			IOException, ParserException {
+	public String step2GetMethod(String url) throws ClientProtocolException, IOException, ParserException {
 		setUrl(url);
 		HttpResponse response = doGet();
-		String responseBody = EntityUtils
-				.toString(response.getEntity(), (UserDomain.getInstance()
-						.isVeryCD() ? HelperConstants.ENCODING_UTF8
-						: HelperConstants.ENCODING_GBK));
+		String responseBody = EntityUtils.toString(response.getEntity(), (UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8
+				: HelperConstants.ENCODING_GBK));
 		Parser parser = new Parser(responseBody);
 		NodeFilter filter = new TagNameFilter("iframe");
 		NodeList nodes = parser.extractAllNodesThatMatch(filter);
 		if (null != nodes) {
 			for (int i = 0; i < nodes.size(); i++) {
 				TagNode frameTag = (TagNode) nodes.elementAt(i);
-				if (("app1021978_").equalsIgnoreCase(frameTag
-						.getAttribute("id"))) {
-					return frameTag
-							.getAttribute("src")
-							.replaceAll("&amp;", "&")
-							.replace("happyfarm.manyou-apps.com?",
-									"happyfarm.manyou-apps.com/?");
+				if (("app1021978_").equalsIgnoreCase(frameTag.getAttribute("id"))) {
+					return frameTag.getAttribute("src").replaceAll("&amp;", "&").replace("happyfarm.manyou-apps.com?", "happyfarm.manyou-apps.com/?");
 				}
 			}
 		}

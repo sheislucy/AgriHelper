@@ -12,8 +12,7 @@ import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONObject;
 
 public class ExecuteService {
-	public void execute(List<EmOperations> operationList,
-			List<String> checkedFieldIdList, String seedId) {
+	public void execute(List<EmOperations> operationList, List<String> checkedFieldIdList, String seedId) {
 		for (String fieldId : checkedFieldIdList) {
 			for (EmOperations o : operationList) {
 				switch (o) {
@@ -58,8 +57,7 @@ public class ExecuteService {
 	}
 
 	private void doWatering(String fieldId) {
-		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
-				.get(Integer.parseInt(fieldId));
+		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
 		if (Integer.parseInt(field.getH()) == 0) {
 			WaterService ws = ServiceFactory.getService(WaterService.class);
 			try {
@@ -67,8 +65,7 @@ public class ExecuteService {
 				StringBuilder logText = new StringBuilder("第");
 				logText.append(fieldId).append("块土地浇水");
 				if (null != responseJson.get("code")) {
-					int code = Integer.parseInt(String.valueOf(responseJson
-							.get("code")));
+					int code = Integer.parseInt(String.valueOf(responseJson.get("code")));
 					if (code == 1) {
 						logText.append("成功");
 						field.setF(String.valueOf(responseJson.get("weed")));
@@ -88,8 +85,7 @@ public class ExecuteService {
 	}
 
 	private void doWorm(String fieldId) {
-		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
-				.get(Integer.parseInt(fieldId));
+		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
 		int wormNumber = Integer.parseInt(field.getG());
 		WormService ws = ServiceFactory.getService(WormService.class);
 		for (int i = 0; i < wormNumber; i++) {
@@ -98,8 +94,7 @@ public class ExecuteService {
 				StringBuilder logText = new StringBuilder("第");
 				logText.append(fieldId).append("块土地杀虫");
 				if (null != responseJson.get("code")) {
-					int code = Integer.parseInt(String.valueOf(responseJson
-							.get("code")));
+					int code = Integer.parseInt(String.valueOf(responseJson.get("code")));
 					if (code == 1) {
 						logText.append("成功");
 						field.setF(String.valueOf(responseJson.get("weed")));
@@ -119,8 +114,7 @@ public class ExecuteService {
 	}
 
 	private void doWeed(String fieldId) {
-		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
-				.get(Integer.parseInt(fieldId));
+		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
 		int weedNumber = Integer.parseInt(field.getF());
 		WeedService ws = ServiceFactory.getService(WeedService.class);
 		for (int i = 0; i < weedNumber; i++) {
@@ -129,8 +123,7 @@ public class ExecuteService {
 				StringBuilder logText = new StringBuilder("第");
 				logText.append(fieldId).append("块土地除草");
 				if (null != responseJson.get("code")) {
-					int code = Integer.parseInt(String.valueOf(responseJson
-							.get("code")));
+					int code = Integer.parseInt(String.valueOf(responseJson.get("code")));
 					if (code == 1) {
 						logText.append("成功");
 						field.setF(String.valueOf(responseJson.get("weed")));
@@ -150,8 +143,7 @@ public class ExecuteService {
 	}
 
 	private void doPlow(String fieldId) {
-		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
-				.get(Integer.parseInt(fieldId));
+		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
 		if (Integer.parseInt(field.getB()) == EmCropStatus.WITHERED.getId()) {
 			PlowService ps = ServiceFactory.getService(PlowService.class);
 			try {
@@ -159,11 +151,9 @@ public class ExecuteService {
 				StringBuilder logText = new StringBuilder("第");
 				logText.append(fieldId).append("块土地铲地");
 				if (null != responseJson.get("code")) {
-					int code = Integer.parseInt(String.valueOf(responseJson
-							.get("code")));
+					int code = Integer.parseInt(String.valueOf(responseJson.get("code")));
 					if (code == 1) {
-						logText.append("成功，获得经验").append(
-								String.valueOf(responseJson.get("exp")));
+						logText.append("成功，获得经验").append(String.valueOf(responseJson.get("exp")));
 						field.setB("0");
 					} else {
 						logText.append("失败，原因" + responseJson.get("direction"));
@@ -180,8 +170,7 @@ public class ExecuteService {
 	}
 
 	private void doHarvest(String fieldId) {
-		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
-				.get(Integer.parseInt(fieldId));
+		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
 		if (Integer.parseInt(field.getB()) == EmCropStatus.RIPE.getId()) {
 			HarvestService hs = ServiceFactory.getService(HarvestService.class);
 			try {
@@ -189,18 +178,12 @@ public class ExecuteService {
 				StringBuilder logText = new StringBuilder("第");
 				logText.append(fieldId).append("块土地收获");
 				if (null != responseJson.get("harvest")) {
-					int harvestCount = Integer.parseInt(String
-							.valueOf(responseJson.get("harvest")));
+					int harvestCount = Integer.parseInt(String.valueOf(responseJson.get("harvest")));
 					if (harvestCount > 0) {
-						logText.append("成功，数量")
-								.append(String.valueOf(responseJson
-										.get("harvest")))
-								.append("，获得经验")
+						logText.append("成功，数量").append(String.valueOf(responseJson.get("harvest"))).append("，获得经验")
 								.append(String.valueOf(responseJson.get("exp")));
-						JSONObject cropResponse = (JSONObject) responseJson
-								.get("status");
-						field.setB(String.valueOf(cropResponse
-								.get("cropStatus")));
+						JSONObject cropResponse = (JSONObject) responseJson.get("status");
+						field.setB(String.valueOf(cropResponse.get("cropStatus")));
 					} else {
 						logText.append("失败，原因" + responseJson.get("direction"));
 					}
@@ -216,8 +199,7 @@ public class ExecuteService {
 	}
 
 	private void doBuySeed(String fieldId, String seedId) {
-		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
-				.get(Integer.parseInt(fieldId));
+		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
 		if (Integer.parseInt(field.getB()) == EmCropStatus.EMPTY.getId()) {
 			BuyService bs = ServiceFactory.getService(BuyService.class);
 			try {
@@ -225,14 +207,10 @@ public class ExecuteService {
 				StringBuilder logText = new StringBuilder("购买");
 				logText.append(ShopDomain.getCropName(seedId));
 				if (null != responseJson.get("code")) {
-					int code = Integer.parseInt(String.valueOf(responseJson
-							.get("code")));
+					int code = Integer.parseInt(String.valueOf(responseJson.get("code")));
 					if (code == 1) {
-						logText.append("成功，数量")
-								.append(String.valueOf(responseJson.get("num")))
-								.append("，金钱")
-								.append(String.valueOf(responseJson
-										.get("money")));
+						logText.append("成功，数量").append(String.valueOf(responseJson.get("num"))).append("，金钱")
+								.append(String.valueOf(responseJson.get("money")));
 					} else {
 						logText.append("失败，原因" + responseJson.get("direction"));
 					}
@@ -248,21 +226,17 @@ public class ExecuteService {
 	}
 
 	private void doPlant(String fieldId, String seedId) {
-		FieldUnitDomain field = FarmDomain.getInstance().getFieldList()
-				.get(Integer.parseInt(fieldId));
+		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
 		if (Integer.parseInt(field.getB()) == EmCropStatus.EMPTY.getId()) {
 			PlantService ps = ServiceFactory.getService(PlantService.class);
 			try {
 				JSONObject responseJson = ps.plant(fieldId, seedId);
 				StringBuilder logText = new StringBuilder("在");
-				logText.append(fieldId).append("号地播种")
-						.append(ShopDomain.getCropName(seedId));
+				logText.append(fieldId).append("号地播种").append(ShopDomain.getCropName(seedId));
 				if (null != responseJson.get("code")) {
-					int code = Integer.parseInt(String.valueOf(responseJson
-							.get("code")));
+					int code = Integer.parseInt(String.valueOf(responseJson.get("code")));
 					if (code == 1) {
-						logText.append("成功，获得经验").append(
-								String.valueOf(responseJson.get("exp")));
+						logText.append("成功，获得经验").append(String.valueOf(responseJson.get("exp")));
 						field.setB("1");
 					} else {
 						logText.append("失败");
