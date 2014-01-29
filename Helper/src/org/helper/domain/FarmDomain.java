@@ -1,6 +1,5 @@
 package org.helper.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,19 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class FarmDomain implements Serializable {
+public class FarmDomain extends BaseFarmDomain {
 	private static final long serialVersionUID = 1170704177667181436L;
 	private Map<String, Object> cookieMap = new HashMap<String, Object>();
-	private String userId;
-	private String userName;
-	private String money;
-	private String exp;
 	private String charm;
 	private String serverTime;
-	private List<FieldUnitDomain> fieldList = new ArrayList<FieldUnitDomain>();
 	private List<StoreUnitDomain> storeList = new ArrayList<StoreUnitDomain>();
 	private List<PackageUnitDomain> packageList = new ArrayList<PackageUnitDomain>();
-
+	private List<BaseFarmDomain> friendList = new ArrayList<>();
 	private static ThreadLocal<FarmDomain> farmDomain;
 
 	private FarmDomain() {
@@ -41,7 +35,7 @@ public class FarmDomain implements Serializable {
 
 	public FieldUnitDomain getFieldUnitDomainById(String id) {
 		int fid = Integer.parseInt(id);
-		for (FieldUnitDomain d : fieldList) {
+		for (FieldUnitDomain d : getFieldList()) {
 			if (Integer.parseInt(d.getA()) == fid) {
 				return d;
 			}
@@ -61,15 +55,19 @@ public class FarmDomain implements Serializable {
 	}
 
 	public void removeAllFields() {
-		fieldList.clear();
+		getFieldList().clear();
 	}
 
 	public void removeAllPackage() {
 		packageList.clear();
 	}
 
+	public void removeAllFriends() {
+		friendList.clear();
+	}
+
 	public void addField(FieldUnitDomain unit) {
-		fieldList.add(unit);
+		getFieldList().add(unit);
 	}
 
 	public void addStore(StoreUnitDomain unit) {
@@ -147,38 +145,6 @@ public class FarmDomain implements Serializable {
 		this.cookieMap = cookieMap;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getMoney() {
-		return money;
-	}
-
-	public void setMoney(String money) {
-		this.money = money;
-	}
-
-	public String getExp() {
-		return exp;
-	}
-
-	public void setExp(String exp) {
-		this.exp = exp;
-	}
-
 	public String getCharm() {
 		return charm;
 	}
@@ -195,14 +161,6 @@ public class FarmDomain implements Serializable {
 		this.serverTime = serverTime;
 	}
 
-	public List<FieldUnitDomain> getFieldList() {
-		return fieldList;
-	}
-
-	public void setFieldList(List<FieldUnitDomain> fieldList) {
-		this.fieldList = fieldList;
-	}
-
 	public List<StoreUnitDomain> getStoreList() {
 		return storeList;
 	}
@@ -217,6 +175,14 @@ public class FarmDomain implements Serializable {
 
 	public void setPackageList(List<PackageUnitDomain> packageList) {
 		this.packageList = packageList;
+	}
+
+	public List<BaseFarmDomain> getFriendList() {
+		return friendList;
+	}
+
+	public void setFriendList(List<BaseFarmDomain> friendList) {
+		this.friendList = friendList;
 	}
 
 }

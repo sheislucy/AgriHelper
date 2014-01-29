@@ -1,7 +1,5 @@
 package org.helper.domain;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -15,6 +13,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.helper.util.HelperLoggerAppender;
+import org.helper.util.ResourceLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,16 +24,13 @@ public class ShopDomain implements Serializable {
 	private static List<CropDomain> cropList = new ArrayList<CropDomain>();
 
 	static {
-		try {
-			InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(new File(ShopDomain.class.getClassLoader()
-					.getResource("").getPath()
-					+ "shop.json")));
+		try (InputStreamReader inputStreamReader = new InputStreamReader(ResourceLoader.load("shop.json"));) {
 			JSONObject shopJson = (JSONObject) new JSONParser().parse(inputStreamReader);
-			inputStreamReader.close();
 			JSONArray cropsArray = (JSONArray) shopJson.get("1");
 
 			SAXReader reader = new SAXReader();
-			Document document = reader.read(new File(ShopDomain.class.getClassLoader().getResource("").getPath() + "crop.xml"));
+
+			Document document = reader.read(ResourceLoader.load("crop.xml"));
 			Element cropsElm = document.getRootElement().element("crops");
 			List<?> crops = cropsElm.elements("crop");
 

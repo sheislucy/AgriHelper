@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,11 +16,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 import org.helper.domain.UserPreferenceDomain;
 import org.helper.util.HelperLoggerAppender;
+import org.helper.util.ResourceLoader;
 
 /**
  * @author lucy
@@ -33,7 +36,7 @@ public class HelperTray {
 		PopupMenu menu = new PopupMenu();
 		frame = new HelperFrame();
 		try {
-			Image image = ImageIO.read(new File(HelperTray.class.getClassLoader().getResource("").getPath() + ("icon.png")));
+			Image image = ImageIO.read(ResourceLoader.load("icon.png"));
 			MenuItem item = new MenuItem("Exit");
 			item.addActionListener(new ActionListener() {
 				@Override
@@ -55,7 +58,7 @@ public class HelperTray {
 				}
 			});
 			tray.add(icon);
-		} catch (IOException | AWTException e) {
+		} catch (AWTException | IOException e) {
 			e.printStackTrace();
 			HelperLoggerAppender.writeLog(e.getMessage());
 		}

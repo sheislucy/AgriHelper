@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -15,6 +16,7 @@ import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.helper.domain.FarmDomain;
+import org.helper.domain.ShopDomain;
 import org.helper.util.FarmKeyGenerator;
 import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONObject;
@@ -40,12 +42,9 @@ public class RefreshShopService extends BaseService {
 	}
 
 	private void updateShopJsonFile(String responseBody) {
-		File shopFile = new File(RefreshShopService.class.getClassLoader().getResource("").getPath() + "shop.json");
-		try {
-			OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(shopFile));
+		try (OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(new File("shop_new.json")));) {
 			output.write(responseBody);
 			output.flush();
-			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			HelperLoggerAppender.writeLog(e.getMessage());

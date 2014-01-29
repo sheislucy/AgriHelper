@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,6 +63,7 @@ import org.helper.service.SellAllService;
 import org.helper.service.SellOneService;
 import org.helper.service.ServiceFactory;
 import org.helper.util.HelperLoggerAppender;
+import org.helper.util.ResourceLoader;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -105,6 +105,8 @@ public class HelperFrame extends JDialog {
 	private DefaultTableModel packageTableModel;
 	private JTable accountTable;
 	private DefaultTableModel accountTableModel;
+	private JTable friendTable;
+	private DefaultTableModel friendTableModel;
 
 	private UserDomain userDomain;
 	private FarmDomain farmDomain;
@@ -134,11 +136,11 @@ public class HelperFrame extends JDialog {
 		this.checkedFieldIdList = new ArrayList<String>();
 		this.checkedStoreCropList = new ArrayList<Integer>();
 
-		this.setTitle("Farmer Helper - Version 0.0.9 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.0 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
-			this.setIconImage(ImageIO.read(new File(HelperTray.class.getClassLoader().getResource("").getPath() + ("icon.png"))));
+			this.setIconImage(ImageIO.read(ResourceLoader.load("icon.png")));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -190,17 +192,78 @@ public class HelperFrame extends JDialog {
 		BoxLayout lo = new BoxLayout(westPanel, BoxLayout.Y_AXIS);
 		westPanel.setLayout(lo);
 		JScrollPane accoutsScrollPane = new JScrollPane(constructAccountsTable());
-		accoutsScrollPane.setPreferredSize(new Dimension(295, 300));
 		accoutsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		accoutsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-		JScrollPane friendsScrollPane = new JScrollPane();
 		accoutsScrollPane.setPreferredSize(new Dimension(295, 300));
-		westPanel.add(new JLabel("已登录帐号"));
+		accoutsScrollPane.setBorder(new TitledBorder("已登录帐号"));
 		westPanel.add(accoutsScrollPane);
-		westPanel.add(new JLabel("好友帐号"));
+
+		JScrollPane friendsScrollPane = new JScrollPane(constructFriendsTable());
+		friendsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		friendsScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		friendsScrollPane.setPreferredSize(new Dimension(295, 300));
+		friendsScrollPane.setBorder(new TitledBorder("好友帐号"));
 		westPanel.add(friendsScrollPane);
 		return westPanel;
+	}
+
+	private JTable constructFriendsTable() {
+		friendTableModel = new CheckTableModel(new Object[] { "Id", "用户名", "经验", "金币" }, 0);
+
+		friendTable = new JTable();
+		friendTable.setModel(friendTableModel);
+		friendTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		friendTable.setSize(new Dimension(400, 350));
+
+		TableColumnModel tcm = friendTable.getColumnModel();
+		tcm.getColumn(0).setWidth(150);// id
+		tcm.getColumn(1).setWidth(150);// name
+		tcm.getColumn(1).setWidth(150);// exp
+		tcm.getColumn(2).setWidth(150);// money
+
+		friendTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (SwingUtilities.isRightMouseButton(e)) {
+					// 右键事件
+					JTable table = (JTable) e.getComponent();
+					// 获取鼠标右键选中的行
+					int row = table.rowAtPoint(e.getPoint());
+					if (row == -1) {
+						return;
+					}
+					// 获取已选中的行
+					int[] rows = table.getSelectedRows();
+					boolean inSelected = false;
+					// 判断当前右键所在行是否已选中
+					for (int r : rows) {
+						if (row == r) {
+							inSelected = true;
+							break;
+						}
+					}
+					accountRowId = row;
+					// 当前鼠标右键点击所在行不被选中则高亮显示选中行
+					if (!inSelected) {
+						table.setRowSelectionInterval(accountRowId, accountRowId);
+					}
+					// 生成右键菜单
+					String userId = (String) friendTableModel.getValueAt(accountRowId, 0);
+					userDomain = accountList.get(userId).getUserDomain();
+					farmDomain = accountList.get(userId).getFarmDomain();
+					UserDomain.setInstance(userDomain);
+					FarmDomain.setInstance(farmDomain);
+					logoutPopMenu = makePopup();
+					logoutPopMenu.show(e.getComponent(), e.getX(), e.getY());
+				} else if (SwingUtilities.isLeftMouseButton(e)) {
+					// 左键事件
+					JTable table = (JTable) e.getComponent();
+					accountRowId = table.rowAtPoint(e.getPoint());
+					refreshSelectedAccount((String) friendTableModel.getValueAt(accountRowId, 0));
+				}
+			}
+		});
+		return this.friendTable;
 	}
 
 	private JTable constructAccountsTable() {
