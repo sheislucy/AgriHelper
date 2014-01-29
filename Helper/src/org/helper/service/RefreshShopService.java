@@ -43,7 +43,9 @@ public class RefreshShopService extends BaseService {
 	}
 
 	private void updateShopJsonFile(String responseBody) {
-		File shopFile = new File("shop.json");
+		File shopFile = new File(RefreshShopService.class.getClassLoader()
+				.getResource("").getPath()
+				+ "shop.json");
 		try {
 			OutputStreamWriter output = new OutputStreamWriter(
 					new FileOutputStream(shopFile));

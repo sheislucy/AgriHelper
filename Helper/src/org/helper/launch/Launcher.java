@@ -4,10 +4,10 @@ import org.helper.ui.HelperFrame;
 import org.helper.util.HelperLoggerAppender;
 
 public class Launcher {
-	
+
 	public static void main(String[] args) {
 		HelperFrame frame = new HelperFrame();
 		frame.setVisible(true);
-		HelperLoggerAppender.writeLog("Dual Helper 启动成功");
+		HelperLoggerAppender.writeLog("启动成功");
 	}
 }

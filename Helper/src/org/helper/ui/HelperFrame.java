@@ -1,6 +1,7 @@
 package org.helper.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -37,6 +38,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -72,7 +74,6 @@ public class HelperFrame extends JFrame {
 	private JTable farmTable;
 	private JMenu menuLogin;
 	private JPanel mainBar;
-	private JTabbedPane tab;
 	private JPanel manuallyWrapper;
 	private JScrollPane scrollTablePanel;
 	private JPanel controlPanel;
@@ -134,7 +135,7 @@ public class HelperFrame extends JFrame {
 		this.checkedFieldIdList = new ArrayList<String>();
 		this.checkedStoreCropList = new ArrayList<Integer>();
 
-		this.setTitle("Farmer Helper - Version 0.0.8 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.0.9 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -187,6 +188,7 @@ public class HelperFrame extends JFrame {
 	public void enableAutoCare() {
 		this.autoCareBtn.setEnabled(true);
 		this.autoCareBtn.setText("开启自动护理");
+		this.autoCareBtn.setBackground(new Color(186, 209, 145));
 	}
 
 	private JPanel constructAccountsPane() {
@@ -282,8 +284,10 @@ public class HelperFrame extends JFrame {
 		auto = accountList.get(userId).isAutoCareEnable();
 		if (auto) {
 			autoCareBtn.setText("停止自动护理");
+			autoCareBtn.setBackground(new Color(240, 117, 82));
 		} else {
 			autoCareBtn.setText("开启自动护理");
+			autoCareBtn.setBackground(new Color(186, 209, 145));
 		}
 		refreshAccount();
 	}
@@ -300,9 +304,8 @@ public class HelperFrame extends JFrame {
 		mainBar = new JPanel();
 		mainBar.setPreferredSize(new Dimension(680, 650));
 
-		tab = new JTabbedPane();
-		tab.addTab("土地信息", constructManuallyPanel());
-		mainBar.add(tab);
+		mainBar.setBorder(new TitledBorder("土地信息"));
+		mainBar.add(constructManuallyPanel());
 		return mainBar;
 
 	}
@@ -485,16 +488,21 @@ public class HelperFrame extends JFrame {
 	private void bindAutoEvent() {
 		this.autoCareBtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				auto = !auto;
-				if (auto) {
-					autoCareBtn.setText("停止自动护理");
-					accountTableModel.setValueAt("已开启自动护理", accountRowId, 3);
-					startSchedule2();
-				} else {
-					autoCareBtn.setText("开启自动护理");
-					accountTableModel.setValueAt("未开启自动护理", accountRowId, 3);
-					// stopSchedule(FarmDomain.getInstance().getUserId());
-					stopSchedule2();
+				if (autoCareBtn.isEnabled()) {
+					auto = !auto;
+					if (auto) {
+						autoCareBtn.setText("停止自动护理");
+						autoCareBtn.setBackground(new Color(240, 117, 82));
+						accountTableModel
+								.setValueAt("已开启自动护理", accountRowId, 3);
+						startSchedule2();
+					} else {
+						autoCareBtn.setText("开启自动护理");
+						autoCareBtn.setBackground(new Color(186, 209, 145));
+						accountTableModel
+								.setValueAt("未开启自动护理", accountRowId, 3);
+						stopSchedule2();
+					}
 				}
 				this.mouseReleased(e);
 			}
@@ -679,6 +687,7 @@ public class HelperFrame extends JFrame {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				int count = 0;
 				while (true) {
 					try {
 						AccountDomain autoOnAccount = accountList.get(userId);
@@ -686,31 +695,68 @@ public class HelperFrame extends JFrame {
 							// 帐号已被登出
 							break;
 						}
+						int oldHash = autoOnAccount.hashCode();
 						long nearestHarvest = countSleepTime(autoOnAccount);
-						if (nearestHarvest > 300000L) {
-							// 距离下一次执行时间超过5分钟，沉默1秒，为了查看帐号是否被登出
+						if (nearestHarvest > 300000L && count < 300) {
+							// 距离下一次执行时间超过5分钟，沉默1秒
 							Thread.sleep(1000L);
+							count++;
 							continue;
-						}
-						Thread.sleep(nearestHarvest);
-						if (autoOnAccount.isAutoCareEnable()) {
-							UserDomain.setInstance(autoOnAccount
-									.getUserDomain());
-							FarmDomain.setInstance(autoOnAccount
-									.getFarmDomain());
-							RefreshFarmStep4Service farmService = ServiceFactory
-									.getService(RefreshFarmStep4Service.class);
-							try {
-								farmService.refreshFarm();
-								HelperLoggerAppender.writeLog("自动护理: 刷新状态成功");
-							} catch (IOException | ParseException e) {
-								e.printStackTrace();
-								HelperLoggerAppender.writeLog(e.getMessage());
+						} else if (count >= 300) {
+							count = 0;
+							autoOnAccount = accountList.get(userId);
+							if (autoOnAccount == null
+									|| oldHash != autoOnAccount.hashCode()) {
+								// 原帐号已被登出
+								break;
 							}
-							ExecuteService executeService = ServiceFactory
-									.getService(ExecuteService.class);
-							executeService.executeAll(UserPreferenceDomain
-									.getSeedIndexById(farmDomain.getUserId()));
+							if (autoOnAccount.isAutoCareEnable()) {
+								UserDomain.setInstance(autoOnAccount
+										.getUserDomain());
+								FarmDomain.setInstance(autoOnAccount
+										.getFarmDomain());
+								RefreshFarmStep4Service farmService = ServiceFactory
+										.getService(RefreshFarmStep4Service.class);
+								try {
+									farmService.refreshFarm();
+									HelperLoggerAppender
+											.writeLog("自动护理: 刷新状态成功");
+								} catch (IOException | ParseException e) {
+									e.printStackTrace();
+									HelperLoggerAppender.writeLog(e
+											.getMessage());
+								}
+							}
+						} else {
+							Thread.sleep(nearestHarvest);
+							autoOnAccount = accountList.get(userId);
+							if (autoOnAccount == null
+									|| oldHash != autoOnAccount.hashCode()) {
+								// 原帐号已被登出
+								break;
+							}
+							if (autoOnAccount.isAutoCareEnable()) {
+								UserDomain.setInstance(autoOnAccount
+										.getUserDomain());
+								FarmDomain.setInstance(autoOnAccount
+										.getFarmDomain());
+								RefreshFarmStep4Service farmService = ServiceFactory
+										.getService(RefreshFarmStep4Service.class);
+								try {
+									farmService.refreshFarm();
+									HelperLoggerAppender
+											.writeLog("自动护理: 刷新状态成功");
+								} catch (IOException | ParseException e) {
+									e.printStackTrace();
+									HelperLoggerAppender.writeLog(e
+											.getMessage());
+								}
+								ExecuteService executeService = ServiceFactory
+										.getService(ExecuteService.class);
+								executeService.executeAll(UserPreferenceDomain
+										.getSeedIndexById(farmDomain
+												.getUserId()));
+							}
 						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -727,16 +773,28 @@ public class HelperFrame extends JFrame {
 		long nearestHarvest = 300000L;
 		for (FieldUnitDomain unit : fieldList) {
 			long cycle = Long.parseLong(ShopDomain.getGrowthCycle(unit.getA()));
-			long harvest = (Long.parseLong(unit.getQ()) + cycle) * 1000
+			long harvest = (Long.parseLong(unit.getQ()) + cycle) * 1000L
 					- System.currentTimeMillis();
 			if (harvest < nearestHarvest) {
 				nearestHarvest = harvest;
 			}
+			if (Integer.parseInt(unit.getF()) > 0) {
+				nearestHarvest = 1000L;// "杂草"
+				break;
+			}
+			if (Integer.parseInt(unit.getG()) > 0) {
+				nearestHarvest = 1000L;// "虫害"
+				break;
+			}
+			if (Integer.parseInt(unit.getH()) == 0) {
+				nearestHarvest = 1000L;// "干旱"
+				break;
+			}
 		}
 		if (nearestHarvest >= 300000L) {
-			return 300000L + (long) (1000 * (new Random()).nextFloat());
+			return 300000L + (long) (1000L * (new Random()).nextFloat());
 		} else if (nearestHarvest <= 1000L) {
-			return 1000L + (long) (1000 * (new Random()).nextFloat());
+			return 1000L + (long) (1000L * (new Random()).nextFloat());
 		} else {
 			return nearestHarvest;
 		}
@@ -851,7 +909,7 @@ public class HelperFrame extends JFrame {
 			entry.add(Integer.parseInt(unit.getH()) == 0 ? "旱" : "-");// "干旱"
 			long harvest = Long.parseLong(unit.getQ());
 			if (harvest > 0L) {
-				Date harvestDate = new Date((harvest + cycle) * 1000);
+				Date harvestDate = new Date((harvest + cycle) * 1000L);
 				entry.add(sdf.format(harvestDate));
 			} else {
 				entry.add("-");

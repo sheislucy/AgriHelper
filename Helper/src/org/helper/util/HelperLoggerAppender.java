@@ -30,7 +30,7 @@ public class HelperLoggerAppender {
 
 	public static void writeLog(String logText) {
 		JTextArea loggerArea = logger.mainframe.getLoggerArea();
-		if (loggerArea.getRows() > 200) {
+		if (loggerArea.getLineCount() > 200) {
 			loggerArea.setText("");
 		}
 		StringBuilder text = new StringBuilder(logger.sdf.format(new Date()));

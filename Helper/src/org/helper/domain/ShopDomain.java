@@ -27,14 +27,18 @@ public class ShopDomain implements Serializable {
 	static {
 		try {
 			InputStreamReader inputStreamReader = new InputStreamReader(
-					new FileInputStream(new File("shop.json")));
+					new FileInputStream(new File(ShopDomain.class
+							.getClassLoader().getResource("").getPath()
+							+ "shop.json")));
 			JSONObject shopJson = (JSONObject) new JSONParser()
 					.parse(inputStreamReader);
 			inputStreamReader.close();
 			JSONArray cropsArray = (JSONArray) shopJson.get("1");
 
 			SAXReader reader = new SAXReader();
-			Document document = reader.read(new File("crop.xml"));
+			Document document = reader.read(new File(ShopDomain.class
+					.getClassLoader().getResource("").getPath()
+					+ "crop.xml"));
 			Element cropsElm = document.getRootElement().element("crops");
 			List<?> crops = cropsElm.elements("crop");
 
