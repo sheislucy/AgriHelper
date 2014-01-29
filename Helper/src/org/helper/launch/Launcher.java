@@ -1,13 +1,12 @@
 package org.helper.launch;
 
-import org.helper.ui.HelperFrame;
+import org.helper.ui.HelperTray;
 import org.helper.util.HelperLoggerAppender;
 
 public class Launcher {
 
 	public static void main(String[] args) {
-		HelperFrame frame = new HelperFrame();
-		frame.setVisible(true);
+		new HelperTray();
 		HelperLoggerAppender.writeLog("启动成功");
 	}
 }

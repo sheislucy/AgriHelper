@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,13 +19,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -69,7 +70,7 @@ import org.json.simple.parser.ParseException;
  * @author luxixu
  * 
  */
-public class HelperFrame extends JFrame {
+public class HelperFrame extends JDialog {
 	private static final long serialVersionUID = -6344590535790274762L;
 	private JTable farmTable;
 	private JMenu menuLogin;
@@ -125,7 +126,7 @@ public class HelperFrame extends JFrame {
 		this.autoCareBtn.setEnabled(false);
 		this.autoCareBtn.setToolTipText("智能自动护理将除三害，并自动收/铲/种");
 		this.sellSelectedBtn = new JButton("一键卖出选中");
-		this.sellSelectedBtn.setToolTipText("卖出仓库内选中的果实，默认全选");
+		this.sellSelectedBtn.setToolTipText("卖出仓库内选中的果实");
 
 		this.loggerArea = new JTextArea();
 		this.loggerArea.setLineWrap(true);
@@ -135,14 +136,12 @@ public class HelperFrame extends JFrame {
 
 		this.setTitle("Farmer Helper - Version 0.0.9 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent winEvt) {
-				UserPreferenceDomain.saveToFile();
-				System.exit(0);
-			}
-		});
+		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		try {
+			this.setIconImage(ImageIO.read(new File(HelperTray.class.getClassLoader().getResource("").getPath() + ("icon.png"))));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		this.setResizable(true);
 		this.loginEvent = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -179,6 +178,7 @@ public class HelperFrame extends JFrame {
 	}
 
 	public void enableAutoCare() {
+		this.auto = false;
 		this.autoCareBtn.setEnabled(true);
 		this.autoCareBtn.setText("开启自动护理");
 		this.autoCareBtn.setBackground(new Color(186, 209, 145));
@@ -764,9 +764,21 @@ public class HelperFrame extends JFrame {
 		JMenu menuShop = new JMenu("商店S");
 		menuShop.setMnemonic(KeyEvent.VK_S);
 
+		JMenu menuExit = new JMenu("退出E");
+		menuExit.setMnemonic(KeyEvent.VK_E);
+		menuExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					UserPreferenceDomain.saveToFile();
+					System.exit(0);
+				}
+			}
+		});
+
 		menuBar.add(menuLogin);
 		menuBar.add(menuShop);
-
+		menuBar.add(menuExit);
 		return menuBar;
 	}
 
@@ -888,6 +900,7 @@ public class HelperFrame extends JFrame {
 		accountRow.add("未开启自动护理");
 		this.accountTableModel.addRow(accountRow);
 		this.accountTable.setRowSelectionInterval(accountTableModel.getRowCount() - 1, accountTableModel.getRowCount() - 1);
+		this.accountRowId = accountTable.getSelectedRow();
 	}
 
 	private String formatCycle(long cycle) {
