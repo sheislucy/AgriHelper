@@ -31,6 +31,7 @@ import org.helper.domain.login.ZhineiResponseDomain;
 import org.helper.enums.EmUrlDomain;
 import org.helper.enums.HttpResponseStatus;
 import org.helper.service.RefreshFarmService;
+import org.helper.service.RefreshFriendService;
 import org.helper.service.ServiceFactory;
 import org.helper.service.login.LianpuLoginService;
 import org.helper.service.login.VeryCDLoginService;
@@ -224,11 +225,6 @@ public class LoginDialog extends JDialog {
 
 	private void commonSuccessfulLogin() {
 		FarmDomain.getInstance().setUserName(userName);// override
-		// userName
-		// with
-		// login account while
-		// the server return is
-		// user nick name
 		RefreshFarmService farmService = ServiceFactory.getService(RefreshFarmService.class);
 		farmService.refresh();
 		parentFrame.enableAutoCare();
@@ -247,5 +243,13 @@ public class LoginDialog extends JDialog {
 			UserPreferenceDomain.USERS.put(FarmDomain.getInstance().getUserId(), user);
 		}
 		parentFrame.createAutoTask(FarmDomain.getInstance().getUserId());
+		RefreshFriendService friendService = ServiceFactory.getService(RefreshFriendService.class);
+		try {
+			friendService.refreshFriend();
+		} catch (org.apache.http.ParseException | IOException | ParseException e) {
+			e.printStackTrace();
+			HelperLoggerAppender.writeLog(e.getMessage());
+		}
+		parentFrame.refreshFriends(UserDomain.getInstance(), FarmDomain.getInstance());
 	}
 }

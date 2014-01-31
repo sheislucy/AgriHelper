@@ -59,4 +59,11 @@ public class BaseFarmDomain implements Serializable {
 		this.fieldList = fieldList;
 	}
 
+	public void removeAllFields() {
+		getFieldList().clear();
+	}
+
+	public void addField(FieldUnitDomain unit) {
+		getFieldList().add(unit);
+	}
 }

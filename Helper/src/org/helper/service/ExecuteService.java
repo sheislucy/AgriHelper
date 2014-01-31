@@ -200,7 +200,7 @@ public class ExecuteService {
 
 	private void doBuySeed(String fieldId, String seedId) {
 		FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(Integer.parseInt(fieldId));
-		if (Integer.parseInt(field.getB()) == EmCropStatus.EMPTY.getId()) {
+		if (Integer.parseInt(field.getB()) == EmCropStatus.EMPTY.getId() && !FarmDomain.getInstance().hasSeed(seedId)) {
 			BuyService bs = ServiceFactory.getService(BuyService.class);
 			try {
 				JSONObject responseJson = bs.buy("1", seedId);
@@ -238,11 +238,12 @@ public class ExecuteService {
 					if (code == 1) {
 						logText.append("成功，获得经验").append(String.valueOf(responseJson.get("exp")));
 						field.setB("1");
+						FarmDomain.getInstance().removeOneSeed(seedId);
 					} else {
-						logText.append("失败");
+						logText.append("失败" + responseJson.get("direction"));
 					}
 				} else {
-
+					logText.append("失败");
 				}
 				HelperLoggerAppender.writeLog(logText.toString());
 			} catch (IOException | org.json.simple.parser.ParseException e) {

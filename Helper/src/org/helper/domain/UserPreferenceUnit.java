@@ -9,14 +9,19 @@ public class UserPreferenceUnit implements Serializable {
 	private String password;
 	private int domainIndex;
 
-	private boolean isWater = false;
-	private boolean isWorm = false;
-	private boolean isWeed = false;
-	private boolean isHarvest = false;
-	private boolean isPlow = false;
+	private boolean isWater = true;
+	private boolean isWorm = true;
+	private boolean isWeed = true;
+	private boolean isHarvest = true;
+	private boolean isPlow = true;
 	private boolean isBuy = false;
-	private boolean isPlant = false;
+	private boolean isPlant = true;
 	private int seedComboIndex;
+
+	private boolean isWaterFriend = true;
+	private boolean isWormFriend = true;
+	private boolean isWeedFriend = true;
+	private boolean isStealFriend = false;
 
 	public String getUserName() {
 		return userName;
@@ -112,6 +117,38 @@ public class UserPreferenceUnit implements Serializable {
 
 	public void setDomainIndex(int domainIndex) {
 		this.domainIndex = domainIndex;
+	}
+
+	public boolean isWaterFriend() {
+		return isWaterFriend;
+	}
+
+	public void setWaterFriend(boolean isWaterFriend) {
+		this.isWaterFriend = isWaterFriend;
+	}
+
+	public boolean isWormFriend() {
+		return isWormFriend;
+	}
+
+	public void setWormFriend(boolean isWormFriend) {
+		this.isWormFriend = isWormFriend;
+	}
+
+	public boolean isWeedFriend() {
+		return isWeedFriend;
+	}
+
+	public void setWeedFriend(boolean isWeedFriend) {
+		this.isWeedFriend = isWeedFriend;
+	}
+
+	public boolean isStealFriend() {
+		return isStealFriend;
+	}
+
+	public void setStealFriend(boolean isStealFriend) {
+		this.isStealFriend = isStealFriend;
 	}
 
 }

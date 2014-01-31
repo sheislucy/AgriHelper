@@ -87,6 +87,14 @@ public class UserPreferenceDomain implements Serializable {
 			USERS.get(idAndTitle[0]).setPlant(new Boolean(config[1]));
 		} else if (idAndTitle[1].equalsIgnoreCase("seedComboIndex")) {
 			USERS.get(idAndTitle[0]).setSeedComboIndex(Integer.parseInt(config[1]));
+		} else if (idAndTitle[1].equalsIgnoreCase("isWaterFriend")) {
+			USERS.get(idAndTitle[0]).setWaterFriend(new Boolean(config[1]));
+		} else if (idAndTitle[1].equalsIgnoreCase("isWormFriend")) {
+			USERS.get(idAndTitle[0]).setWormFriend(new Boolean(config[1]));
+		} else if (idAndTitle[1].equalsIgnoreCase("isWeedFriend")) {
+			USERS.get(idAndTitle[0]).setWeedFriend(new Boolean(config[1]));
+		} else if (idAndTitle[1].equalsIgnoreCase("isStealFriend")) {
+			USERS.get(idAndTitle[0]).setStealFriend(new Boolean(config[1]));
 		}
 	}
 
@@ -126,9 +134,7 @@ public class UserPreferenceDomain implements Serializable {
 	}
 
 	public static void saveToFile() {
-
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(new File("user.ini"), false));
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("user.ini"), false));) {
 			for (Map.Entry<String, UserPreferenceUnit> userEntry : USERS.entrySet()) {
 				UserPreferenceUnit userPreferenceUnit = userEntry.getValue();
 				if (null != userPreferenceUnit.getUserId()) {
@@ -154,10 +160,16 @@ public class UserPreferenceDomain implements Serializable {
 					writer.newLine();
 					writer.write(userPreferenceUnit.getUserId() + ".seedComboIndex=" + userPreferenceUnit.getSeedComboIndex());
 					writer.newLine();
+					writer.write(userPreferenceUnit.getUserId() + ".isWaterFriend=" + userPreferenceUnit.isWaterFriend());
+					writer.newLine();
+					writer.write(userPreferenceUnit.getUserId() + ".isWormFriend=" + userPreferenceUnit.isWormFriend());
+					writer.newLine();
+					writer.write(userPreferenceUnit.getUserId() + ".isWeedFriend=" + userPreferenceUnit.isWeedFriend());
+					writer.newLine();
+					writer.write(userPreferenceUnit.getUserId() + ".isStealFriend=" + userPreferenceUnit.isStealFriend());
+					writer.newLine();
 				}
 			}
-
-			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			HelperLoggerAppender.writeLog(e.getMessage());

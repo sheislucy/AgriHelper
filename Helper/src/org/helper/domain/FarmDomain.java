@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.helper.util.StringUtils;
+
 public class FarmDomain extends BaseFarmDomain {
 	private static final long serialVersionUID = 1170704177667181436L;
 	private Map<String, Object> cookieMap = new HashMap<String, Object>();
@@ -50,12 +52,37 @@ public class FarmDomain extends BaseFarmDomain {
 		return null;
 	}
 
-	public void removeAllStorage() {
-		storeList.clear();
+	public BaseFarmDomain getFriendById(String userId) {
+		for (BaseFarmDomain friend : friendList) {
+			if (friend.getUserId().equals(userId)) {
+				return friend;
+			}
+		}
+		return null;
 	}
 
-	public void removeAllFields() {
-		getFieldList().clear();
+	public boolean hasSeed(String seedId) {
+		for (PackageUnitDomain unit : packageList) {
+			if (unit.getcId() != null && unit.getcId().equalsIgnoreCase(seedId) && StringUtils.isEmpty(unit.getAmount())
+					&& !unit.getAmount().equals("0")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void removeOneSeed(String seedId) {
+		for (PackageUnitDomain unit : packageList) {
+			if (unit.getcId() != null && unit.getcId().equalsIgnoreCase(seedId)) {
+				int amount = Integer.parseInt(unit.getAmount()) - 1;
+				unit.setAmount(String.valueOf(amount + ""));
+				break;
+			}
+		}
+	}
+
+	public void removeAllStorage() {
+		storeList.clear();
 	}
 
 	public void removeAllPackage() {
@@ -64,10 +91,6 @@ public class FarmDomain extends BaseFarmDomain {
 
 	public void removeAllFriends() {
 		friendList.clear();
-	}
-
-	public void addField(FieldUnitDomain unit) {
-		getFieldList().add(unit);
 	}
 
 	public void addStore(StoreUnitDomain unit) {
