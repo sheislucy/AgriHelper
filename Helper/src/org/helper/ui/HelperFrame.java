@@ -147,6 +147,7 @@ public class HelperFrame extends JDialog {
 		this.executeBtn.setToolTipText("会根据土地状态，判断执行复选框内选中的操作");
 		this.autoCareBtn = new JButton("开启自动护理");
 		this.autoCareBtn.setEnabled(false);
+		this.autoCareBtn.setBackground(Color.WHITE);
 		this.autoCareBtn.setToolTipText("智能自动护理将除三害，并自动收/铲/种");
 		this.sellSelectedBtn = new JButton("一键卖出选中");
 		this.sellSelectedBtn.setToolTipText("卖出仓库内选中的果实");
@@ -164,7 +165,7 @@ public class HelperFrame extends JDialog {
 		this.checkedStoreCropList = new ArrayList<Integer>();
 		this.friendOperationList = new ArrayList<EmFriendOperations>();
 
-		this.setTitle("Farmer Helper - Version 0.1.0 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.1 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
@@ -197,9 +198,13 @@ public class HelperFrame extends JDialog {
 					refreshSelectedAccount((String) accountTableModel.getValueAt(accountTableModel.getRowCount() - 1, 0));
 				} else {
 					farmTableModel.setRowCount(0);
+					friendTableModel.setRowCount(0);
 					storageTableModel.setRowCount(0);
 					packageTableModel.setRowCount(0);
 					((JScrollPane) infoPane.getComponentAt(0)).setViewportView(new JPanel());
+					auto = false;
+					autoCareBtn.setEnabled(false);
+					autoCareBtn.setBackground(Color.WHITE);
 				}
 			}
 		};
