@@ -4,6 +4,7 @@
 package org.helper.service;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,7 @@ public class RefreshFriendService extends BaseService {
 				FarmDomain.getInstance().getFriendList().add(friend);
 			}
 		}
+		Collections.sort(FarmDomain.getInstance().getFriendList());
 	}
 
 	@Override

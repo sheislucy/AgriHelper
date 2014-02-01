@@ -165,7 +165,7 @@ public class HelperFrame extends JDialog {
 		this.checkedStoreCropList = new ArrayList<Integer>();
 		this.friendOperationList = new ArrayList<EmFriendOperations>();
 
-		this.setTitle("Farmer Helper - Version 0.1.4 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.6 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
@@ -1023,6 +1023,7 @@ public class HelperFrame extends JDialog {
 		tempPanel.add(new JLabel("经验： " + FarmDomain.getInstance().getExp(), SwingConstants.LEFT));
 		tempPanel.add(new JLabel("魅力值： " + FarmDomain.getInstance().getCharm(), SwingConstants.LEFT));
 		userInfoPane.setViewportView(tempPanel);
+		userInfoPane.repaint();
 	}
 
 	private void refreshFarmTable(List<FieldUnitDomain> fieldList) {

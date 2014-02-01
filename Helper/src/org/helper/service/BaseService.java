@@ -28,6 +28,7 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreConnectionPNames;
 import org.helper.domain.login.UserDomain;
 import org.helper.util.HelperConstants;
 
@@ -60,6 +61,8 @@ public abstract class BaseService {
 
 		BasicHttpParams params = new BasicHttpParams();
 		params.setParameter(ClientPNames.DEFAULT_HEADERS, headers);
+		params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 6000);
+		params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 6000);
 
 		buildRegistry();
 
@@ -85,6 +88,8 @@ public abstract class BaseService {
 
 		BasicHttpParams params = new BasicHttpParams();
 		params.setParameter(ClientPNames.DEFAULT_HEADERS, headers);
+		params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 2000);
+		params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
 
 		buildRegistry();
 

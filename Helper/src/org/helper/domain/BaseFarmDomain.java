@@ -11,7 +11,7 @@ import java.util.List;
  * @author lucy
  * 
  */
-public class BaseFarmDomain implements Serializable {
+public class BaseFarmDomain implements Serializable, Comparable<BaseFarmDomain> {
 	private static final long serialVersionUID = -3627428284561126709L;
 	private String userId;
 	private String userName;
@@ -65,5 +65,28 @@ public class BaseFarmDomain implements Serializable {
 
 	public void addField(FieldUnitDomain unit) {
 		getFieldList().add(unit);
+	}
+
+	@Override
+	public int compareTo(BaseFarmDomain o) {
+		if (o == null) {
+			return -1;
+		} else if (this.getExp() == null) {
+			return 1;
+		} else {
+			try {
+				int exp_local = Integer.parseInt(this.getExp());
+				int exp_another = Integer.parseInt(o.getExp());
+				if (exp_local > exp_another) {
+					return -1;
+				} else if ((exp_local == exp_another)) {
+					return 0;
+				} else {
+					return 1;
+				}
+			} catch (Throwable e) {
+				return 1;
+			}
+		}
 	}
 }
