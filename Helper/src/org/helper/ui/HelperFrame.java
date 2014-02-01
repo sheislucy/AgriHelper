@@ -165,7 +165,7 @@ public class HelperFrame extends JDialog {
 		this.checkedStoreCropList = new ArrayList<Integer>();
 		this.friendOperationList = new ArrayList<EmFriendOperations>();
 
-		this.setTitle("Farmer Helper - Version 0.1.3 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.4 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
@@ -296,7 +296,7 @@ public class HelperFrame extends JDialog {
 		StringBuilder sb = new StringBuilder("[").append(FarmDomain.getInstance().getUserName()).append("]").append("的好友").append("[")
 				.append(FarmDomain.getInstance().getFriendById(friendId).getUserName()).append("]").append("土地信息");
 		fieldTitle.setTitle(sb.toString());
-		mainBar.repaint();
+		scrollTablePanel.repaint();
 		HelperLoggerAppender.writeLog("刷新好友[" + FarmDomain.getInstance().getFriendById(friendId).getUserName() + "]的土地信息成功");
 	}
 
@@ -1097,7 +1097,7 @@ public class HelperFrame extends JDialog {
 		refreshStorage();
 		refreshPackage();
 		fieldTitle.setTitle("[" + FarmDomain.getInstance().getUserName() + "]" + "土地信息");
-		mainBar.repaint();
+		scrollTablePanel.repaint();
 		HelperLoggerAppender.writeLog("刷新状态成功");
 	}
 
