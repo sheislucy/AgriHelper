@@ -165,7 +165,7 @@ public class HelperFrame extends JDialog {
 		this.checkedStoreCropList = new ArrayList<Integer>();
 		this.friendOperationList = new ArrayList<EmFriendOperations>();
 
-		this.setTitle("Farmer Helper - Version 0.1.2 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.3 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
@@ -412,7 +412,7 @@ public class HelperFrame extends JDialog {
 		controlPanel.setPreferredSize(new Dimension(680, 90));
 
 		ctrlWrapper1 = new JPanel();// control 面板第一行，checkbox和dropdown
-		ctrlWrapper1.setPreferredSize(new Dimension(680, 30));
+		ctrlWrapper1.setPreferredSize(new Dimension(680, 35));
 		constructControlCheckbox();
 		ctrlWrapper1.add(new JLabel("作物"));
 		ctrlWrapper1.add(constructSeedCombo());
@@ -427,7 +427,7 @@ public class HelperFrame extends JDialog {
 		controlPanel.add(ctrlWrapper2);
 
 		ctrlWrapper3 = new JPanel();// 好友操作面板，隐藏
-		ctrlWrapper3.setPreferredSize(new Dimension(680, 30));
+		ctrlWrapper3.setPreferredSize(new Dimension(680, 35));
 		ctrlWrapper3.setVisible(false);
 		constructFriendControlCheckbox();
 		controlPanel.add(ctrlWrapper3);
@@ -549,28 +549,23 @@ public class HelperFrame extends JDialog {
 				if (userDomain != null && farmDomain != null) {
 					UserDomain.setInstance(userDomain);
 					FarmDomain.setInstance(farmDomain);
-					collectStorage();
-					if (checkedStoreCropList.size() == storageTableModel.getRowCount()) {
-						SellAllService sellAllService = ServiceFactory.getService(SellAllService.class);
-						try {
+					try {
+						collectStorage();
+						if (checkedStoreCropList.size() == storageTableModel.getRowCount()) {
+							SellAllService sellAllService = ServiceFactory.getService(SellAllService.class);
 							sellAllService.sellAll();
-						} catch (IOException | ParseException e1) {
-							e1.printStackTrace();
-							HelperLoggerAppender.writeLog(e1.getMessage());
-						}
-					} else {
-						SellOneService sellOneService = ServiceFactory.getService(SellOneService.class);
-						for (int index : checkedStoreCropList) {
-							StoreUnitDomain storeUnit = FarmDomain.getInstance().getStoreUnitDomainByIndex(index);
-							try {
+						} else {
+							SellOneService sellOneService = ServiceFactory.getService(SellOneService.class);
+							for (int index : checkedStoreCropList) {
+								StoreUnitDomain storeUnit = FarmDomain.getInstance().getStoreUnitDomainByIndex(index);
 								sellOneService.sellOne(storeUnit.getAmount(), storeUnit.getcId());
-							} catch (IOException | ParseException e1) {
-								e1.printStackTrace();
-								HelperLoggerAppender.writeLog(e1.getMessage());
 							}
 						}
+						refreshBtn.doClick();
+					} catch (Throwable e1) {
+						e1.printStackTrace();
+						HelperLoggerAppender.writeLog(e1.getMessage());
 					}
-					refreshBtn.doClick();
 				}
 			}
 		});
@@ -607,12 +602,20 @@ public class HelperFrame extends JDialog {
 				if (userDomain != null && farmDomain != null) {
 					UserDomain.setInstance(userDomain);
 					FarmDomain.setInstance(farmDomain);
-					collectFriendOperations();
-					collectFields();
-					HelpFriendService helpFriendService = ServiceFactory.getService(HelpFriendService.class);
-					helpFriendService.help(friendOperationList, checkedFieldIdList, friendId);
-					saveFriendConfig();
-					refreshFriendField.doClick();
+					try {
+						collectFriendOperations();
+						collectFields();
+						HelpFriendService helpFriendService = ServiceFactory.getService(HelpFriendService.class);
+						helpFriendService.help(friendOperationList, checkedFieldIdList, friendId);
+						saveFriendConfig();
+						refreshFriendField.doClick();
+						RefreshStorageService storeService = ServiceFactory.getService(RefreshStorageService.class);
+						storeService.refreshStorage();
+						refreshStorage();
+					} catch (Throwable e1) {
+						e1.printStackTrace();
+						HelperLoggerAppender.writeLog(e1.getMessage());
+					}
 				}
 			}
 		});
@@ -627,12 +630,17 @@ public class HelperFrame extends JDialog {
 				if (userDomain != null && farmDomain != null) {
 					UserDomain.setInstance(userDomain);
 					FarmDomain.setInstance(farmDomain);
-					collectOperations();
-					collectFields();
-					ExecuteService executeService = ServiceFactory.getService(ExecuteService.class);
-					executeService.execute(operationList, checkedFieldIdList, ((CropDomain) seedCombo.getSelectedItem()).getcId());
-					saveExecutionsToConfig();
-					refreshBtn.doClick();
+					try {
+						collectOperations();
+						collectFields();
+						ExecuteService executeService = ServiceFactory.getService(ExecuteService.class);
+						executeService.execute(operationList, checkedFieldIdList, ((CropDomain) seedCombo.getSelectedItem()).getcId());
+						saveExecutionsToConfig();
+						refreshBtn.doClick();
+					} catch (Throwable e1) {
+						e1.printStackTrace();
+						HelperLoggerAppender.writeLog(e1.getMessage());
+					}
 				}
 			}
 		});
@@ -773,7 +781,12 @@ public class HelperFrame extends JDialog {
 				if (userDomain != null && farmDomain != null) {
 					UserDomain.setInstance(userDomain);
 					FarmDomain.setInstance(farmDomain);
-					refreshFriendField();
+					try {
+						refreshFriendField();
+					} catch (Throwable e1) {
+						e1.printStackTrace();
+						HelperLoggerAppender.writeLog(e1.getMessage());
+					}
 				}
 			}
 		});
@@ -1007,7 +1020,6 @@ public class HelperFrame extends JDialog {
 		tempPanel.add(new JLabel("经验： " + FarmDomain.getInstance().getExp(), SwingConstants.LEFT));
 		tempPanel.add(new JLabel("魅力值： " + FarmDomain.getInstance().getCharm(), SwingConstants.LEFT));
 		userInfoPane.setViewportView(tempPanel);
-		// infoPane.repaint();
 	}
 
 	private void refreshFarmTable(List<FieldUnitDomain> fieldList) {
@@ -1073,7 +1085,6 @@ public class HelperFrame extends JDialog {
 			storageTableModel.addRow(entry);
 		}
 		storageTable.setModel(storageTableModel);
-		storageTable.repaint();
 	}
 
 	private void refreshAccount() {

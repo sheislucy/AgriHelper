@@ -41,7 +41,7 @@ public class HelpFriendService {
 		BaseFarmDomain friend = FarmDomain.getInstance().getFriendById(friendId);
 		int fieldIndex = Integer.parseInt(fieldId);
 		if (friend.getFieldList().size() >= fieldIndex + 1) {
-			FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(fieldIndex);
+			FieldUnitDomain field = friend.getFieldList().get(fieldIndex);
 			if (Integer.parseInt(field.getB()) < EmCropStatus.RIPE.getId()) {
 				int wormNumber = Integer.parseInt(field.getG());
 				WormFriendService wormFriendService = ServiceFactory.getService(WormFriendService.class);
@@ -71,7 +71,7 @@ public class HelpFriendService {
 		BaseFarmDomain friend = FarmDomain.getInstance().getFriendById(friendId);
 		int fieldIndex = Integer.parseInt(fieldId);
 		if (friend.getFieldList().size() >= fieldIndex + 1) {
-			FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(fieldIndex);
+			FieldUnitDomain field = friend.getFieldList().get(fieldIndex);
 			if (Integer.parseInt(field.getH()) == 0 && Integer.parseInt(field.getB()) < EmCropStatus.RIPE.getId()) {
 				WaterFriendService waterFriendService = ServiceFactory.getService(WaterFriendService.class);
 				try {
