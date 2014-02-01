@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- http://happyfarm.manyou-apps.com/images/v3_3_1/module/ini.xml?v=hf50 -->
 <main>
-<postUrl url = "http://kxnc.manyou.yeswan.com/api.php?" />
-<loading url="http://kxnc.manyou.yeswan.com/images/v3_3/module/loading.swf?v=3" />
-<soundFolder url="http://kxnc.manyou.yeswan.com/images/v3_3/module/sound/sound.swf" />
-<folder url = "http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/" />
-<defaultIcon url="http://kxnc.manyou.yeswan.com/images/v3_3/module/null.gif" />
+<postUrl url = "http://happyfarm.manyou-apps.com/api.php?" />
+<loading url="http://happyfarm.manyou-apps.com/images/v3_3/module/loading.swf?v=3" />
+<soundFolder url="http://happyfarm.manyou-apps.com/images/v3_3/module/sound/sound.swf" />
+<folder url = "http://happyfarm.manyou-apps.com/images/v3_3/module/ui/" />
+<defaultIcon url="http://happyfarm.manyou-apps.com/images/v3_3/module/null.gif" />
 <version value = "manyou" loginurl = "" language = "cn" />
 <openControl>
 	<item name = "tool" open = "true" />
@@ -17,18 +18,18 @@
 	<item id="7" className="d1as" />
 </dogsound>
 <resource>
-	<item url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/material.xml?v=8" name="materialResource" />
+	<item url="http://happyfarm.manyou-apps.com/images/v3_3_1/module/material.xml?v=8" name="materialResource" />
 </resource>
 <moduleList>
-	<module name="main" url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/Main.swf?v=10" statusText="加载主文件..." size="246350">
-		<material url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/ui/main/newSign.swf?v=1" statusText="加载素材 ... 1" size="15403" />
-		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/commonualUI.swf?v=3" statusText="加载素材 ... 1" size="156403" />
-		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/maininterface.swf?v=3" statusText="加载素材 ... 2" size="43250" />
-		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/matterandcursor.swf?v=5" statusText="加载素材 ... 3" size="77501" />
-		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/newUI2.swf?v=3" statusText="加载素材 ... 4" size="64597" />
-		<material url="http://kxnc.manyou.yeswan.com/images/v3_3/module/ui/main/defaultbg.swf?v=5" statusText="加载UI素材... 5" size="28866" />
+	<module name="main" url="http://happyfarm.manyou-apps.com/images/v3_3_1/module/Main.swf?v=10" statusText="加载主文件..." size="246350">
+		<material url="http://happyfarm.manyou-apps.com/images/v3_3_1/module/ui/main/newSign.swf?v=1" statusText="加载素材 ... 1" size="15403" />
+		<material url="http://happyfarm.manyou-apps.com/images/v3_3/module/ui/main/commonualUI.swf?v=3" statusText="加载素材 ... 1" size="156403" />
+		<material url="http://happyfarm.manyou-apps.com/images/v3_3/module/ui/main/maininterface.swf?v=3" statusText="加载素材 ... 2" size="43250" />
+		<material url="http://happyfarm.manyou-apps.com/images/v3_3/module/ui/main/matterandcursor.swf?v=5" statusText="加载素材 ... 3" size="77501" />
+		<material url="http://happyfarm.manyou-apps.com/images/v3_3/module/ui/main/newUI2.swf?v=3" statusText="加载素材 ... 4" size="64597" />
+		<material url="http://happyfarm.manyou-apps.com/images/v3_3/module/ui/main/defaultbg.swf?v=5" statusText="加载UI素材... 5" size="28866" />
 	</module>
-	<module name="farm" url="http://kxnc.manyou.yeswan.com/images/v3_3_1/module/Farm.swf?v=10" size="136681">
+	<module name="farm" url="http://happyfarm.manyou-apps.com/images/v3_3_1/module/Farm.swf?v=10" size="136681">
 	</module>
 </moduleList>
 <pay>

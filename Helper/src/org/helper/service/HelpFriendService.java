@@ -130,7 +130,9 @@ public class HelpFriendService {
 		if (friend.getFieldList().size() >= fieldIndex + 1) {
 			FieldUnitDomain field = friend.getFieldList().get(fieldIndex);
 			if (Integer.parseInt(field.getB()) == EmCropStatus.RIPE.getId()) {
-				if (field.getN().equals("2")) {
+//				int leaving = Integer.parseInt(field.getM());
+//				int minimum = Integer.parseInt(field.getK());
+				if (field.getN().equals("2") ) {
 					StealFriendService stealService = ServiceFactory.getService(StealFriendService.class);
 					try {
 						JSONObject friendFieldJson = stealService.stealFriend(friendId, fieldId);

@@ -390,9 +390,9 @@ public class HelperFrame extends JDialog {
 
 	private JPanel constructMainPanel() {
 		mainBar = new JPanel();
-		mainBar.setPreferredSize(new Dimension(680, 650));
+		mainBar.setPreferredSize(new Dimension(700, 660));
 
-		mainBar.setBorder(fieldTitle);
+//		mainBar.setBorder(fieldTitle);
 		mainBar.add(constructManuallyPanel());
 		return mainBar;
 
@@ -401,25 +401,26 @@ public class HelperFrame extends JDialog {
 	private JPanel constructManuallyPanel() {
 		manuallyWrapper = new JPanel();
 		BoxLayout lo = new BoxLayout(manuallyWrapper, BoxLayout.Y_AXIS);
+		manuallyWrapper.setPreferredSize(new Dimension(690, 650));
 		manuallyWrapper.setLayout(lo);
 
 		// 表格区域
 		scrollTablePanel = new JScrollPane(constructFarmFieldTable());
-		scrollTablePanel.setPreferredSize(new Dimension(680, 325));
+		scrollTablePanel.setPreferredSize(new Dimension(690, 325));
 
 		// 控制面板
 		controlPanel = new JPanel();
-		controlPanel.setPreferredSize(new Dimension(680, 90));
+		controlPanel.setPreferredSize(new Dimension(690, 90));
 
 		ctrlWrapper1 = new JPanel();// control 面板第一行，checkbox和dropdown
-		ctrlWrapper1.setPreferredSize(new Dimension(680, 35));
+		ctrlWrapper1.setPreferredSize(new Dimension(690, 35));
 		constructControlCheckbox();
 		ctrlWrapper1.add(new JLabel("作物"));
 		ctrlWrapper1.add(constructSeedCombo());
 		controlPanel.add(ctrlWrapper1);
 
 		ctrlWrapper2 = new JPanel();// control 面板第二行，按钮
-		ctrlWrapper2.setPreferredSize(new Dimension(680, 35));
+		ctrlWrapper2.setPreferredSize(new Dimension(690, 35));
 		ctrlWrapper2.add(executeBtn);
 		ctrlWrapper2.add(refreshBtn);
 		ctrlWrapper2.add(autoCareBtn);
@@ -427,13 +428,13 @@ public class HelperFrame extends JDialog {
 		controlPanel.add(ctrlWrapper2);
 
 		ctrlWrapper3 = new JPanel();// 好友操作面板，隐藏
-		ctrlWrapper3.setPreferredSize(new Dimension(680, 35));
+		ctrlWrapper3.setPreferredSize(new Dimension(690, 35));
 		ctrlWrapper3.setVisible(false);
 		constructFriendControlCheckbox();
 		controlPanel.add(ctrlWrapper3);
 
 		ctrlWrapper4 = new JPanel();// 好友操作面板，隐藏
-		ctrlWrapper4.setPreferredSize(new Dimension(680, 35));
+		ctrlWrapper4.setPreferredSize(new Dimension(690, 35));
 		ctrlWrapper4.setVisible(false);
 		ctrlWrapper4.add(refreshFriendField);
 		ctrlWrapper4.add(helpFriend);
@@ -450,7 +451,7 @@ public class HelperFrame extends JDialog {
 		// 日志
 		footerWrapper = new JPanel();
 		consoleTab = new JTabbedPane();
-		consoleTab.setPreferredSize(new Dimension(490, 190));
+		consoleTab.setPreferredSize(new Dimension(480, 190));
 		JScrollPane loggerScroll = new JScrollPane(loggerArea);
 		loggerScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		consoleTab.addTab("操作日志", loggerScroll);
@@ -472,6 +473,7 @@ public class HelperFrame extends JDialog {
 		footerWrapper.add(consoleTab);
 		footerWrapper.add(infoPane);
 
+		scrollTablePanel.setBorder(fieldTitle);
 		manuallyWrapper.add(scrollTablePanel);
 		manuallyWrapper.add(controlPanel);
 		manuallyWrapper.add(footerWrapper);
@@ -977,6 +979,7 @@ public class HelperFrame extends JDialog {
 		tcm.getColumn(6).setMaxWidth(50);
 		tcm.getColumn(7).setMaxWidth(50);
 		tcm.getColumn(8).setMaxWidth(50);
+		tcm.getColumn(9).setWidth(55);
 
 		return farmTable;
 	}
