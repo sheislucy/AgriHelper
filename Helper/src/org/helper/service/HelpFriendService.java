@@ -8,6 +8,7 @@ import org.helper.domain.BaseFarmDomain;
 import org.helper.domain.FarmDomain;
 import org.helper.domain.FieldUnitDomain;
 import org.helper.domain.ShopDomain;
+import org.helper.enums.EmCropStatus;
 import org.helper.enums.EmFriendOperations;
 import org.helper.util.HelperLoggerAppender;
 import org.json.simple.JSONObject;
@@ -18,13 +19,13 @@ public class HelpFriendService {
 			for (EmFriendOperations o : operationList) {
 				switch (o) {
 				case WATER:
-					// doWatering(fieldId);
+					doWater(fieldId, friendId);
 					break;
 				case WORM:
-					// doWorm(fieldId);
+					doWorm(fieldId, friendId);
 					break;
 				case WEED:
-					// doWeed(fieldId);
+					doWeed(fieldId, friendId);
 					break;
 				case STEAL:
 					doSteal(fieldId, friendId);
@@ -36,35 +37,124 @@ public class HelpFriendService {
 		}
 	}
 
-	private void doSteal(String fieldId, String friendId) {
+	private void doWorm(String fieldId, String friendId) {
 		BaseFarmDomain friend = FarmDomain.getInstance().getFriendById(friendId);
 		int fieldIndex = Integer.parseInt(fieldId);
-		if (friend.getFieldList().size() > fieldIndex + 1) {
-			FieldUnitDomain field = friend.getFieldList().get(fieldIndex);
-			if (field.getN().equals("2")) {
-				StealFriendService stealService = ServiceFactory.getService(StealFriendService.class);
+		if (friend.getFieldList().size() >= fieldIndex + 1) {
+			FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(fieldIndex);
+			if (Integer.parseInt(field.getB()) < EmCropStatus.RIPE.getId()) {
+				int wormNumber = Integer.parseInt(field.getG());
+				WormFriendService wormFriendService = ServiceFactory.getService(WormFriendService.class);
+				for (int i = 0; i < wormNumber; i++) {
+					try {
+						JSONObject friendFieldJson = wormFriendService.wormFriend(friendId, fieldId);
+						if (String.valueOf(friendFieldJson.get("code")).equals("1")) {
+							StringBuilder sb = new StringBuilder("为好友[").append(friend.getUserName()).append("]第")
+									.append(friendFieldJson.get("farmlandIndex")).append("块土地除虫成功，获得金币").append(friendFieldJson.get("money"))
+									.append("，经验").append(friendFieldJson.get("exp"));
+							HelperLoggerAppender.writeLog(sb.toString());
+						} else {
+							StringBuilder sb = new StringBuilder("为好友[").append(friend.getUserName()).append("]第")
+									.append(friendFieldJson.get("farmlandIndex")).append("块土地除虫失败");
+							HelperLoggerAppender.writeLog(sb.toString());
+						}
+					} catch (ParseException | org.json.simple.parser.ParseException | IOException e) {
+						e.printStackTrace();
+						HelperLoggerAppender.writeLog(e.getMessage());
+					}
+				}
+			}
+		}
+	}
+
+	private void doWater(String fieldId, String friendId) {
+		BaseFarmDomain friend = FarmDomain.getInstance().getFriendById(friendId);
+		int fieldIndex = Integer.parseInt(fieldId);
+		if (friend.getFieldList().size() >= fieldIndex + 1) {
+			FieldUnitDomain field = FarmDomain.getInstance().getFieldList().get(fieldIndex);
+			if (Integer.parseInt(field.getH()) == 0 && Integer.parseInt(field.getB()) < EmCropStatus.RIPE.getId()) {
+				WaterFriendService waterFriendService = ServiceFactory.getService(WaterFriendService.class);
 				try {
-					JSONObject friendFieldJson = stealService.stealFriend(friendId, fieldId);
+					JSONObject friendFieldJson = waterFriendService.waterFriend(friendId, fieldId);
 					if (String.valueOf(friendFieldJson.get("code")).equals("1")) {
-						field.setM(String.valueOf(friendFieldJson.get("leavings")));
-						field.setN("1");
-						JSONObject status = (JSONObject) friendFieldJson.get("status");
-						StringBuilder sb = new StringBuilder("采摘好友[").append(friend.getUserName()).append("]第")
-								.append(friendFieldJson.get("farmlandIndex")).append("块土地的[")
-								.append(ShopDomain.getCropName(String.valueOf(status.get("cId"))).replace("种子", "").trim()).append("]成功，数量")
-								.append(friendFieldJson.get("harvest"));
+						StringBuilder sb = new StringBuilder("为好友[").append(friend.getUserName()).append("]第")
+								.append(friendFieldJson.get("farmlandIndex")).append("块土地浇水成功，获得金币").append(friendFieldJson.get("money"))
+								.append("，经验").append(friendFieldJson.get("exp"));
 						HelperLoggerAppender.writeLog(sb.toString());
 					} else {
-						StringBuilder sb = new StringBuilder("采摘好友[").append(friend.getUserName()).append("]的第").append(fieldId).append("块土地失败");
+						StringBuilder sb = new StringBuilder("为好友[").append(friend.getUserName()).append("]第")
+								.append(friendFieldJson.get("farmlandIndex")).append("块土地浇水失败");
 						HelperLoggerAppender.writeLog(sb.toString());
 					}
-				} catch (ParseException | IOException | org.json.simple.parser.ParseException e) {
+				} catch (ParseException | org.json.simple.parser.ParseException | IOException e) {
 					e.printStackTrace();
 					HelperLoggerAppender.writeLog(e.getMessage());
 				}
-			} else {
-				StringBuilder sb = new StringBuilder("好友[").append(friend.getUserName()).append("]的第").append(fieldId).append("块土地已经采摘过");
-				HelperLoggerAppender.writeLog(sb.toString());
+			}
+
+		}
+	}
+
+	private void doWeed(String fieldId, String friendId) {
+		BaseFarmDomain friend = FarmDomain.getInstance().getFriendById(friendId);
+		int fieldIndex = Integer.parseInt(fieldId);
+		if (friend.getFieldList().size() >= fieldIndex + 1) {
+			WeedFriendService weedFriendService = ServiceFactory.getService(WeedFriendService.class);
+			if (Integer.parseInt(friend.getFieldList().get(fieldIndex).getB()) < EmCropStatus.RIPE.getId()) {
+				int weedNumber = Integer.parseInt(friend.getFieldList().get(fieldIndex).getF());
+				for (int i = 0; i < weedNumber; i++) {
+					try {
+						JSONObject friendFieldJson = weedFriendService.weedFriend(friendId, fieldId);
+						if (String.valueOf(friendFieldJson.get("code")).equals("1")) {
+							StringBuilder sb = new StringBuilder("为好友[").append(friend.getUserName()).append("]第")
+									.append(friendFieldJson.get("farmlandIndex")).append("块土地除草成功，获得金币").append(friendFieldJson.get("money"))
+									.append("，经验").append(friendFieldJson.get("exp"));
+							HelperLoggerAppender.writeLog(sb.toString());
+						} else {
+							StringBuilder sb = new StringBuilder("为好友[").append(friend.getUserName()).append("]第")
+									.append(friendFieldJson.get("farmlandIndex")).append("块土地除草失败");
+							HelperLoggerAppender.writeLog(sb.toString());
+						}
+					} catch (ParseException | IOException | org.json.simple.parser.ParseException e) {
+						e.printStackTrace();
+						HelperLoggerAppender.writeLog(e.getMessage());
+					}
+				}
+			}
+		}
+	}
+
+	private void doSteal(String fieldId, String friendId) {
+		BaseFarmDomain friend = FarmDomain.getInstance().getFriendById(friendId);
+		int fieldIndex = Integer.parseInt(fieldId);
+		if (friend.getFieldList().size() >= fieldIndex + 1) {
+			FieldUnitDomain field = friend.getFieldList().get(fieldIndex);
+			if (Integer.parseInt(field.getB()) == EmCropStatus.RIPE.getId()) {
+				if (field.getN().equals("2")) {
+					StealFriendService stealService = ServiceFactory.getService(StealFriendService.class);
+					try {
+						JSONObject friendFieldJson = stealService.stealFriend(friendId, fieldId);
+						if (String.valueOf(friendFieldJson.get("code")).equals("1")) {
+							field.setM(String.valueOf(friendFieldJson.get("leavings")));
+							field.setN("1");
+							JSONObject status = (JSONObject) friendFieldJson.get("status");
+							StringBuilder sb = new StringBuilder("采摘好友[").append(friend.getUserName()).append("]第")
+									.append(friendFieldJson.get("farmlandIndex")).append("块土地的[")
+									.append(ShopDomain.getCropName(String.valueOf(status.get("cId"))).replace("种子", "").trim()).append("]成功，数量")
+									.append(friendFieldJson.get("harvest"));
+							HelperLoggerAppender.writeLog(sb.toString());
+						} else {
+							StringBuilder sb = new StringBuilder("采摘好友[").append(friend.getUserName()).append("]的第").append(fieldId).append("块土地失败");
+							HelperLoggerAppender.writeLog(sb.toString());
+						}
+					} catch (ParseException | IOException | org.json.simple.parser.ParseException e) {
+						e.printStackTrace();
+						HelperLoggerAppender.writeLog(e.getMessage());
+					}
+				} else {
+					StringBuilder sb = new StringBuilder("好友[").append(friend.getUserName()).append("]的第").append(fieldId).append("块土地已经采摘过");
+					HelperLoggerAppender.writeLog(sb.toString());
+				}
 			}
 		}
 	}

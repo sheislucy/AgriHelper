@@ -165,7 +165,7 @@ public class HelperFrame extends JDialog {
 		this.checkedStoreCropList = new ArrayList<Integer>();
 		this.friendOperationList = new ArrayList<EmFriendOperations>();
 
-		this.setTitle("Farmer Helper - Version 0.1.1 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.2 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
@@ -611,7 +611,6 @@ public class HelperFrame extends JDialog {
 					collectFields();
 					HelpFriendService helpFriendService = ServiceFactory.getService(HelpFriendService.class);
 					helpFriendService.help(friendOperationList, checkedFieldIdList, friendId);
-					// TODO
 					saveFriendConfig();
 					refreshFriendField.doClick();
 				}
