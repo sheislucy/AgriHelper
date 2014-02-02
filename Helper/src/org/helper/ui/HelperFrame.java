@@ -177,7 +177,7 @@ public class HelperFrame extends JDialog {
 		this.checkedStoreCropList = new ArrayList<Integer>();
 		this.friendOperationList = new ArrayList<EmFriendOperations>();
 
-		this.setTitle("Farmer Helper - Version 0.1.8 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.9 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
@@ -993,7 +993,7 @@ public class HelperFrame extends JDialog {
 		tcm.getColumn(7).setMaxWidth(50);
 		tcm.getColumn(8).setMaxWidth(50);
 		tcm.getColumn(9).setWidth(55);
-
+		
 		return farmTable;
 	}
 

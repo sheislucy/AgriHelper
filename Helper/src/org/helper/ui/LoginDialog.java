@@ -250,7 +250,7 @@ public class LoginDialog extends JDialog {
 			@Override
 			public void run() {
 				try {
-					Thread.sleep(1500L);
+					Thread.sleep(500L);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}

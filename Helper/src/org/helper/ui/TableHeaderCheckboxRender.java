@@ -23,8 +23,7 @@ public class TableHeaderCheckboxRender implements TableCellRenderer {
 		this.tableModel = (CheckTableModel) table.getModel();
 		this.tableHeader = table.getTableHeader();
 		this.selectBox = new JCheckBox(tableModel.getColumnName(0));
-//		this.selectBox.setSelected(defaultSelect);
-		this.selectBox.setSelected(true);
+		this.selectBox.setSelected(defaultSelect);
 
 		tableHeader.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {

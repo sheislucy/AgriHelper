@@ -79,16 +79,43 @@ public class RefreshFriendService extends BaseService {
 	@Override
 	protected CookieStore buildCookieStore() {
 		BasicCookieStore cookieStore = new BasicCookieStore();
-		StringBuilder cookieValue = new StringBuilder();
-
+		Map<String, Object> cookieMap = new HashMap<>();
 		Entry<String, Object> uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_uId");
 		if (null != uidEntry) {
-			cookieValue.append(uidEntry.getKey()).append("=").append(uidEntry.getValue());
+			cookieMap.put(uidEntry.getKey(), uidEntry.getValue());
 		}
-		BasicClientCookie cookie = new BasicClientCookie(uidEntry.getKey(), (String) uidEntry.getValue());
-		cookie.setDomain("happyfarm.manyou-apps.com");
-		cookie.setPath("/");
-		cookieStore.addCookie(cookie);
+
+		uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_uLevel");
+		if (null != uidEntry) {
+			cookieMap.put(uidEntry.getKey(), uidEntry.getValue());
+		}
+
+		uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_sId");
+		if (null != uidEntry) {
+			cookieMap.put(uidEntry.getKey(), uidEntry.getValue());
+		}
+
+		uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_sessionId");
+		if (null != uidEntry) {
+			cookieMap.put(uidEntry.getKey(), uidEntry.getValue());
+		}
+
+		uidEntry = FarmDomain.getInstance().getFirstCookieByReg(".*_key");
+		if (null != uidEntry) {
+			cookieMap.put(uidEntry.getKey(), uidEntry.getValue());
+		}
+		cookieMap.put("appId", "1021978");
+		cookieMap.put("added", "1");
+		cookieMap.put("inFrame", "1");
+		cookieMap.put("myKingdom", "2");
+
+		for (Entry<String, Object> entry : cookieMap.entrySet()) {
+			BasicClientCookie cookie = new BasicClientCookie(entry.getKey(), (String) entry.getValue());
+			cookie.setDomain("happyfarm.manyou-apps.com");
+			cookie.setPath("/");
+			cookieStore.addCookie(cookie);
+		}
+
 		return cookieStore;
 	}
 
