@@ -77,6 +77,12 @@ import org.json.simple.parser.ParseException;
  */
 public class HelperFrame extends JDialog {
 	private static final long serialVersionUID = -6344590535790274762L;
+
+	public static final Color RED = new Color(240, 117, 82);
+	public static final Color GREEN = new Color(186, 209, 145);
+	public static final Color ORANGE = new Color(238, 196, 171);
+	public static final Color BLUE = new Color(174, 224, 232);
+
 	private JTable farmTable;
 	private JMenu menuLogin;
 	private JPanel mainBar;
@@ -143,20 +149,26 @@ public class HelperFrame extends JDialog {
 
 	public HelperFrame() {
 		this.refreshBtn = new JButton("刷新");
+		this.refreshBtn.setBackground(BLUE);
 		this.executeBtn = new JButton("执行护理");
 		this.executeBtn.setToolTipText("会根据土地状态，判断执行复选框内选中的操作");
+		this.executeBtn.setBackground(ORANGE);
 		this.autoCareBtn = new JButton("开启自动护理");
 		this.autoCareBtn.setEnabled(false);
 		this.autoCareBtn.setBackground(Color.WHITE);
 		this.autoCareBtn.setToolTipText("智能自动护理将除三害，并自动收/铲/种");
 		this.sellSelectedBtn = new JButton("一键卖出选中");
+		this.sellSelectedBtn.setBackground(BLUE);
 		this.sellSelectedBtn.setToolTipText("卖出仓库内选中的果实");
 		this.refreshFriends = new JButton("刷新好友列表");
 		this.refreshFriends.setPreferredSize(new Dimension(50, 20));
+		this.refreshFriends.setBackground(BLUE);
 		this.fieldTitle = new TitledBorder("土地信息");
 
 		this.refreshFriendField = new JButton("刷新好友土地");
+		this.refreshFriendField.setBackground(BLUE);
 		this.helpFriend = new JButton("护理好友土地");
+		this.helpFriend.setBackground(ORANGE);
 
 		this.loggerArea = new JTextArea();
 		this.loggerArea.setLineWrap(true);
@@ -165,7 +177,7 @@ public class HelperFrame extends JDialog {
 		this.checkedStoreCropList = new ArrayList<Integer>();
 		this.friendOperationList = new ArrayList<EmFriendOperations>();
 
-		this.setTitle("Farmer Helper - Version 0.1.6 :: designed by Chloe's studio");
+		this.setTitle("Farmer Helper - Version 0.1.8 :: designed by Chloe's studio");
 		this.setSize(1010, 700);
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 		try {
@@ -219,7 +231,7 @@ public class HelperFrame extends JDialog {
 		this.auto = false;
 		this.autoCareBtn.setEnabled(true);
 		this.autoCareBtn.setText("开启自动护理");
-		this.autoCareBtn.setBackground(new Color(186, 209, 145));
+		this.autoCareBtn.setBackground(GREEN);
 	}
 
 	private JPanel constructAccountsPane() {
@@ -352,6 +364,7 @@ public class HelperFrame extends JDialog {
 					FarmDomain.setInstance(farmDomain);
 					logoutPopMenu = makePopup();
 					logoutPopMenu.show(e.getComponent(), e.getX(), e.getY());
+					refreshSelectedAccount((String) accountTableModel.getValueAt(accountRowId, 0));
 				} else if (SwingUtilities.isLeftMouseButton(e)) {
 					// 左键事件
 					JTable table = (JTable) e.getComponent();
@@ -371,10 +384,10 @@ public class HelperFrame extends JDialog {
 		auto = accountList.get(userId).isAutoCareEnable();
 		if (auto) {
 			autoCareBtn.setText("停止自动护理");
-			autoCareBtn.setBackground(new Color(240, 117, 82));
+			autoCareBtn.setBackground(RED);
 		} else {
 			autoCareBtn.setText("开启自动护理");
-			autoCareBtn.setBackground(new Color(186, 209, 145));
+			autoCareBtn.setBackground(GREEN);
 		}
 		refreshAccount();
 		refreshFriends();
@@ -392,7 +405,7 @@ public class HelperFrame extends JDialog {
 		mainBar = new JPanel();
 		mainBar.setPreferredSize(new Dimension(700, 660));
 
-//		mainBar.setBorder(fieldTitle);
+		// mainBar.setBorder(fieldTitle);
 		mainBar.add(constructManuallyPanel());
 		return mainBar;
 
@@ -421,10 +434,10 @@ public class HelperFrame extends JDialog {
 
 		ctrlWrapper2 = new JPanel();// control 面板第二行，按钮
 		ctrlWrapper2.setPreferredSize(new Dimension(690, 35));
-		ctrlWrapper2.add(executeBtn);
-		ctrlWrapper2.add(refreshBtn);
 		ctrlWrapper2.add(autoCareBtn);
 		ctrlWrapper2.add(sellSelectedBtn);
+		ctrlWrapper2.add(refreshBtn);
+		ctrlWrapper2.add(executeBtn);
 		controlPanel.add(ctrlWrapper2);
 
 		ctrlWrapper3 = new JPanel();// 好友操作面板，隐藏
@@ -580,12 +593,12 @@ public class HelperFrame extends JDialog {
 					auto = !auto;
 					if (auto) {
 						autoCareBtn.setText("停止自动护理");
-						autoCareBtn.setBackground(new Color(240, 117, 82));
+						autoCareBtn.setBackground(RED);
 						accountTableModel.setValueAt("已开启自动护理", accountRowId, 3);
 						startSchedule();
 					} else {
 						autoCareBtn.setText("开启自动护理");
-						autoCareBtn.setBackground(new Color(186, 209, 145));
+						autoCareBtn.setBackground(GREEN);
 						accountTableModel.setValueAt("未开启自动护理", accountRowId, 3);
 						stopSchedule();
 					}
@@ -1114,7 +1127,6 @@ public class HelperFrame extends JDialog {
 			friendTableModel.addRow(entry);
 		}
 		friendTable.setModel(friendTableModel);
-		HelperLoggerAppender.writeLog("刷新好友列表成功");
 	}
 
 	public void refreshFriends(UserDomain userDomain, FarmDomain farmDomain) {
@@ -1126,6 +1138,8 @@ public class HelperFrame extends JDialog {
 	public void refreshAccount(UserDomain userDomain, FarmDomain farmDomain) {
 		this.userDomain = userDomain;
 		this.farmDomain = farmDomain;
+		UserDomain.setInstance(userDomain);
+		FarmDomain.setInstance(farmDomain);
 		refreshAccount();
 	}
 

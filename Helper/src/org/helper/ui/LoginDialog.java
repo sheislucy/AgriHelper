@@ -243,13 +243,29 @@ public class LoginDialog extends JDialog {
 			UserPreferenceDomain.USERS.put(FarmDomain.getInstance().getUserId(), user);
 		}
 		parentFrame.createAutoTask(FarmDomain.getInstance().getUserId());
-		RefreshFriendService friendService = ServiceFactory.getService(RefreshFriendService.class);
-		try {
-			friendService.refreshFriend();
-		} catch (org.apache.http.ParseException | IOException | ParseException e) {
-			e.printStackTrace();
-			HelperLoggerAppender.writeLog(e.getMessage());
-		}
-		parentFrame.refreshFriends(UserDomain.getInstance(), FarmDomain.getInstance());
+		final FarmDomain farm = FarmDomain.getInstance();
+		final UserDomain user = UserDomain.getInstance();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(1500L);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				FarmDomain.setInstance(farm);
+				UserDomain.setInstance(user);
+				RefreshFriendService friendService = ServiceFactory.getService(RefreshFriendService.class);
+				try {
+					friendService.refreshFriend();
+				} catch (org.apache.http.ParseException | IOException | ParseException e) {
+					e.printStackTrace();
+					HelperLoggerAppender.writeLog(e.getMessage());
+				}
+				parentFrame.refreshFriends(UserDomain.getInstance(), FarmDomain.getInstance());
+
+			}
+		}).start();
 	}
 }

@@ -1,6 +1,7 @@
 package org.helper.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -42,4 +43,19 @@ public class RefreshFarmStep2Service extends BaseService {
 		return "";
 	}
 
+	@Override
+	protected List<BasicHeader> buildCommonHeaders() {
+		List<BasicHeader> headers = new ArrayList<BasicHeader>();
+		headers.add(new BasicHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"));
+		headers.add(new BasicHeader("User-Agent",
+				"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36"));
+		if (UserDomain.getInstance().isVeryCD()) {
+			headers.add(new BasicHeader("Referer", "http://home.verycd.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D"));
+		} else if (UserDomain.getInstance().isZhinei()) {
+			headers.add(new BasicHeader("Referer", "http://my.zhinei.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D"));
+		} else if (UserDomain.getInstance().isLianpen()) {
+			headers.add(new BasicHeader("Referer", "http://www.lianpunet.com/userapp.php?id=1021978&my_suffix=Lw%3D%3D"));
+		}
+		return headers;
+	}
 }

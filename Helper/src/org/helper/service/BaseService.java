@@ -48,7 +48,7 @@ public abstract class BaseService {
 
 	private void init() {
 		schemeRegistry = new org.apache.http.conn.scheme.SchemeRegistry();
-		// proxy = new HttpHost("127.0.0.1", 8888);
+//		proxy = new HttpHost("127.0.0.1", 8888);
 	}
 
 	protected HttpResponse doPost() throws ClientProtocolException, IOException {
@@ -126,6 +126,8 @@ public abstract class BaseService {
 		List<BasicHeader> headers = new ArrayList<BasicHeader>();
 		headers.add(new BasicHeader("Content-Type", "application/x-www-form-urlencoded; charset="
 				+ (UserDomain.getInstance().isVeryCD() ? HelperConstants.ENCODING_UTF8 : HelperConstants.ENCODING_GBK)));
+		headers.add(new BasicHeader("User-Agent",
+				"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36"));
 		return headers;
 	}
 

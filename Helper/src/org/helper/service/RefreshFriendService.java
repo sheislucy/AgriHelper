@@ -54,6 +54,7 @@ public class RefreshFriendService extends BaseService {
 		Object json = new JSONParser().parse(EntityUtils.toString(response.getEntity()));
 		if (json instanceof JSONArray) {
 			buildFriends((JSONArray) json);
+			HelperLoggerAppender.writeLog("刷新好友列表成功");
 		} else {
 			HelperLoggerAppender.writeLog("刷新好友失败：" + ((JSONObject) json).get("error"));
 		}
