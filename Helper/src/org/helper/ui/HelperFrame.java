@@ -692,7 +692,7 @@ public class HelperFrame extends JDialog {
 			this.buy.setSelected(userConfig.isBuy());
 			this.plant.setSelected(userConfig.isPlant());
 			this.seedCombo.setSelectedIndex(userConfig.getSeedComboIndex());
-			// this.seedCombo.repaint();
+			this.seedCombo.repaint();
 			this.waterFriend.setSelected(userConfig.isWaterFriend());
 			this.weedFriend.setSelected(userConfig.isWeedFriend());
 			this.wormFriend.setSelected(userConfig.isWormFriend());
@@ -993,7 +993,7 @@ public class HelperFrame extends JDialog {
 		tcm.getColumn(7).setMaxWidth(50);
 		tcm.getColumn(8).setMaxWidth(50);
 		tcm.getColumn(9).setWidth(55);
-		
+
 		return farmTable;
 	}
 
